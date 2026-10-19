@@ -1,0 +1,16 @@
+# LaTeX Build- und Hilfsdateien
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex*
+*.bbl
+*.blg
+
+# Temporäre OS-Dateien
+.DS_Store
+Thumbs.db
