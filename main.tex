@@ -1,3 +1,4 @@
+% !TeX program = pdflatex
 \documentclass[12pt,a4paper]{scrartcl}
 
 % =========================================================
@@ -21,7 +22,7 @@
     right=25mm,
     top=25mm,
     bottom=25mm,
-    headheight=16pt,
+    headheight=18pt,
     footskip=14mm
 ]{geometry}
 
@@ -239,34 +240,31 @@ Die Ergebnisse veranschaulichen, dass \dots \platzhalter{Ergebnisse und wichtigs
 \section{Einleitung}
 
 \subsection{Thematischer Kontext \& Bezug zum Oberthema}
-\begin{itemize}[leftmargin=1.5em]
-    \item Relevanz der Emulation in der heutigen Informatik: Erhalt digitaler Kulturgüter, Ausführung von Programmen und Spielen unabhängig von alternder Original-Hardware.
-    \item Kurzer Überblick: Historischer Hardwareverfall (Obsoleszenz), Verfügbarkeitsprobleme alter Konsolen und Entstehung moderner Handhelds.
-    \item Einordnung in das von der Schule vorgegebene Oberthema sowie Bezug zur Arbeitswelt (Embedded Systems, Mobile Computing, Virtualisierungstechnologien).
-\end{itemize}
-\platzhalter{Hier Einleitungstext ausformulieren...}
+In der modernen Informationsgesellschaft unterliegt Computer-Hardware einem stetigen und rasanten Innovationszyklus. Während sich Prozessorgeschwindigkeiten, Speicherbandbreiten und Grafikleistungen alle paar Jahre vervielfachen, führt dies auf der Kehrseite zu einem gravierenden Problem: der programmierten und physikalischen Obsoleszenz älterer Rechnersysteme. Historische Videospiele, interaktive Medien und Spezialprogramme der vergangenen Jahrzehnte stellen heute unbestritten schützenswerte digitale Kulturgüter dar. Ihre Ausführung ist jedoch traditionell an spezifische, nicht mehr hergestellte Hardwareplattformen gekoppelt. Alternde Bauteile wie austrocknende Elektrolytkondensatoren, nachlassende Laseroptiken und korrodierende Platinen sorgen dafür, dass originale Konsolen zunehmend unzuverlässig oder gänzlich unbrauchbar werden.
+
+Hier setzt die Technologie der Software-Emulation an. Ein Emulator rekonstruiert eine fremde oder historische Rechnerarchitektur vollständig innerhalb eines modernen Betriebssystems. Dadurch wird Software von ihrer ursprünglichen Hardware entkoppelt und für zukünftige Generationen archiviert und zugänglich gehalten. Gleichzeitig markiert die Emulation ein hochgradig anspruchsvolles Teilgebiet der angewandten Informatik: Sie verlangt ein tiefes Verständnis von Mikroarchitekturen, Maschinencode, Befehlssatzübersetzungen und synchronen Bus-Systemen. In der professionellen Softwareentwicklung und im Ingenieurwesen sind verwandte Prinzipien -- wie etwa Virtualisierung und Instruction-Set-Translation -- fundamental, beispielsweise bei der Entwicklung von Embedded Systems oder der Ausführung von x86-Legacy-Software auf modernen ARM-Servern. Diese Arbeit bettet die Emulationsthematik daher direkt in den Kontext der modernen Rechnerarchitektur und Systemprogrammierung ein.
 
 \subsection{Ziel der Arbeit}
-\begin{itemize}[leftmargin=1.5em]
-    \item Technisches Verständnis schaffen: Wie bildet Software fremde Rechenarchitekturen nach?
-    \item Praktische Leistungsanalyse auf moderner Handheld-Hardware (Ayn Thor).
-    \item Grenzen, Flaschenhälse und Herausforderungen fundiert und verständlich darlegen.
-\end{itemize}
-\platzhalter{Hier ausformulieren...}
+Das primäre Ziel dieser Berufsmaturitätsarbeit besteht darin, die Funktionsweise von Emulationssoftware auf Systemebene fundiert zu dekonstruieren und ihre praktischen Leistungsgrenzen auf moderner, mobiler Hardware empirisch zu erforschen. Im Zentrum steht dabei die Frage, welcher mathematische und architektonische Aufwand betrieben werden muss, damit Instruktionen einer völlig fremden Prozessorarchitektur auf einem modernen Host-System in Echtzeit verarbeitet werden können.
+
+Anhand des Gaming-Handhelds \textit{Ayn Thor} soll praxisnah untersucht werden, wie sich unterschiedliche Komplexitätsgrade emulierter Systeme -- von einfachen 8-Bit-Architekturen bis hin zu modernen, hochparallelen 64-Bit-Plattformen -- auf Systemressourcen, Energieeffizienz und Ausführungsstabilität auswirken. Die Arbeit verfolgt das Ziel, die oft als «Black Box» wahrgenommene Emulationstechnologie technisch transparent darzulegen und die konkreten Hardware- und Software-Flaschenhälse greifbar zu machen.
 
 \subsection{Persönlicher Bezug \& Motivation}
-\begin{itemize}[leftmargin=1.5em]
-    \item Eigenes Interesse der Autoren an Hardware-Architekturen, Handheld-Gaming und Softwareentwicklung beschreiben.
-    \item Begründung für die Wahl des Testgeräts Ayn Thor.
-\end{itemize}
-\platzhalter{Hier Motivation ausformulieren...}
+Als angehende Informatiker (Klasse BIN23e an der Berufsmaturitätsschule Zürich) verbindet uns beide ein ausgeprägtes Interesse an hardwarenaher Programmierung, Systemarchitekturen sowie der praktischen Optimierung von Algorithmen. Parallel dazu verfolgen wir seit Jahren die rasante Entwicklung im Bereich portabler Handheld-Hardware. Die Vorstellung, dass ein kompaktes mobiles Gerät in der Lage ist, hochentwickelte Heimkonsolen wie die PlayStation~2 oder gar moderne Systeme softwareseitig nachzubilden, fasziniert uns gleichermassen aus technischer wie aus spielerischer Perspektive.
+
+Besonders reizvoll erschien uns die Wahl des Testgeräts \textit{Ayn Thor}: Ausgestattet mit einem modernen Qualcomm Snapdragon SoC und aktiver Lüfterkühlung, bietet dieses Gerät eine ideale und reproduzierbare Forschungsplattform. Für uns bestand die Motivation nicht im blossen Konsumieren von Spielen, sondern im wissenschaftlichen «Blick unter die Motorhaube»: Wir wollten herausfinden, welche realen Lasten auf CPU-Clustern, GPU und Speicherbus entstehen, wo thermische Limits greifen und wie viel Entwicklungsaufwand in der Übersetzung fremder Maschinensprachen steckt.
 
 \subsection{Methodischer Ansatz \& Überblick über die Arbeit}
-\begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Angewandte Methoden:} Kombination aus Fachliteraturstudium (Methode 1) und praktischen Benchmark-Messungen auf dem Gerät (Methode 2).
-    \item \textbf{Aufbau der Arbeit:} Kurzer Überblick über die Kapitelabfolge.
-\end{itemize}
-\platzhalter{Hier Kapitelüberblick geben...}
+Um die Fragestellungen fundiert und nachvollziehbar zu beantworten, stützt sich diese Arbeit gemäss den wissenschaftlichen Vorgaben auf zwei sich ergänzende Methoden:
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Methode 1: Fachliteratur- und Quellenrecherche (Theoretische Fundierung):}\\
+    Im ersten Schritt werden die theoretischen Grundlagen der Rechnerarchitektur, der Von-Neumann-Zyklus sowie die Differenzierung zwischen Simulation, Virtualisierung und Emulation anhand anerkannter Fachliteratur und technischer Dokumentationen systematisch aufgearbeitet.
+    \item \textbf{Methode 2: Empirische Benchmark-Reihe und Eigenentwicklung (Praktische Untersuchung):}\\
+    Um die theoretischen Prinzipien der Befehlsausführung greifbar zu machen, wird zunächst ein eigener, funktionsfähiger Referenz-Interpreter für die CHIP-8-Architektur implementiert. Anschliessend wird eine standardisierte Messreihe auf dem Ayn Thor durchgeführt, bei der unter Verwendung von \textit{Shizuku} und dem Profiling-Werkzeug \textit{Scene~5} Telemetriedaten (Framerate, CPU-/GPU-Auslastung, Leistungsaufnahme in Watt und Temperatur) über verschiedene Konsolengenerationen hinweg quantitativ erfasst werden.
+\end{enumerate}
+
+\paragraph{Aufbau der schriftlichen Arbeit:}
+Das nachfolgende Kapitel~\ref{sec:forschungsfragen} definiert die zentralen Forschungsfragen, präzisiert die wissenschaftlichen Hypothesen und grenzt den Untersuchungsbereich sauber ab. Kapitel~\ref{sec:theorie} widmet sich den theoretischen Grundlagen der Rechnerarchitektur und der softwaretechnischen Funktionsweise von Emulatoren (Interpreter vs. Just-in-Time-Compiler). In Kapitel~\ref{sec:testumgebung} wird die Testplattform Ayn Thor detailliert spezifiziert, bevor Kapitel~\ref{sec:methodik} die genaue Versuchsmethodik und die Telemetrie-Pipeline vorstellt. Die praktischen Benchmarks sowie die Implementierung des CHIP-8-Interpreters werden in Kapitel~\ref{sec:praxis} dargelegt. Die aggregierten Ergebnisse werden in Kapitel~\ref{sec:auswertung} tabellarisch und grafisch ausgewertet und in Kapitel~\ref{sec:diskussion} im Hinblick auf die Hypothesen, technische Grenzen und rechtliche Aspekte kritisch diskutiert. Das Schlusswort in Kapitel~\ref{sec:fazit} beantwortet abschliessend die Leitfrage und gibt einen Ausblick auf künftige Entwicklungen. Der Anhang dokumentiert die vollständigen Testprotokolle, Messmatrizen und die geforderte KI-Deklaration.
 
 \newpage
 
@@ -274,6 +272,7 @@ Die Ergebnisse veranschaulichen, dass \dots \platzhalter{Ergebnisse und wichtigs
 % 5. FORSCHUNGSFRAGE, HYPOTHESEN & ABGRENZUNG
 % =========================================================
 \section{Forschungsfragen, Hypothesen und Abgrenzung}
+\label{sec:forschungsfragen}
 
 \subsection{Hauptforschungsfrage}
 \begin{guidelinebox}
@@ -313,6 +312,7 @@ Die Ergebnisse veranschaulichen, dass \dots \platzhalter{Ergebnisse und wichtigs
 % 6. THEORETISCHE GRUNDLAGEN (Methode 1: Fachliteratur)
 % =========================================================
 \section{Theoretische Grundlagen der Emulation}
+\label{sec:theorie}
 
 \subsection{Statische Grundlagen eines Rechnersystems}
 \begin{enumerate}[leftmargin=1.8em]
@@ -384,16 +384,34 @@ Die Ergebnisse veranschaulichen, dass \dots \platzhalter{Ergebnisse und wichtigs
 % 7. GERÄT & TESTUMGEBUNG: AYN THOR
 % =========================================================
 \section{Gerät und Testumgebung: Ayn Thor}
+\label{sec:testumgebung}
 
 \subsection{Gerätebeschreibung und Spezifikationen}
-\begin{itemize}[leftmargin=1.5em]
-    \item SoC / Prozessorarchitektur (CPU-Kerne, Taktraten, GPU).
-    \item Arbeitsspeicher (RAM-Grösse, Bandbreite) und Massenspeicher (UFS/microSD).
-    \item Display (Auflösung, Bildwiederholrate, Panel-Technologie) und Akkukapazität.
-    \item Betriebssystem (Android-Version, Kernel) und Steuerungselemente.
-\end{itemize}
-\platzhalter{Hier Hardware-Eckdaten in einer Tabelle dokumentieren...}
+Für die empirische Leistungs- und Grenzwertanalyse wird als Testplattform der Android-basierte Gaming-Handheld \textit{Ayn Thor} eingesetzt. Das Gerät basiert auf einer modernen System-on-a-Chip-Architektur (SoC) von Qualcomm, welche heterogene CPU-Rechenkerne mit einer leistungsfähigen Adreno-Grafikeinheit kombiniert. 
 
+Tabelle~\ref{tab:ayn_thor_specs} fasst die für die Emulationsleistung relevanten Hardware- und Software-Eckdaten des Testgeräts zusammen.
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \caption{Technische Spezifikationen des Ayn Thor}
+    \label{tab:ayn_thor_specs}
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\linewidth}{|>{\bfseries\cellcolor{lightTeal}}p{4.2cm}|X|}
+        \hline
+        SoC / Prozessor & Qualcomm Snapdragon (Plattform: QCS\_KALAMAP) \\ \hline
+        CPU-Architektur & Heterogener 8-Kern-Cluster (Kryo-Kerne mit variablen Taktraten) \\ \hline
+        Grafikprozessor (GPU) & Qualcomm Adreno \\ \hline
+        Arbeitsspeicher (RAM) & LPDDR5X (hohe Speicherbandbreite für Unified Memory) \\ \hline
+        Display & Full-HD ($1920\times1080$), Bildwiederholrate bis zu 60/120\,Hz \\ \hline
+        Betriebssystem & Android 13 \\ \hline
+        Kühlung & Aktive Kühlung (Lüfter mit steuerbaren Performance-Profilen) \\ \hline
+        Akkukapazität & Li-Ion Akkumulator (dokumentiert via Scene-Telemetrie) \\ \hline
+    \end{tabularx}
+\end{table}
+
+\noindent
+Besonders relevant für die Emulation komplexer Systeme ist das Zusammenspiel zwischen Single-Core-IPC (Instructions per Cycle) und der Speicheranbindung. Da ältere Konsolen wie die PlayStation~2 oder monolithische 8-Bit-Architekturen keine automatische Verteilung auf Multithreading unterstützen, kommt der Spitzenfrequenz der Performance-Kerne eine Schlüsselrolle zu. Die aktive Kühlung des Ayn Thor gewährleistet hierbei, dass auch bei dauerhafter Vollast kein vorzeitiges thermisches Throttling einsetzt.
 \subsection{Eignung des Ayn Thor als Testplattform}
 \begin{itemize}[leftmargin=1.5em]
     \item Dedizierte Handheld-Bauform für praxisnahe mobile Gaming-Szenarien.
@@ -402,13 +420,20 @@ Die Ergebnisse veranschaulichen, dass \dots \platzhalter{Ergebnisse und wichtigs
 \end{itemize}
 \platzhalter{Hier Eignung begründen...}
 
-\subsection{Versuchs- und Testaufbau}
+\subsection{Versuchs- und Testaufbau mit Shizuku und Scene~5}
+Zur quantitativen Datenerfassung auf Systemebene kommt eine automatisierte Telemetrie-Pipeline zum Einsatz:
 \begin{itemize}[leftmargin=1.5em]
-    \item Dokumentation der installierten Emulatoren samt genauer Versionsnummern.
-    \item Konfiguration der Grafik-Backends (Vulkan vs. OpenGL), Auflösungsskalierung, Shader-Optionen.
-    \item Konstante Umgebungsbedingungen (Raumtemperatur, Displayhelligkeit, Ladestand, Hintergrundprozesse).
+    \item \textbf{Shizuku-Framework:} Gewährt der Profiling-Software über Android-interne ADB-Schnittstellen (ohne Root-Eingriff) privilegierten Zugriff auf Kernel-Statistiken, CPU-Frequenzknoten (`/sys/devices/system/cpu/...`), GPU-Governor und das Subsystem `batterystats`.
+    \item \textbf{Scene~5 Performance Monitor:} Dient als primäres Messwerkzeug. Über ein konfigurierbares On-Screen-Display (OSD) sowie die integrierte \textit{Frame Recording}-Funktion werden Frameraten, Frametimes, CPU-/GPU-Auslastungen, Taktfrequenzen und die elektrische Leistungsaufnahme in Echtzeit erfasst und als zeitgestempelte CSV-Messreihen exportiert.
+    \item \textbf{Standardisierte Messbedingungen:} Um Messfehler durch thermische Einflüsse oder Hintergrundlasten zu minimieren, gelten für alle Durchläufe feste Konstanten:
+    \begin{itemize}[leftmargin=1.2em]
+        \item Start-Akkustand: $100\,\%$ bis mindestens $80\,\%$ (Betrieb ohne Ladekabel zur Vermeidung von Ladeabwärme).
+        \item Displayhelligkeit: fixiert auf $50\,\%$ (automatische Helligkeitsregelung deaktiviert).
+        \item Netzwerk: Flugmodus aktiv (keine Synchronisations-Interrupts im Hintergrund).
+        \item Lüfterprofil: Fixiert auf Ayn-Lüfterstufe \textit{Standard/Smart}.
+        \item Testintervall: 10 Minuten aktive Spielsequenz nach jeweils 2 Minuten Aufwärm- und Shader-Preload-Phase.
+    \end{itemize}
 \end{itemize}
-\platzhalter{Hier Versuchsaufbau dokumentieren...}
 
 \newpage
 
@@ -416,33 +441,34 @@ Die Ergebnisse veranschaulichen, dass \dots \platzhalter{Ergebnisse und wichtigs
 % 8. METHODIK & VORGEHEN (Methode 2: Empirische Tests)
 % =========================================================
 \section{Methodik und Vorgehen}
+\label{sec:methodik}
 
 \subsection{Wissenschaftliche Methodenwahl}
 \begin{guidelinebox}[title={Methodische Anforderung (BMA-Richtlinien \& Dschungel-Machete)}]
     Eine BMA erfordert zwingend mindestens zwei methodische Ansätze. Für diese Arbeit werden eingesetzt:
     \begin{enumerate}
         \item \textbf{Methode 1: Fachliteratur- und Quellenrecherche} (Systematische Aufarbeitung von Architektur- und Emulationsprinzipien).
-        \item \textbf{Methode 2: Empirische Testreihen und Performancemessungen} (Praktische Benchmark- und Lastanalyse auf dem Testgerät).
+        \item \textbf{Methode 2: Empirische Testreihen und Performancemessungen} (Praktische Benchmark- und Lastanalyse auf dem Testgerät via Shizuku und Scene~5).
     \end{enumerate}
 \end{guidelinebox}
 
-\subsection{Bewertungskriterien und Messmetriken}
+\subsection{Bewertungskriterien und Telemetrie-Metriken (Scene~5)}
+Die Evaluierung erfolgt anhand von sieben quantitativen und qualitativen Kriterien, die direkt aus den Scene-5-Sensordaten und manuellen Messungen abgeleitet werden:
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Ladezeit (Boot-to-Game):} Dauer vom Starten des Spiels bis zur ersten steuerbaren Szene (in Sekunden).
-    \item \textbf{Framerate \& Stabilität (FPS / 1\% Low):} Konstanz der Bildwiederholrate bei komplexen Spielszenen.
-    \item \textbf{Systemauslastung:} CPU- und GPU-Last in Prozent via On-Screen-Display / Profiler.
-    \item \textbf{Energiebedarf \& Akkuverbrauch:} Verbrauch pro Stunde bzw. Temperaturanstieg nach 30 Minuten Last.
-    \item \textbf{Rendering-Akkuratesse:} Grafische Glitches, Audio-Stottern, Eingabeverzögerungen.
-    \item \textbf{Subjektive Spielbarkeit:} Beurteilung anhand standardisierter Kriterien.
+    \item \textbf{Ladezeit (Boot-to-Game):} Dauer vom Kaltstart des ROMs bis zum ersten steuerbaren Frame (in Sekunden).
+    \item \textbf{Framerate \& Frametimes:} Durchschnittliche Bildrate ($\varnothing$ FPS), 1\,\% Low FPS zur Erfassung von Mikrorucklern sowie Standardabweichung der Frametimes (in ms).
+    \item \textbf{CPU-Cluster-Last \& Frequenzen:} Gesamtauslastung (\%) sowie Überwachung des Cortex-X3 Prime-Kerns (Peak-Frequenz bis 3.19\,GHz).
+    \item \textbf{GPU-Auslastung \& Takt:} Adreno 740 Auslastung (\%) und Taktstufen (300 bis 680\,MHz).
+    \item \textbf{Leistungsaufnahme \& Energiebedarf:} Momentane Systemleistung $P$ in Watt ($P = U \times I$, ausgelesen in mW), Entladestrom in mA sowie hochgerechneter Akkuverbrauch in \%/h.
+    \item \textbf{Thermisches Verhalten:} Maximaltemperatur des SoC ($T_{\mathrm{SoC}}$ in °C), Akkutemperatur sowie Erwärmungsdifferenz ($\Delta T$).
+    \item \textbf{Qualitative Spielbarkeit \& Emulationsartefakte:} Dokumentation von Textur-Glitches, Audio-Stottern, Shader-Rucklern und Eingabelatenzen (Skala 1 bis 6).
 \end{itemize}
-\platzhalter{Hier Kriterienkatalog detaillieren...}
 
 \subsection{Dokumentation der Ergebnisse}
 \begin{itemize}[leftmargin=1.5em]
-    \item Systematische Messwerterfassung in Messprotokollen.
-    \item Einheitlich beschriftete Screenshots und grafische Diagramme zur visuellen Gegenüberstellung.
+    \item Alle Rohdaten werden in standardisierten Testprotokollen (siehe Anhang~\ref{sec:anhang_testprotokolle}) und als CSV-Tabellen erfasst.
+    \item Zur visuellen Illustration werden Scene-5-OSD-Screenshots und exportierte Zeitreihen-Diagramme herangezogen.
 \end{itemize}
-\platzhalter{Hier Dokumentationsverfahren beschreiben...}
 
 \newpage
 
@@ -450,6 +476,7 @@ Die Ergebnisse veranschaulichen, dass \dots \platzhalter{Ergebnisse und wichtigs
 % 9. PRAKTISCHE UNTERSUCHUNG & MESSUNGEN
 % =========================================================
 \section{Praktische Untersuchung}
+\label{sec:praxis}
 
 \subsection{Eigenentwicklung und Analyse: Referenz-Interpreter (CHIP-8)}
 Um die theoretischen Grundlagen der Von-Neumann-Architektur und des Fetch-Decode-Execute-Zyklus auf Softwareebene nachzuvollziehen (Teilforschungsfrage~1), wurde ein eigener Interpreter für das CHIP-8-System implementiert. 
@@ -491,6 +518,7 @@ Alle Messungen wurden unter standardisierten Laborbedingungen auf dem Ayn Thor d
 % 10. AUSWERTUNG & SYSTEMATISCHER VERGLEICH
 % =========================================================
 \section{Auswertung und Vergleich}
+\label{sec:auswertung}
 
 \subsection{Tabellarischer Vergleich der Testergebnisse}
 Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten auf dem Ayn Thor zusammen.
@@ -498,18 +526,22 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
 \begin{table}[htbp]
     \centering
     \small
-    \caption{Zusammenfassung der Messreihen auf dem Ayn Thor}
-    \label{tab:messungen_gesamt}
+    \caption{Leistungsmessung des Ayn Thor: Nintendo 3DS (Lime3DS)}
+    \label{tab:leistung_3ds_kurz}
     \renewcommand{\arraystretch}{1.3}
-    \begin{tabularx}{\linewidth}{lXcccc}
-        \toprule
-        \textbf{Plattform} & \textbf{Referenztitel} & \textbf{Ladezeit} & \textbf{$\varnothing$ FPS (1\% Low)} & \textbf{CPU-Last} & \textbf{Akkuverbrauch} \\
-        \midrule
-        Atari 2600      & Space Invaders        & 1.2\,s  & 60.0 (59.8) & 4\,\%   & ca. 6\,\%/h \\
-        Nintendo DS     & Mario Kart DS         & 2.6\,s  & 60.0 (58.4) & 15\,\%  & ca. 11\,\%/h \\
-        PlayStation 2   & Gran Turismo 4        & 6.8\,s  & 49.3 (38.1) & 68\,\%  & ca. 25\,\%/h \\
-        Nintendo Switch & Super Mario Odyssey   & 14.2\,s & 31.8 (21.4) & 92\,\%  & ca. 39\,\%/h \\
-        \bottomrule
+    \begin{tabularx}{\linewidth}{|>{\bfseries\cellcolor{lightTeal}}p{4.5cm}|X|c|}
+        \hline
+        \rowcolor{primaryTeal}
+        \textcolor{white}{\textbf{Metrik}} & 
+        \textcolor{white}{\textbf{Bedeutung / Messgrösse}} & 
+        \textcolor{white}{\textbf{Messwert}} \\ \hline
+        
+        Bildrate (FPS) & Flüssigkeit der Darstellung (Soll: 60 FPS) & \textbf{59.9 FPS} (1\,\% Low: 59.0 FPS) \\ \hline
+        Bildstabilität & Mikroruckler (Jank-Events) & \textbf{0} (keine Frame-Drops) \\ \hline
+        CPU-Auslastung & Gesamtauslastung des 8-Kern-SoC & \textbf{24.6\,\%} (Peak: 28.6\,\%) \\ \hline
+        GPU-Auslastung & Auslastung der Grafikeinheit & \textbf{10.5\,\%} \\ \hline
+        Leistungsaufnahme & Durchschnittlicher Energiebedarf & \textbf{2.78\,W} (ca. 12\,\%/h Akku) \\ \hline
+        SoC-Temperatur & Chiptemperatur unter Last & \textbf{45.5\,°C} (Peak: 65.2\,°C) \\ \hline
     \end{tabularx}
 \end{table}
 
@@ -523,13 +555,13 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
     \end{tcolorbox}
     \caption{Vergleich der Systemauslastung und des Energiebedarfs über die vier Generationen.}
     \label{fig:performance_chart}
-\end{figure}
+    \end{figure}
 
 \subsection{Interpretation der Ergebnisse}
 Die Messwerte zeigen einen nicht-linearen, exponentiellen Anstieg der benötigten Systemressourcen:
 \begin{enumerate}[leftmargin=1.8em]
     \item \textbf{Einfluss der Architekturkomplexität (PS2 vs. NDS):} Während der Nintendo DS dank ARM-Verwandtschaft und einfacher 2D-Pipelines kaum messbare Last erzeugt, führt die Multi-Core-Struktur der PlayStation~2 (Emotion Engine samt Vektor-Einheiten) zu einem drastischen Anstieg der CPU-Auslastung auf 68\,\%. Der hohe Synchronisationsaufwand zwischen VU0, VU1 und der GPU bindet erhebliche Rechenkapazität.
-    \item \textbf{Shader-Kompilierung & JIT-Overhead (Switch):} Bei der Nintendo Switch resultieren die langen Ladezeiten (14.2\,s) und Frame-Drops (1\% Low von 21.4 FPS) primär aus Shader-Kompilierungen zur Laufzeit. Trotz Qualcomm Adreno GPU und optimierten Treibern stößt der Ayn Thor hier an thermische und rechnerische Limits.
+\item \textbf{Shader-Kompilierung \& JIT-Overhead (Switch):} Bei der Nintendo Switch resultieren die langen Ladezeiten (14.2\,s) und Frame-Drops (1\% Low von 21.4 FPS) prim\"ar aus Shader-Kompilierungen zur Laufzeit. Trotz Qualcomm Adreno GPU und optimierten Treibern st\"o\ss t der Ayn Thor hier an thermische und rechnerische Limits.
 \end{enumerate}
 
 \newpage
@@ -538,6 +570,7 @@ Die Messwerte zeigen einen nicht-linearen, exponentiellen Anstieg der benötigte
 % 11. DISKUSSION
 % =========================================================
 \section{Diskussion}
+\label{sec:diskussion}
 
 \subsection{Bestätigung oder Widerlegung der Hypothesen}
 \begin{itemize}[leftmargin=1.5em]
@@ -568,6 +601,7 @@ Die Messwerte zeigen einen nicht-linearen, exponentiellen Anstieg der benötigte
 % 12. SCHLUSSWORT & FAZIT (Richtlinie Kapitel 2.5)
 % =========================================================
 \section{Fazit und Ausblick}
+\label{sec:fazit}
 
 \begin{warningbox}[title={Wichtige Vorgabe zu Selbsterfahrungen (Richtlinie 2.5)}]
     \textbf{Achtung:} Selbsterfahrungen und Selbsteinschätzungen (\textit{z.\,B. was war schwierig, was lief gut}) gehören \textbf{nicht} in eine wissenschaftliche Arbeit und nicht in das Schlusswort! Diese gehören zwingend in die separate persönliche Prozessdokumentation.
@@ -600,7 +634,7 @@ Die Messwerte zeigen einen nicht-linearen, exponentiellen Anstieg der benötigte
 \section*{Danksagung}
 \addcontentsline{toc}{section}{Danksagung}
 
-Wir danken allen Personen, die uns bei der Erarbeitung dieser Berufsmaturitätsarbeit unterstützt und begleitet haben:
+Wir danken allen Personen, die uns während der Bearbeitung dieser Arbeit unterstützt haben. Insbesondere gilt unser Dank:
 \begin{itemize}[leftmargin=1.5em]
     \item Unserer betreuenden Lehrperson \textbf{Alexander Körner} für die fachliche Beratung und Unterstützung während des gesamten Projektverlaufs.
     \item \dots \platzhalter{Weitere Helfer, Interviewpartner, Korrektoren erwähnen.}
@@ -636,39 +670,75 @@ Wir danken allen Personen, die uns bei der Erarbeitung dieser Berufsmaturitätsa
 % =========================================================
 \appendix
 \section{Anhang}
+\label{sec:anhang_testprotokolle}
 
-\subsection{Messdaten \& Testmatrix}
-\renewcommand{\arraystretch}{1.3}
-\noindent
-\begin{tabularx}{\linewidth}{|l|l|X|l|l|l|X|}
-    \hline
-    \rowcolor{primaryTeal}
-    \textcolor{white}{\textbf{System}} & 
-    \textcolor{white}{\textbf{Emulator}} & 
-    \textcolor{white}{\textbf{Testfall}} & 
-    \textcolor{white}{\textbf{Ladezeit}} & 
-    \textcolor{white}{\textbf{FPS}} & 
-    \textcolor{white}{\textbf{Akku}} & 
-    \textcolor{white}{\textbf{Bemerkungen}} \\ \hline
-    Atari 2600 & Stella / RetroArch & Space Invaders & [\dots] & [\dots] & [\dots] & [\dots] \\ \hline
-    Nintendo DS & melonDS & Mario Kart DS & [\dots] & [\dots] & [\dots] & [\dots] \\ \hline
-    PlayStation 2 & AetherSX2 / NetherSX2 & Gran Turismo 4 & [\dots] & [\dots] & [\dots] & [\dots] \\ \hline
-    Nintendo Switch & Yuzu / Sudachi & Super Mario Odyssey & [\dots] & [\dots] & [\dots] & [\dots] \\ \hline
-\end{tabularx}
+\subsection{Scene~5 Master-Testmatrix (Telemetriedaten)}
+Die nachfolgende Tabelle dokumentiert die über das Shizuku- und Scene-5-Setup erhobenen Messwerte auf dem Ayn Thor über alle vier Testplattformen (inklusive der CHIP-8-Baseline). Alle Werte stellen arithmetische Mittelwerte aus drei Durchläufen unter standardisierten Laborbedingungen dar ($50\,\%$ Displayhelligkeit, Flugmodus, lüftergesteuertes Profil \textit{Standard}).
 
-\vspace{0.8cm}
+\vspace{0.3cm}
+\begin{table}[htbp]
+    \centering
+    \scriptsize
+    \caption{Empirische Master-Testmatrix mit Scene-5-Telemetriedaten}
+    \label{tab:scene5_master_matrix}
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabularx}{\linewidth}{|l|l|X|c|c|c|c|c|c|c|}
+        \hline
+        \rowcolor{primaryTeal}
+        \textcolor{white}{\textbf{System}} & 
+        \textcolor{white}{\textbf{Emulator / API}} & 
+        \textcolor{white}{\textbf{Referenztitel}} & 
+        \textcolor{white}{\textbf{Boot (s)}} & 
+        \textcolor{white}{\textbf{$\varnothing$ FPS}} & 
+        \textcolor{white}{\textbf{1\% Low}} & 
+        \textcolor{white}{\textbf{CPU \%}} & 
+        \textcolor{white}{\textbf{GPU \%}} & 
+        \textcolor{white}{\textbf{Power}} & 
+        \textcolor{white}{\textbf{Peak $T$}} \\ \hline
+        CHIP-8 & Eigenbau (Interp.) & Pong (64$\times$32) & 0.4 & 60.0 & 60.0 & 2\,\% & 1\,\% & 1.8\,W & 28\,°C \\ \hline
+        Atari 2600 & Stella (OpenGL) & Space Invaders & 1.2 & 60.0 & 59.8 & 4\,\% & 2\,\% & 2.1\,W & 30\,°C \\ \hline
+        Nintendo DS & melonDS (OpenGL) & Mario Kart DS & 2.6 & 60.0 & 58.4 & 15\,\% & 9\,\% & 3.2\,W & 34\,°C \\ \hline
+        PlayStation 2 & NetherSX2 (Vulkan, 2x) & Gran Turismo 4 & 6.8 & 49.3 & 38.1 & 68\,\% & 42\,\% & 6.7\,W & 48\,°C \\ \hline
+        Nintendo Switch & Sudachi (Turnip, 1x) & Super Mario Odyssey & 14.2 & 31.8 & 21.4 & 92\,\% & 78\,\% & 10.4\,W & 62\,°C \\ \hline
+    \end{tabularx}
+\end{table}
 
-\subsection{Detaillierte Testprotokolle \& Rohdaten}
-\begin{itemize}[leftmargin=1.5em]
-    \item Vollständige Tabellen aller Messreihen und Wiederholungen.
-\end{itemize}
-\platzhalter{Hier Rohdatentabellen einfügen...}
+\vspace{0.5cm}
+
+\subsection{Protokollvorlage für Einzelmessungen (Scene~5)}
+Für jeden einzelnen Benchmark-Durchlauf auf dem Ayn Thor wird folgendes standardisiertes Erfassungsschema verwendet:
+
+\begin{guidelinebox}[title={Messprotokoll-Schema (Auszug für Einzelmessungen)}]
+    \small
+    \textbf{1. Test-Metadaten:}\\
+    $\bullet$ Test-ID: \texttt{TEST-[Plattform]-[Spiel]-[Nr]} \quad $\bullet$ Datum/Uhrzeit: \dots\dots\dots\dots \quad $\bullet$ Prüfer: \dots\dots\dots\dots\\
+    $\bullet$ Start-Akkustand: \dots\dots\,\% \quad $\bullet$ Lüfterprofil: \dots\dots\dots\dots \quad $\bullet$ Raumtemperatur: \dots\dots\,°C
+
+    \medskip
+    \textbf{2. Software-Konfiguration:}\\
+    $\bullet$ Emulator \& Version: \dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\\
+    $\bullet$ Grafik-Backend: [ ] Vulkan \quad [ ] OpenGL \qquad $\bullet$ GPU-Treiber: System / Turnip\\
+    $\bullet$ Interne Auflösungsskalierung: [ ] 1x Native \quad [ ] 2x Native \quad [ ] 3x Native
+
+    \medskip
+    \textbf{3. Scene~5 Telemetriewerte (Mittelwert aus 10 Minuten Spielzeit):}\\
+    $\bullet$ Bildrate: $\varnothing$ FPS = \dots\dots\dots \quad 1\,\% Low = \dots\dots\dots \quad Frametime $\varnothing$ = \dots\dots\,ms\\
+    $\bullet$ SoC-Auslastung: CPU Gesamt = \dots\dots\,\% \quad Prime-Core X3 = \dots\dots\,GHz \quad GPU = \dots\dots\,\%\\
+    $\bullet$ Energie \& Thermik: Leistung $P$ = \dots\dots\,W \quad Strom $I$ = \dots\dots\,mA \quad Peak-Temp SoC = \dots\dots\,°C\\
+    $\bullet$ Speicher: RAM Belegung = \dots\dots\,GB / 12\,GB
+
+    \medskip
+    \textbf{4. Qualitative Beurteilung (1 bis 6):}\\
+    $\bullet$ Spielbarkeit: \dots / 6 \quad $\bullet$ Audio-Stottern: [ ] Nein \ [ ] Ja \quad $\bullet$ Shader-Ruckler: [ ] Nein \ [ ] Ja
+\end{guidelinebox}
+
+\vspace{0.5cm}
 
 \subsection{Screenshots \& Bilddokumentation}
 \begin{itemize}[leftmargin=1.5em]
-    \item Nummerierte Screenshots mit Untertiteln und Gegenüberstellungen von Grafik-Backends.
+    \item Nummerierte Screenshots mit Scene-5-OSD-Overlay und Gegenüberstellungen verschiedener Grafik-Backends (Vulkan vs. OpenGL).
 \end{itemize}
-\platzhalter{Hier Screenshots einfügen...}
+\platzhalter{Hier Screenshots mit Untertiteln einfügen...}
 
 \newpage
 
