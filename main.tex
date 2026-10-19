@@ -1,0 +1,586 @@
+\documentclass[11pt,a4paper]{scrartcl}
+
+% ---------------------------------------------------------
+% Grundlegende Pakete & Spracheinstellungen
+% ---------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ---------------------------------------------------------
+% Seitenränder & Geometrie
+% ---------------------------------------------------------
+\usepackage[a4paper,left=25mm,right=25mm,top=25mm,bottom=25mm,headheight=15pt,footskip=12mm]{geometry}
+
+% ---------------------------------------------------------
+% Farben
+% ---------------------------------------------------------
+\usepackage[table]{xcolor}
+\definecolor{primaryTeal}{HTML}{1F4E5B}
+\definecolor{headerTeal}{HTML}{275D6D}
+\definecolor{lightTeal}{HTML}{E8F1F3}
+\definecolor{borderGray}{HTML}{CCCCCC}
+\definecolor{textGray}{HTML}{555555}
+\definecolor{placeholderColor}{HTML}{777777}
+\definecolor{boxBg}{HTML}{EDF5F8}
+\definecolor{boxBorder}{HTML}{9DC3D0}
+
+% ---------------------------------------------------------
+% Kopf- und Fußzeilen
+% ---------------------------------------------------------
+\usepackage{scrlayer-scrpage}
+\clearpagemainheadfoot
+\ihead{\normalfont\small\textcolor{textGray}{Berufsmaturitätsarbeit BMA $\cdot$ Abschlussprojekt $\cdot$ Emulation mit Ayn Thor}}
+\ifoot{\normalfont\small\textcolor{textGray}{BMA Abschlussprojekt Vorlage $\cdot$ Emulation mit Ayn Thor}}
+\ofoot{\normalfont\small\textcolor{textGray}{\thepage}}
+\pagestyle{scrheadings}
+
+% ---------------------------------------------------------
+% Tabellen & Listen
+% ---------------------------------------------------------
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{amssymb} % Für \square Checkboxen
+
+% ---------------------------------------------------------
+% Infoboxen & Formatierung
+% ---------------------------------------------------------
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% ---------------------------------------------------------
+% Hyperlinks
+% ---------------------------------------------------------
+\usepackage[
+    colorlinks=true,
+    linkcolor=primaryTeal,
+    urlcolor=primaryTeal,
+    citecolor=primaryTeal
+]{hyperref}
+
+% Nummerierungstiefe bis subsubsection
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% Hilfsbefehl für Platzhalter
+\newcommand{\platzhalter}[1]{\par\medskip\noindent\textcolor{placeholderColor}{\textit{[#1]}}\medskip}
+
+\begin{document}
+
+% =========================================================
+% TITELSEITE / METADATEN-BLOCK
+% =========================================================
+\begin{titlepage}
+    \thispagestyle{scrheadings}
+    \vspace*{0.5cm}
+
+    \begin{center}
+        {\Large \textbf{Berufsmaturitätsarbeit}}\\[0.8em]
+        {\huge \textbf{\textcolor{primaryTeal}{Emulation mit Ayn Thor}}}\\[0.6em]
+        {\large \textcolor{textGray}{Vorlage für das BMA-Abschlussprojekt}}\\[1.2em]
+        \textcolor{primaryTeal}{\rule{\linewidth}{1.5pt}}
+    \end{center}
+
+    \vspace{0.8cm}
+
+    % Metadaten-Tabelle
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \begin{tabularx}{\linewidth}{|>{\bfseries\cellcolor{lightTeal}}p{4.2cm}|X|}
+        \hline
+        Titel & Emulation mit Ayn Thor \\ \hline
+        Verfasser & David Martin Felicio Reichlin / Gabriel Di Giuseppe \\ \hline
+        Klasse & BIN23e \\ \hline
+        Schule & Berufsmaturitätsschule Zürich \\ \hline
+        Abgabe & [Datum eintragen] \\ \hline
+        Betreuende Lehrperson & Alexander Körner \\ \hline
+        Version & 1.0 \\ \hline
+    \end{tabularx}
+
+    \vspace{1.5cm}
+
+    % Arbeitstitel / Leitfrage
+    \subsection*{Arbeitstitel / Leitfrage}
+    \begin{tcolorbox}[
+        colback=boxBg,
+        colframe=boxBorder,
+        arc=2mm,
+        left=4mm,
+        right=4mm,
+        top=3mm,
+        bottom=3mm
+    ]
+        \textbf{Leitfrage:}\\[0.4em]
+        Wie funktioniert Emulation auf dem Ayn Thor, und was läuft im Hintergrund ab, damit ältere Konsolen und Spiele auf moderner Hardware funktionieren? Welche Grenzen hat Emulation und warum sind gewisse Systeme schwieriger zu emulieren als andere?
+    \end{tcolorbox}
+
+    \vfill
+\end{titlepage}
+
+\newpage
+
+% =========================================================
+% INHALTSVERZEICHNIS
+% =========================================================
+\renewcommand{\contentsname}{Inhaltsverzeichnis / Kapitelübersicht}
+\tableofcontents
+\newpage
+
+% =========================================================
+% INHALT
+% =========================================================
+
+\section{Einleitung}
+\platzhalter{Hier Einleitungstext ausformulieren...}
+
+\section{Ausgangslage und Hintergrund}
+\begin{itemize}[leftmargin=1.5em]
+    \item Warum Emulation heute relevant ist: alte Konsolen, Computer und Programme auf moderner Hardware weiterverwenden.
+    \item Kurzer Überblick, weshalb originale Hardware oft nicht mehr produziert wird oder schwer verfügbar ist.
+\end{itemize}
+
+\subsection{Ziel der Arbeit}
+\begin{itemize}[leftmargin=1.5em]
+    \item Technisch erklären, wie Emulation funktioniert.
+    \item Praktisch untersuchen, wie gut verschiedene Emulatoren auf dem Ayn Thor laufen.
+    \item Grenzen und Schwierigkeiten der Emulation verständlich darstellen.
+\end{itemize}
+\medskip
+\noindent\textit{Was genau ist mit dem Begriff Emulation gemeint?}
+
+\subsection{Persönlicher Bezug / Motivation}
+\begin{itemize}[leftmargin=1.5em]
+    \item Interesse an Technik, modernen Geräten und Retro-Systemen beschreiben.
+    \item Erklären, weshalb euch Emulatoren und die Funktionsweise von Konsolen im Hintergrund interessieren.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Forschungsfrage, Hypothese und Abgrenzung}
+
+\subsection{Forschungsfragen}
+Wie funktioniert Emulation auf Systemebene, und welche Hardware- und Software-Faktoren bestimmen die Grenzen der Emulierbarkeit auf moderner Handheld-Hardware (Ayn Thor)?
+
+\subsubsection*{Teilforschungsfragen}
+\begin{enumerate}[leftmargin=1.8em]
+    \item Welche softwarearchitektonischen Kernkomponenten sind zwingend erforderlich, um einen funktionsfähigen CHIP-8-Interpreter von Grund auf zu implementieren?
+    \item \textbf{Flaschenhals- und Grenzwertanalyse:} Welche spezifischen Hardwarefaktoren und Softwarefaktoren setzen der Emulierbarkeit komplexer Systeme auf dem Testgerät praktische Grenzen?
+    \item \textbf{Skalierung \& Systemlast:} In welchem Verhältnis steigen CPU-/GPU-Auslastung und Leistungsaufnahme auf dem Ayn Thor, wenn die emulierte Systemkomplexität von einem einfachen CHIP-8-Interpreter bis hin zu modernen Systemen mit Just-in-Time-Kompilierung skaliert wird?
+\end{enumerate}
+
+\subsection{Hypothese}
+\begin{itemize}[leftmargin=1.5em]
+    \item Die Interpreter benötigen \dots
+    \item Beispiele: ältere Systeme wie Atari oder Nintendo DS sind einfacher als PlayStation 2 oder Nintendo Switch.
+    \item Wir denken, dass wir die \dots
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Abgrenzung}
+\begin{itemize}[leftmargin=1.5em]
+    \item Klarmachen, welche Systeme, Emulatoren und Tests betrachtet werden.
+    \item Nicht untersuchte Themen nennen, z.\,B. vollständige Spielebibliotheken, Online-Funktionen oder tiefgehende rechtliche Einzelfälle.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Theoretische Grundlagen der Emulation}
+
+\subsubsection{Statische Grundlagen eines Rechners}
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Von-Neumann-Architektur:}\\
+    Ist ein Schaltungskonzept für die Realisation einer Turingmaschine (Wikipedia, 2026).
+    \item \textbf{Zustandsmaschine:}\\
+    Der Gesamtzustand: Die exakte Momentaufnahme aller Register und Speicher zu einem bestimmten Zeitpunkt.
+    \item \textbf{Fetch-Decode-Execute-Zyklus} (James Woodhouse, 2025):
+    \begin{itemize}[leftmargin=1.5em]
+        \item \textbf{Fetch:} Befehl an Position aus dem RAM laden
+        \item \textbf{Decode:} Befehl analysieren
+        \item \textbf{Execute:} Operation in Hard-/Software ausführen
+    \end{itemize}
+    \item \textbf{Status-Flags}
+    \item \textbf{Software-Interpreter} (Wikipedia, 2026)
+\end{enumerate}
+
+\subsubsection{Definition: Emulation, Simulation und Virtualisierung}
+
+\paragraph{Simulation}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Wie:} Verwendet Software, um die externen Antworten oder Ausgaben nach Eingaben zu simulieren.
+    \item \textbf{Performance und Akkuratesse:} Die Akkuratesse ist nach Design unterschiedlich, bevorzugt meistens Performance anstatt genauer Replikation (SoC \& FPGA, 2025).
+\end{itemize}
+
+\paragraph{Emulation}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Wie:} Rekreiert die komplette Hardware- und Softwareumgebung in einer Software, was der Host-Maschine erlaubt, sich wie ein komplett anderes Gerät zu verhalten.
+    \item \textbf{Performance und Akkuratesse:} Hat die höchste Akkuratesse, was zu höherer Latenz führen kann (SoC \& FPGA, 2025).
+\end{itemize}
+
+\paragraph{Virtualisierung}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Wie:} Es partitioniert die Ressourcen des physischen Hosts, um mehrere isolierte Betriebssysteme laufen zu lassen.
+    \item \textbf{Performance:} Höchst effizient mit minimalem Performanceverlust, bietet jedoch keine hardwarenahe Replikation fremder Architekturen (SoC \& FPGA, 2025).
+\end{itemize}
+
+\begin{itemize}[leftmargin=1.5em]
+    \item Kurz erklären, was ein Emulator nachbildet und was nicht.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsubsection{Technische Bausteine eines Emulators}
+\begin{itemize}[leftmargin=1.5em]
+    \item CPU / Instruktionssatz
+    \item Speicher und Adressierung
+    \item Grafik / Rendering
+    \item Audio
+    \item Eingaben / Controller
+    \item Dateien, BIOS, Firmware und Systemdaten
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsubsection{Wie Emulation im Hintergrund funktioniert}
+\begin{itemize}[leftmargin=1.5em]
+    \item Interpretation
+    \item Dynamische Rekompilierung / JIT
+    \item Timing und Synchronisation
+    \item Kompatibilität und Fehlerquellen
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsubsection{Grenzen der Emulation}
+\begin{itemize}[leftmargin=1.5em]
+    \item Leistung
+    \item Genauigkeit
+    \item Latenz
+    \item Kompatibilität
+    \item Energieverbrauch
+    \item Bedienbarkeit auf Handheld-Geräten
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Gerät und Testumgebung: Ayn Thor}
+
+\subsection{Gerätebeschreibung}
+\begin{itemize}[leftmargin=1.5em]
+    \item Technische Eckdaten des Ayn Thor eintragen.
+    \item Betriebssystem, Speicher, Display, Akku und Eingabemöglichkeiten beschreiben.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Warum Ayn Thor geeignet ist}
+\begin{itemize}[leftmargin=1.5em]
+    \item Leistung für verschiedene Emulatoren.
+    \item Handheld-Formfaktor für praxisnahe Tests.
+    \item Vergleichbarkeit durch wiederholbare Testbedingungen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Testaufbau}
+\begin{itemize}[leftmargin=1.5em]
+    \item Installierte Emulatoren und Versionen dokumentieren.
+    \item Einstellungen festhalten, z.\,B. Auflösung, Grafik-Backend, Frameskip, Controller-Mapping.
+    \item Testdauer, Akku-Startwert und Umgebung notieren.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Methodik und Vorgehen}
+
+\subsection{Methode 1: Literatur- und Quellenrecherche}
+\begin{itemize}[leftmargin=1.5em]
+    \item Bücher, Fachartikel, Herstellerseiten und seriöse Internetquellen sammeln.
+    \item Wichtige technische Begriffe und Funktionsweisen zusammenfassen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Methode 2: Praktische Tests auf dem Ayn Thor}
+\begin{itemize}[leftmargin=1.5em]
+    \item Verschiedene Emulatoren testen und vergleichbare Kriterien verwenden.
+    \item Testergebnisse mit Screenshots, Tabellen und Diagrammen dokumentieren.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Bewertungskriterien}
+\begin{itemize}[leftmargin=1.5em]
+    \item Ladezeit
+    \item Bildqualität
+    \item Steuerung
+    \item Stabilität
+    \item Akkuverbrauch
+    \item Fehler / Grafikprobleme
+    \item Subjektive Spielbarkeit
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Dokumentation der Ergebnisse}
+\begin{itemize}[leftmargin=1.5em]
+    \item Screenshots benennen und nummerieren.
+    \item Messwerte in Tabellen eintragen.
+    \item Diagramme erst nach vollständiger Datenerhebung erstellen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Praktische Untersuchung}
+
+\subsection{Auswahl der Systeme}
+\begin{itemize}[leftmargin=1.5em]
+    \item Atari / ältere Systeme
+    \item Nintendo DS
+    \item PlayStation 2
+    \item Nintendo Switch oder anderes anspruchsvolles System, falls sinnvoll und zulässig
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Auswahl der Emulatoren}
+\begin{itemize}[leftmargin=1.5em]
+    \item Pro System mindestens einen Emulator auswählen.
+    \item Versionen, Quellen und Einstellungen dokumentieren.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Durchführung der Tests}
+\begin{itemize}[leftmargin=1.5em]
+    \item Gleicher Ablauf pro Emulator.
+    \item Messwerte direkt nach jedem Test eintragen.
+    \item Auffälligkeiten kurz notieren.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Beobachtungen}
+\begin{itemize}[leftmargin=1.5em]
+    \item Technische Probleme beschreiben.
+    \item Unterschiede zwischen Systemen erklären.
+    \item Screenshots oder kurze Bildvergleiche einfügen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Auswertung und Vergleich}
+
+\subsection{Tabellarischer Vergleich}
+\begin{itemize}[leftmargin=1.5em]
+    \item Alle getesteten Systeme anhand derselben Kriterien vergleichen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Diagramme}
+\begin{itemize}[leftmargin=1.5em]
+    \item Ladezeiten, Akkuverbrauch oder Bewertungspunkte visualisieren.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Interpretation}
+\begin{itemize}[leftmargin=1.5em]
+    \item Erklären, warum gewisse Systeme besser oder schlechter laufen.
+    \item Hypothese mit den Ergebnissen vergleichen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Diskussion}
+
+\subsection{Bestätigung oder Widerlegung der Hypothese}
+\begin{itemize}[leftmargin=1.5em]
+    \item Was spricht für die Hypothese?
+    \item Welche Ergebnisse waren überraschend?
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Technische Grenzen}
+\begin{itemize}[leftmargin=1.5em]
+    \item Leistung des Geräts, Emulator-Optimierung, Systemkomplexität und Genauigkeit diskutieren.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Rechtliche und ethische Hinweise}
+\begin{itemize}[leftmargin=1.5em]
+    \item Nur allgemein und sachlich: BIOS, Firmware, ROMs und Urheberrecht sauber behandeln.
+    \item Keine Anleitung zu illegaler Beschaffung aufnehmen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Fazit}
+
+\subsection{Antwort auf die Leitfrage}
+\begin{itemize}[leftmargin=1.5em]
+    \item Kurz, klar und direkt beantworten.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Wichtigste Erkenntnisse}
+\begin{itemize}[leftmargin=1.5em]
+    \item 3 bis 5 zentrale Punkte zusammenfassen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Ausblick}
+\begin{itemize}[leftmargin=1.5em]
+    \item Weitere Tests, andere Geräte oder tiefere technische Analysen als mögliche Weiterführung nennen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Projektorganisation}
+
+\subsection{Rollen und Verantwortlichkeiten}
+\begin{itemize}[leftmargin=1.5em]
+    \item Festhalten, wer welchen Teil bearbeitet.
+    \item Wichtig bei Partnerarbeit und individueller Prozessdokumentation.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Zeitplan}
+\begin{itemize}[leftmargin=1.5em]
+    \item Meilensteine, Besprechungstermine und Abgabe ergänzen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Hilfsmittel}
+\begin{itemize}[leftmargin=1.5em]
+    \item Ayn Thor
+    \item Emulatoren
+    \item Laptop
+    \item Quellenverwaltung
+    \item Screenshots / Tabellen / Diagramme
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Kontaktpersonen und Informationsstellen}
+\begin{itemize}[leftmargin=1.5em]
+    \item Lehrperson
+    \item Person mit Erfahrung im Bereich Emulation
+    \item Herstellerseiten von Emulatoren
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section{Quellenverzeichnis}
+
+\subsection{Quellen erfassen}
+\begin{itemize}[leftmargin=1.5em]
+    \item SoC \& FPGA, Emulation, Virtualization, and Simulation A Comparative Analysis. 22. November 2025, \url{https://www.youtube.com/watch?v=S8Nt_-jJ60s&t=1749s} Abrufdatum: 2. September 2026.
+    \item Interpreter (Computing), Wikipedia, Abrufdatum: 14. August 2026, \url{https://en.wikipedia.org/wiki/Interpreter_(computing)} Abrufdatum: 09. September 2026.
+    \item Von-Neumann-Architektur, Wikipedia, 4. September 2026, \url{https://de.wikipedia.org/wiki/Von-Neumann-Architektur}, Abrufdatum: 09. September 2026.
+    \item James Woodhouse, The Fetch-Decode-Execute Cycle, 28. November 2025, \url{https://www.savemyexams.com/igcse/computer-science/cie/23/revision-notes/3-hardware/computer-architecture/the-fetch-decode-execute-cycle/} Abrufdatum: 09.09.2026.
+    \item Autor / Herausgeber, Titel, Datum, URL und Abrufdatum festhalten.
+    \item Einheitlichen Zitierstil verwenden.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\section*{Bibliography / Literaturverzeichnis}
+\addcontentsline{toc}{section}{Bibliography / Literaturverzeichnis}
+
+\begin{itemize}[leftmargin=1.5em, label={--}]
+    \item FPGA, S. \&. (2026, November 22). \textit{Emulation, Virtualization and Simulation A Comparative Analysis}. Retrieved from: \url{https://www.youtube.com/watch?v=S8Nt_-jJ60s&t=1749s}
+    \item Wikipedia. (2026, August 14). \textit{Interpreter (Computing)}. Retrieved from: \url{https://en.wikipedia.org/wiki/Interpreter_(computing)}
+    \item Wikipedia. (2026, September 4). \textit{Von-Neumann-Architektur}. Retrieved from: \url{https://de.wikipedia.org/wiki/Von-Neumann-Architektur}
+    \item Woodhouse, J. (2026, September 9). \textit{The Fetch-Decode Execute Cycle}. Retrieved from Savemyexams: \url{https://www.savemyexams.com/igcse/computer-science/cie/23/revision-notes/3-hardware/computer-architecture/the-fetch-decode-execute-cycle/}
+\end{itemize}
+
+\newpage
+
+\section{Anhang}
+
+\subsection{Testprotokolle}
+\begin{itemize}[leftmargin=1.5em]
+    \item Rohdaten und vollständige Tabellen einfügen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Screenshots}
+\begin{itemize}[leftmargin=1.5em]
+    \item Screenshots nummerieren und kurz beschreiben.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\subsection{Prozessdokumentation}
+\begin{itemize}[leftmargin=1.5em]
+    \item Arbeitsjournal, Besprechungsnotizen und Reflexionen ergänzen.
+\end{itemize}
+\platzhalter{Hier ausformulieren...}
+
+\newpage
+
+\section{Vorlagen für Datenerhebung und Planung}
+
+\subsection{Testmatrix}
+\renewcommand{\arraystretch}{1.4}
+\noindent
+\begin{tabularx}{\linewidth}{|l|l|X|l|l|l|X|}
+    \hline
+    \rowcolor{primaryTeal}
+    \textcolor{white}{\textbf{System}} & 
+    \textcolor{white}{\textbf{Emulator}} & 
+    \textcolor{white}{\textbf{Testfall}} & 
+    \textcolor{white}{\textbf{Ladezeit}} & 
+    \textcolor{white}{\textbf{Perf.}} & 
+    \textcolor{white}{\textbf{Akku}} & 
+    \textcolor{white}{\textbf{Bemerkungen}} \\ \hline
+    Atari / älteres System & [\dots] & [\dots] & [\dots] & [\dots] & [\dots] & [\dots] \\ \hline
+    Nintendo DS & [\dots] & [\dots] & [\dots] & [\dots] & [\dots] & [\dots] \\ \hline
+    PlayStation 2 & [\dots] & [\dots] & [\dots] & [\dots] & [\dots] & [\dots] \\ \hline
+    Nintendo Switch / anspruchsvoll & [\dots] & [\dots] & [\dots] & [\dots] & [\dots] & [\dots] \\ \hline
+\end{tabularx}
+
+\vspace{1cm}
+
+\subsection{Kapitel- und Aufgabenplanung}
+\renewcommand{\arraystretch}{1.4}
+\noindent
+\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{3.5cm}|X|>{\raggedright\arraybackslash}p{3.2cm}|c|}
+    \hline
+    \rowcolor{primaryTeal}
+    \textcolor{white}{\textbf{Kapitel / Aufgabe}} & 
+    \textcolor{white}{\textbf{Inhalt}} & 
+    \textcolor{white}{\textbf{Verantwortlich}} & 
+    \textcolor{white}{\textbf{Status}} \\ \hline
+    Theorie & Grundlagen Emulation + technische Bausteine & David / Gabriel & Offen \\ \hline
+    Testumgebung & Ayn Thor, Emulatoren, Einstellungen & David / Gabriel & Offen \\ \hline
+    Praktische Tests & Messwerte, Screenshots, Fehler dokumentieren & David / Gabriel & Offen \\ \hline
+    Auswertung & Tabellen, Diagramme, Interpretation & David / Gabriel & Offen \\ \hline
+    Fazit & Leitfrage beantworten, Hypothese prüfen & David / Gabriel & Offen \\ \hline
+\end{tabularx}
+
+\vspace{1cm}
+
+\subsection{Besprechungstermine}
+\renewcommand{\arraystretch}{1.4}
+\noindent
+\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{3.5cm}|X|>{\raggedright\arraybackslash}p{3.5cm}|p{2.5cm}|}
+    \hline
+    \rowcolor{primaryTeal}
+    \textcolor{white}{\textbf{Kapitel / Aufgabe}} & 
+    \textcolor{white}{\textbf{Inhalt}} & 
+    \textcolor{white}{\textbf{Verantwortlich}} & 
+    \textcolor{white}{\textbf{Status}} \\ \hline
+    1. Termin & [Datum] & Lehrperson / Lernende & [Themen] \\ \hline
+    2. Termin & [Datum] & Lehrperson / Lernende & [Themen] \\ \hline
+\end{tabularx}
+
+\vspace{1cm}
+
+\subsection{Checkliste vor Abgabe}
+\begin{itemize}[label={$\square$}, leftmargin=2em]
+    \item Leitfrage beantwortet
+    \item Hypothese geprüft
+    \item Mindestens zwei Methoden sichtbar angewendet
+    \item Testdaten vollständig dokumentiert
+    \item Screenshots beschriftet
+    \item Quellen vollständig und einheitlich
+    \item Rechtschreibung kontrolliert
+    \item Inhaltsverzeichnis aktualisiert
+    \item Anhang vollständig
+\end{itemize}
+
+\vspace{0.8cm}
+
+\begin{tcolorbox}[
+    colback=boxBg,
+    colframe=boxBorder,
+    arc=2mm,
+    left=4mm,
+    right=4mm,
+    top=3mm,
+    bottom=3mm
+]
+    \textbf{Arbeitsweise:} Alle Platzhalter in eckigen Klammern ersetzen. Die Reihenfolge der Kapitel kann angepasst werden, wenn die Lehrperson andere Vorgaben macht.
+\end{tcolorbox}
+
+\end{document}
