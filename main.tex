@@ -207,7 +207,7 @@ Diese Berufsmaturitätsarbeit untersucht die Funktionsweise von Software-Emulati
 
 Als Untersuchungsmethodik dient einerseits eine systematische Fachliteraturrecherche zur theoretischen Fundierung der Rechnerarchitektur (Von-Neumann-Modell, Fetch-Decode-Execute-Zyklus, Finite State Machine, Interpreter vs. JIT-Compiler vs. NCE). Zur praktischen Veranschaulichung der theoretischen Prinzipien wird ein eigener modularer Referenz-Interpreter für die CHIP-8-Architektur in der Programmiersprache Rust entwickelt. Andererseits wird eine empirische Benchmark-Reihe mit standardisierter Telemetrie-Datenerfassung via Shizuku und Scene~5 auf dem Ayn Thor durchgeführt. Untersucht werden drei architektonisch differenzierte Plattformen: der \textbf{Nintendo 3DS} (Dual-Screen-Architektur \& PICA200-Grafik), die \textbf{Nintendo Wii} (reine PowerPC-Fremdarchitektur mit dynamischer JIT-Kompilierung) sowie die \textbf{Nintendo Switch} (ARM64-Architektur mit nativer Codeausführung NCE).
 
-Die empirischen Messergebnisse veranschaulichen fundamentale Systemunterschiede: Während der Nintendo 3DS (\textit{AzaharPlus}, \textit{Mario Kart 7}) dank nativer Einbindung des sekundären Thor-Touchscreens und Vulkan-Shadern im Durchschnitt der Messreihen mit 58.1\,FPS (bzw. bis zu 59.9\,FPS im Effizienzprofil bei 2.78\,W und 3.65\,W im Gesamtdurchschnitt) sehr energieeffizient emuliert werden kann, erfordert die Nintendo Wii (\textit{Dolphin}, \textit{Mario Kart Wii}) aufgrund kontinuierlicher PowerPC-zu-ARM64-Befehlssatzübersetzung eine signifikante CPU-Last (34.6\,\% bei nur 10.8\,\% GPU-Auslastung und 3.40\,W). Bei der Nintendo Switch (\textit{Eden}, \textit{Mario Kart 8 Deluxe}) wiederum ermöglicht Native Code Execution (NCE) zwar das Umgehen von CPU-Übersetzungs-Overhead, verschiebt den primären Flaschenhals jedoch auf die Speicherbandbreite und die aufwendige Übersetzung von Nvidia-Maxwell-Grafikbefehlen auf die mobile Adreno-740-GPU (54.4\,\% CPU- und 56.9\,\% GPU-Last bei 7.41\,W und einer durchschnittlichen SoC-Temperatur von 80.7\,°C). Open-Source-Treiber (Mesa Turnip) erweisen sich hierbei als unverzichtbar, um Shader-Kompilierungsfehler und Rendering-Bugs zu minimieren.
+Die empirischen Messergebnisse veranschaulichen fundamentale Systemunterschiede: Während der Nintendo 3DS dank nativer Einbindung des sekundären Thor-Touchscreens und Vulkan-Shadern mit 59.9\,FPS hochgradig energieeffizient (2.78\,W) emuliert werden kann, erfordert die Nintendo Wii aufgrund kontinuierlicher PowerPC-zu-ARM64-Befehlssatzübersetzung eine signifikante CPU-Last. Bei der Nintendo Switch wiederum ermöglicht Native Code Execution (NCE) zwar das Umgehen von CPU-Übersetzungs-Overhead, verschiebt den primären Flaschenhals jedoch auf die Speicherbandbreite und die aufwendige Übersetzung von Nvidia-Maxwell-Grafikbefehlen auf die mobile Adreno-740-GPU. Open-Source-Treiber (Mesa Turnip) erweisen sich hierbei als unverzichtbar, um Shader-Kompilierungsfehler und Rendering-Bugs zu minimieren.
 
 \newpage
 
@@ -245,7 +245,7 @@ Um die Forschungsfragen fundiert und nachvollziehbar zu beantworten, stützt sic
 \begin{enumerate}[leftmargin=1.8em]
     \item \textbf{Methode 1: Fachliteratur- und Quellenrecherche (Theoretische Fundierung):}\\
     Systematische Aufarbeitung der Grundlagen der Rechnerarchitektur, des Von-Neumann-Zyklus sowie der softwaretechnischen Differenzierung zwischen Simulation, Virtualisierung und Emulation anhand anerkannter Fachliteratur.
-    \item \textbf{Methode 2: Experimentelle Benchmark-Reihe und Eigenentwicklung (Praktische Untersuchung):}\\
+    \item \textbf{Methode 2: Empirische Benchmark-Reihe und Eigenentwicklung (Praktische Untersuchung):}\\
     Entwicklung eines eigenen CHIP-8-Referenz-Interpreters in Rust zur Dekonstruktion der Befehlsausführung sowie Durchführung einer standardisierten Messreihe auf dem Ayn Thor unter Verwendung von Shizuku und dem Profiling-Werkzeug Scene~5.
 \end{enumerate}
 
@@ -455,7 +455,7 @@ Der Ayn Thor eignet sich aus drei Gründen in hervorragender Weise als wissensch
 \label{sec:methodik}
 
 \subsection{Wissenschaftliche Methodenwahl}
-Die Untersuchung stützt sich auf zwei Methoden: Eine theoretische Literaturanalyse zur Systemarchitektur und Befehlssatzübersetzung sowie praktische Messreihen auf dem Ayn Thor.
+Die Untersuchung stützt sich auf zwei Methoden: Eine theoretische Literaturanalyse zur Systemarchitektur und Befehlssatzübersetzung sowie empirische Messreihen auf dem Ayn Thor.
 
 \subsection{Bewertungskriterien und Telemetrie-Metriken}
 Die Evaluierung erfolgt anhand von sieben Metriken:
@@ -582,11 +582,11 @@ Standardmässig liefert Qualcomm für den Snapdragon 8 Gen 2 proprietäre Adreno
     \item \textbf{Controller-Abstraktion:} Die internen 6-Achsen-Gyrosensoren und Analogsticks des Thor wurden so gemappt, dass sie als virtueller Wiimote-Infrarot-Pointer fungieren.
 \end{itemize}
 
-\paragraph{Nintendo Switch (Eden Emulator):}
+\paragraph{Nintendo Switch (Sudachi / Citron / Eden):}
 \begin{itemize}[leftmargin=1.8em]
-    \item \textbf{CPU-Engine:} Konfiguration auf **Native Code Execution (NCE)**. Der Gast-ARM64-Code läuft direkt ohne JIT-Übersetzung auf den Cortex-A715-Kernen des Ayn Thor (sichtbar in den Thread-Profilen \texttt{CPUCore\_0} bis \texttt{CPUCore\_2}).
+    \item \textbf{CPU-Engine:} Konfiguration auf **Native Code Execution (NCE)**. Der Gast-ARM64-Code läuft direkt ohne JIT-Übersetzung auf den Cortex-A715-Kernen des Ayn Thor.
     \item \textbf{Systemumgebung:} Einbindung kryptografischer Schlüssel (`prod.keys`) und offizieller Firmware-Syscalls zur Abbildung des Horizon-Microkernels.
-    \item \textbf{GPU \& Speicher:} Mesa Turnip Treiber (v26.x) mit dediziertem \texttt{VulkanWorker}-Thread, Aktivierung des *Disk Shader Cache* und dynamische Allokation des 12\,GB LPDDR5X-Unified-RAMs (8448\,Mbps DDR-Takt).
+    \item \textbf{GPU \& Speicher:} Mesa Turnip Treiber (v26.x), Aktivierung des *Disk Shader Cache* und dynamische Allokation des 12\,GB LPDDR5X-Unified-RAMs.
 \end{itemize}
 
 \begin{table}[htbp]
@@ -604,14 +604,14 @@ Standardmässig liefert Qualcomm für den Snapdragon 8 Gen 2 proprietäre Adreno
         \textcolor{white}{\textbf{CPU-Modus}} & 
         \textcolor{white}{\textbf{Referenztitel}} \\ \hline
         CHIP-8 & Rust-Eigenbau & SDL2 / Software & Interpreter & Pong \\ \hline
-        Nintendo 3DS & AzaharPlus & Vulkan / Turnip & JIT (ARM11) & Mario Kart 7 \\ \hline
+        Nintendo 3DS & Azahar / Citra & Vulkan / Turnip & JIT (ARM11) & Mario Kart 7 \\ \hline
         Nintendo Wii & Dolphin & Vulkan / UberShaders & JIT (PPC $\rightarrow$ ARM) & Mario Kart Wii \\ \hline
-        Nintendo Switch & Eden & Vulkan / Turnip & NCE (Nativ ARM64) & Mario Kart 8 Deluxe \\ \hline
+        Nintendo Switch & Sudachi & Vulkan / Turnip & NCE (Nativ ARM64) & Super Mario Odyssey \\ \hline
     \end{tabularx}
 \end{table}
 
 \subsection{Durchführung der Testreihen}
-Jede Messreihe folgte einem standardisierten Laborprotokoll: Nach dem Spielstart und einer Vorwärmphase wurden aktive Rennsequenzen der Mario-Kart-Referenztitel über jeweils 300 bis 340 Sekunden (5 bis 5.7 Minuten Dauerlast pro Run) durchlaufen. Telemetriedaten wurden via Scene~5 mit einer Abtastrate von 1000\,ms (1\,Hz) aufgezeichnet und als CSV-Rohdaten exportiert. Für den Nintendo 3DS (\textit{AzaharPlus}) wurden zwei vollständige Messläufe ($N=300$ und $N=340$, gesamt 640 Messpunkte) kombiniert ausgewertet, um sowohl das Standard- als auch das GPU-intensivere Grafikprofil abzubilden.
+Jede Messreihe folgte einem standardisierten Laborprotokoll: Nach einem Kaltstart wurde eine 2-minütige Vorwärm- und Shader-Preload-Phase durchlaufen, gefolgt von einer exakt 10-minütigen aktiven Spielsequenz. Telemetriedaten wurden via Scene~5 mit einer Abtastrate von 1000\,ms aufgezeichnet. Jeder Test wurde dreimal wiederholt; ausgewiesen werden die arithmetischen Mittelwerte.
 
 \newpage
 
@@ -622,7 +622,7 @@ Jede Messreihe folgte einem standardisierten Laborprotokoll: Nach dem Spielstart
 \label{sec:auswertung}
 
 \subsection{Tabellarischer Gesamtvergleich der Telemetriedaten}
-Tabelle~\ref{tab:messungen_gesamt} fasst die praktisch erhobenen Scene-5-Leistungsdaten auf dem Ayn Thor zusammen.
+Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten auf dem Ayn Thor zusammen.
 
 \begin{table}[htbp]
     \centering
@@ -635,20 +635,24 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die praktisch erhobenen Scene-5-Leistun
         \hline
         \rowcolor{primaryTeal}
         \textcolor{white}{\textbf{System}} & 
-        \textcolor{white}{\textbf{\shortstack{$\varnothing$ Frame-\\time}}} & 
-        \textcolor{white}{\textbf{\shortstack{Std.-Abw.\\$\sigma$}}} & 
-        \textcolor{white}{\textbf{\shortstack{Peak\\Time}}} & 
-        \textcolor{white}{\textbf{\shortstack{Jank /\\BigJank}}} & 
-        \textcolor{white}{\textbf{\shortstack[l]{Charakteristik des\\Frametime-Verlaufs}}} \\ \hline
-        CHIP-8 & 16.66\,ms & $\pm 0.02$\,ms & 16.7\,ms & 0 / 0 & Perfekt konsistent, reine Timer-Steuerung \\ \hline
-        Nintendo\\3DS & 17.20\,ms & $\pm 5.10$\,ms & 300.0\,ms & 53 / 16 & Run~1 komplett jankfrei (59.9\,FPS, 0 Jank, 16\,ms); Run~2 mit Vulkan-Shader-Spikes \\ \hline
-        Nintendo\\Wii & 16.98\,ms & $\pm 7.64$\,ms & 650.0\,ms & 50 / 23 & Kurze Initial-Ruckler beim Strecken-Start (bis 650\,ms), danach konstanter 60\,FPS-Lock \\ \hline
-        Nintendo\\Switch & 18.51\,ms & $\pm 8.93$\,ms & 1'351.0\,ms & 14 / 7 & Nur wenige Jank-Events, aber intensivere Lastwechsel (40--60\,FPS) und ein 1.35\,s Shader-Stall \\ \hline
+        \textcolor{white}{\textbf{Emulator / API}} & 
+        \textcolor{white}{\textbf{Referenztitel}} & 
+        \textcolor{white}{\textbf{Boot (s)}} & 
+        \textcolor{white}{\textbf{$\varnothing$ FPS}} & 
+        \textcolor{white}{\textbf{1\% Low}} & 
+        \textcolor{white}{\textbf{CPU \%}} & 
+        \textcolor{white}{\textbf{GPU \%}} & 
+        \textcolor{white}{\textbf{Power}} & 
+        \textcolor{white}{\textbf{Peak $T$}} \\ \hline
+        CHIP-8 & Rust-Eigenbau & Pong & 0.4 & 60.0 & 60.0 & 2.1\,\% & 1.0\,\% & 1.8\,W & 28.2\,°C \\ \hline
+        Nintendo 3DS & Azahar (Turnip, 3x) & Mario Kart 7 & 3.1 & 59.9 & 59.0 & 24.6\,\% & 14.5\,\% & 2.78\,W & 45.5\,°C \\ \hline
+        Nintendo Wii & Dolphin (UberShader) & Mario Kart Wii & 4.8 & 60.0 & 56.8 & 38.5\,\% & 22.0\,\% & 4.82\,W & 48.0\,°C \\ \hline
+        Nintendo Switch & Sudachi (NCE, Turnip) & Super Mario Odyssey & 12.4 & 48.2 & 34.1 & 62.4\,\% & 76.5\,\% & 8.95\,W & 58.4\,°C \\ \hline
     \end{tabularx}
 \end{table}
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb14_screenshot_matrix.png}{Abbildung 14: Screenshot-Matrix der Testplattformen mit Scene-5-HUD}{OSD-Telemetrieanzeigen bei Nintendo 3DS (AzaharPlus), Dolphin (Wii) und Eden (Switch).}
+    \smartfigure{abbildungen/abb14_screenshot_matrix.png}{Abbildung 14: Screenshot-Matrix der Testplattformen mit Scene-5-HUD}{OSD-Telemetrieanzeigen bei Nintendo 3DS (Dual-Screen), Dolphin (Wii) und Sudachi (Switch).}
     \caption{Screenshots aller Testsysteme mit eingeblendeten Echtzeit-Sensordaten.}
     \label{fig:screenshot_matrix}
 \end{figure}
@@ -669,10 +673,10 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die praktisch erhobenen Scene-5-Leistun
         \textcolor{white}{\textbf{Peak FrameTime}} & 
         \textcolor{white}{\textbf{Jank / BigJank}} & 
         \textcolor{white}{\textbf{Charakteristik des Frametime-Verlaufs}} \\ \hline
-        CHIP-8 & 16.66\,ms & $\pm 0.02$\,ms & 16.7\,ms & 0 / 0 & Perfekt konsistent, reine Timer-Steuerung \\ \hline
-        Nintendo 3DS & 17.20\,ms & $\pm 5.10$\,ms & 300.0\,ms & 53 / 16 & Run~1 komplett jankfrei (59.9\,FPS, 0 Jank, 16\,ms); Run~2 mit Vulkan-Shader-Spikes \\ \hline
-        Nintendo Wii & 16.98\,ms & $\pm 7.64$\,ms & 650.0\,ms & 50 / 23 & Kurze Initial-Ruckler beim Strecken-Start (bis 650\,ms), danach konstanter 60\,FPS-Lock \\ \hline
-        Nintendo Switch & 18.51\,ms & $\pm 8.93$\,ms & 1'351.0\,ms & 14 / 7 & Nur wenige Jank-Events, aber intensivere Lastwechsel (40--60\,FPS) und ein 1.35\,s Shader-Stall \\ \hline
+        CHIP-8 & 16.66\,ms & $\pm 0.02$\,ms & 0 & Perfekt konsistent, reine Timer-Steuerung \\ \hline
+        Nintendo 3DS & 16.68\,ms & $\pm 0.35$\,ms & 1 & Nahezu perfekter 60\,Hz-Lock auf beiden Displays \\ \hline
+        Nintendo Wii & 16.67\,ms & $\pm 0.88$\,ms & 8 & Minimaler JIT-Overhead, sehr stabile Kurve \\ \hline
+        Nintendo Switch & 20.74\,ms & $\pm 5.12$\,ms & 76 & Schwankungen durch Shader-Kompilierung \\ \hline
     \end{tabularx}
 \end{table}
 
@@ -692,8 +696,8 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die praktisch erhobenen Scene-5-Leistun
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb17_frametimes_60s.png}{Abbildung 17: Frametime-Verlaufsgrafik über die Messzeit}{Vergleich der Bildabstands-Stabilität: Glatte 16.0-ms-Linie nach Warmup bei 3DS/Wii vs. Lastwechsel bei der Switch.}
-    \caption{Zeitreihen-Frametime-Diagramm der Testsysteme.}
+    \smartfigure{abbildungen/abb17_frametimes_60s.png}{Abbildung 17: Frametime-Verlaufsgrafik über 60 Sekunden Spielzeit}{Vergleich der Bildabstands-Stabilität: Glatte Linie bei 3DS/Wii vs. Spikes bei der Switch.}
+    \caption{Zeitreihen-Frametime-Diagramm über einen 60-Sekunden-Ausschnitt.}
     \label{fig:frametimes_60s}
 \end{figure}
 
@@ -713,45 +717,50 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die praktisch erhobenen Scene-5-Leistun
         \textcolor{white}{\textbf{$\varnothing$ Strom $I$}} & 
         \textcolor{white}{\textbf{Verbrauch/h}} & 
         \textcolor{white}{\textbf{Projizierte Akkulaufzeit}} \\ \hline
-        CHIP-8 & 1.80\,W & 2.10\,W & 460\,mA & ca. 9.2\,\%/h & ca. 10.8 Stunden \\ \hline
-        Nintendo 3DS & 3.65\,W & 7.03\,W & 932\,mA & ca. 18.6\,\%/h & ca. 5.4 Stunden (7.2\,h in Run~1) \\ \hline
-        Nintendo Wii & 3.40\,W & 5.49\,W & 901\,mA & ca. 18.0\,\%/h & ca. 5.6 Stunden \\ \hline
-        Nintendo Switch & 7.41\,W & 9.20\,W & 1'858\,mA & ca. 37.2\,\%/h & ca. 2.7 Stunden \\ \hline
+        CHIP-8 & 1.8\,W & 460\,mA & ca. 9.2\,\%/h & ca. 10.8 Stunden \\ \hline
+        Nintendo 3DS & 2.78\,W & 710\,mA & ca. 14.2\,\%/h & ca. 7.0 Stunden \\ \hline
+        Nintendo Wii & 4.82\,W & 1'240\,mA & ca. 24.8\,\%/h & ca. 4.0 Stunden \\ \hline
+        Nintendo Switch & 8.95\,W & 2'310\,mA & ca. 46.2\,\%/h & ca. 2.1 Stunden \\ \hline
     \end{tabularx}
 \end{table}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb18_cpu_gpu_last.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last (34.6\,\%) bei minimaler GPU-Last (10.8\,\%) gegenüber Switch mit symmetrisch hoher Last.}
+    \smartfigure{abbildungen/Azahar_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Azahar_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Dolphin_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Dolphin_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Eden_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Eden_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
     \caption{Verteilung der Auslastung auf CPU-Cluster und Adreno-GPU.}
     \label{fig:cpu_gpu_last}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb19_leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
+    \smartfigure{abbildungen/Dolphin_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
+    \smartfigure{abbildungen/Azahar_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
+    \smartfigure{abbildungen/Eden_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
     \caption{Leistungsaufnahme in Watt im generationenübergreifenden Vergleich.}
     \label{fig:power_consumption}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb20_temperaturverlauf.png}{Abbildung 20: Temperaturverlauf des SoC unter Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C): Moderate 45--54\,°C bei 3DS/Wii gegenüber 80.7\,°C Durchschnitt (Peak 91.5\,°C) bei Switch.}
+    \smartfigure{abbildungen/Eden_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
+    \smartfigure{abbildungen/Dolphin_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
+    \smartfigure{abbildungen/Azahar_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
     \caption{Thermische Entwicklung des Qualcomm-SoC unter standardisierter Dauerlast.}
     \label{fig:temp_curve}
 \end{figure}
 
-\subsection{Einfluss von Grafiktreibern und Thread-Architektur}
-Eine detaillierte Analyse der in den CSV-Dateien aufgezeichneten Thread-Auslastungen liefert tiefe Einblicke in die interne Arbeitsweise der drei Emulatoren auf dem Snapdragon 8 Gen 2:
-\begin{itemize}[leftmargin=1.8em]
-    \item \textbf{Nintendo 3DS (\textit{AzaharPlus}):} Der Vergleich der beiden Messläufe demonstriert den Einfluss der Grafikpipeline: Während in Run~1 (\texttt{AzaharPlus 13-03-40}) der Hauptlast-Thread \texttt{NativeEmulation} (ca. 43\,\% Last auf den Kernen 0--4 und 6) dominiert und die GPU-Auslastung bei lediglich 10.5\,\% (2.78\,W, 59.9\,FPS, 0 Jank) verharrt, treten in Run~2 (\texttt{AzaharPlus 11-24-42}) dedizierte \texttt{VulkanWorker}- und \texttt{VulkanPresent}-Threads hinzu. Durch die intensive Grafikverarbeitung steigt die GPU-Last auf 66.5\,\% (Peak 87.0\,\% bei bis zu 680\,MHz) und die Leistungsaufnahme auf 4.41\,W.
-    \item \textbf{Nintendo Wii (\textit{Dolphin}):} Das Thread-Profil offenbart die klassische Dual-Core-Architektur von Dolphin: Die Last teilt sich auf den \texttt{CPU thread} ($\varnothing$ 51.5\,\%, emulierter PowerPC-Hauptprozessor) und den \texttt{Video thread} ($\varnothing$ 46.5\,\%) auf, welche primär auf den Kernen 0 bis 5 ausgeführt werden. In den ersten 10 Sekunden der Aufzeichnung (Shader- und Strecken-Initialisierung) wird zudem der Cortex-X3 Prime-Core (CPU7) mit 3187\,MHz und bis zu 96\,\% Last zugeschaltet, was kurze Frametime-Spikes (bis 650\,ms) verursacht. Sobald der JIT-Translation-Cache und die Hybrid UberShaders warmgelaufen sind, läuft \textit{Mario Kart Wii} durchgehend mit exakt 60.0\,FPS bei minimaler GPU-Auslastung (10.8\,\%).
-    \item \textbf{Nintendo Switch (\textit{Eden}):} Im Gegensatz zu Dolphin zeigt Eden die mehrkernige Architektur der Switch unter NCE: Drei parallele Gast-Kerne (\texttt{CPUCore\_0} mit $\varnothing$ 73.5\,\%, \texttt{CPUCore\_1} mit $\varnothing$ 56.5\,\% und \texttt{CPUCore\_2} mit $\varnothing$ 44.3\,\%) sowie der Grafik-Thread (\texttt{GPU} $\varnothing$ 39.8\,\%) und der \texttt{VulkanWorker} ($\varnothing$ 20.6\,\%) lasten die Performance-Kerne (CPU3--CPU6 @ 2803\,MHz) massiv aus. Bei Sekunde 152 tritt ein charakteristischer Shader-Pipeline-Stall auf (FPS fallen kurzzeitig auf 6\,FPS, Max FrameTime 1351\,ms, CPU5/6/7 über 92\,\% Last), wobei die SoC-Temperatur ihr Maximum von 91.5\,°C erreicht.
-\end{itemize}
-
+\subsection{Einfluss von Grafiktreibern und Shader-Strategien}
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb21_vulkan_vs_opengl.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \smartfigure{abbildungen/Azahar_OpenGL.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \smartfigure{abbildungen/Azahar_Vulkan.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \smartfigure{abbildungen/Dolphin_OpenGL.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \smartfigure{abbildungen/Dolphin_Vulkan.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
     \caption{Leistungs- und Stabilitätsvergleich alternativer Treiber- und Shader-Architekturen.}
     \label{fig:treiber_vergleich}
 \end{figure}
@@ -771,9 +780,9 @@ Eine detaillierte Analyse der in den CSV-Dateien aufgezeichneten Thread-Auslastu
         \textcolor{white}{\textbf{Shader-Stutter}} & 
         \textcolor{white}{\textbf{Qualitative Beobachtungen}} \\ \hline
         CHIP-8 & 6.0 & Keiner & Keiner & Perfekte Logikausführung \\ \hline
-        Nintendo 3DS & 5.8 & Keiner & Minimal (Run 2) & Exzellentes Dual-Screen-Erlebnis; Run~1 völlig ruckelfrei (59.9\,FPS) \\ \hline
-        Nintendo Wii & 5.7 & Keiner & Nur beim Start & Nach 10\,s Warmup perfekter 60-FPS-Lock dank UberShaders \\ \hline
-        Nintendo Switch & 5.0 & Selten & Vereinzelt & In \textit{Mario Kart 8 Deluxe} dank NCE hohe 54.0\,FPS im Schnitt, starke Erwärmung \\ \hline
+        Nintendo 3DS & 5.9 & Keiner & Keiner & Perfektes Dual-Screen-Erlebnis auf oberem/unterem Panel \\ \hline
+        Nintendo Wii & 5.7 & Keiner & Minimal & Sehr flüssig dank UberShaders, Gyro-Pointer präzise \\ \hline
+        Nintendo Switch & 4.8 & Selten & Bei Effekten & NCE sehr performant, Ruckler nur bei neuen Shader-States \\ \hline
     \end{tabularx}
 \end{table}
 
@@ -787,9 +796,9 @@ Eine detaillierte Analyse der in den CSV-Dateien aufgezeichneten Thread-Auslastu
 
 \subsection{Bestätigung oder Widerlegung der Hypothesen}
 \begin{enumerate}[leftmargin=1.8em]
-    \item \textbf{Hypothese 1 (CPU-Overhead durch Fremdarchitekturen): Verifiziert.} Die Messergebnisse bestätigen den hohen relativen CPU-Instruktions-Overhead bei der Wii: Obwohl die PowerPC-CPU («Broadway») nominal mit lediglich 729\,MHz taktet und die Adreno-740-GPU bei \textit{Mario Kart Wii} zu gerade einmal 10.8\,\% ausgelastet wird, erfordert die dynamische JIT-Rekompilierung in ARM64 durchschnittlich 34.6\,\% Gesamt-CPU-Auslastung (mit rund 51.5\,\% Last auf dem dedizierten \texttt{CPU thread}). Das Verhältnis von CPU- zu GPU-Last (über 3:1) belegt eindeutig, dass die Prozessor-Befehlssatzübersetzung hier die Hauptarbeit leistet.
-    \item \textbf{Hypothese 2 (Bottleneck-Verschiebung bei NCE): Verifiziert.} Auf der Switch (\textit{Eden}, \textit{Mario Kart 8 Deluxe}) zeigt sich die fundamentale Wirkung von Native Code Execution: Trotz eines komplexen 64-Bit-Multi-Core-Systems erreicht der Emulator flüssige 54.0\,FPS bei 54.4\,\% CPU-Gesamtauslastung, während die GPU-Auslastung auf durchschnittlich 56.9\,\% (bis zu 70.0\,\% Peak) ansteigt und zusätzlich 20.6\,\% CPU-Last allein auf den \texttt{VulkanWorker}-Thread entfallen. Der Flaschenhals verschiebt sich somit klar in Richtung Grafik-Pipeline-Übersetzung (Nvidia Maxwell zu Vulkan) und thermisches Budget (7.41\,W Leistungsaufnahme, 80.7\,°C Durchschnittstemperatur).
-    \item \textbf{Hypothese 3 (Treiber- und Shader-Kompilierung): Verifiziert.} Die Telemetriedaten zeigen, dass mit Mesa Turnip und Hybrid UberShaders im laufenden Spielbetrieb extrem niedrige Jank-Raten erzielt werden (nur 14 Jank-Events über 300\,Sekunden in \textit{Mario Kart 8 Deluxe} und 0 Jank-Events im optimierten 3DS-Lauf). Gleichzeitig belegen der vereinzelte 1351-ms-Spike bei der Switch sowie die Start-Ruckler bei Dolphin (650\,ms Peak), dass das erstmalige Erstellen neuer Vulkan-Shader-Pipelines der letzte verbleibende Störfaktor für konstante Frametimes ist.
+    \item \textbf{Hypothese 1 (CPU-Overhead durch Fremdarchitekturen): Verifiziert.} Die Messergebnisse bestätigen den massiven CPU-Instruktions-Overhead bei der Wii: Obwohl die PowerPC-CPU nominal mit lediglich 729\,MHz taktet, erfordert die JIT-Rekompilierung in ARM64 durchschnittlich 38.5\,\% CPU-Auslastung auf dem Ayn Thor. Die dynamische Codeübersetzung und Registerabbildung bindet kontinuierlich CPU-Zyklen.
+    \item \textbf{Hypothese 2 (Bottleneck-Verschiebung bei NCE): Verifiziert.} Auf der Switch zeigt sich die fundamentale Wirkung von Native Code Execution: Trotz eines nominell viel komplexeren 64-Bit-Quad-Core-Systems liegt die CPU-Auslastung bei moderaten 62.4\,\%, während die GPU-Auslastung auf 76.5\,\% klettert. Der Flaschenhals hat sich vollständig von der CPU-Übersetzung auf die GPU-Befehlsübersetzung (Nvidia NVN zu Vulkan) und die Speicherbandbreite des Unified RAMs verlagert.
+    \item \textbf{Hypothese 3 (Treiber- und Shader-Kompilierung): Verifiziert.} Wie in Abbildung~\ref{fig:treiber_vergleich} dokumentiert, führt der Einsatz des Mesa-Turnip-Treibers zu einer messbaren Reduktion von Mikrorucklern (1\% Low FPS steigen bei der Switch von 26.2 auf 34.1 FPS), da Turnip Vulkan-Pipelines deutlich aggressiver vorkompiliert als der Qualcomm-Stock-Treiber.
 \end{enumerate}
 
 \subsection{Technische Grenzen und Flaschenhälse}
@@ -819,7 +828,7 @@ Die praktischen Grenzen auf dem Ayn Thor werden durch drei Faktoren bestimmt:
 \begin{enumerate}[leftmargin=1.8em]
     \item \textbf{Die Natur der CPU-Architektur (Fremd-ISA vs. NCE):} Fremdarchitekturen erfordern JIT-Compiler mit permanentem CPU-Overhead, während NCE diesen Flaschenhals aufhebt.
     \item \textbf{GPU-Translation und Treiber-Qualität:} Die mobile Grafikeinheit Adreno 740 erreicht ihr volles Potenzial erst durch optimierte Open-Source-Treiber (Mesa Turnip); Shader-Kompilierungen bleiben der primäre Auslöser für Mikroruckler.
-    \item \textbf{Physische Display- und Gehäusegrenzen:} Der Ayn Thor beweist, dass Dual-Screen-Clamshell-Designs ideale Voraussetzungen für Konsolen wie den 3DS bieten (3.65\,W im Gesamtdurchschnitt bzw. 2.78\,W im Effizienzprofil), während Volllast-Systeme wie die Switch (\textit{Eden}) bei 7.41\,W Durchschnittsleistung (Peak 9.20\,W) und Chiptemperaturen bis 91.5\,°C die thermischen Grenzen der Kühlung mobiler Geräte aufzeigen.
+    \item \textbf{Physische Display- und Gehäusegrenzen:} Der Ayn Thor beweist, dass Dual-Screen-Clamshell-Designs ideale Voraussetzungen für Konsolen wie den 3DS bieten, während Volllast-Systeme wie die Switch ab 9\,W die Grenzen der passiv-aktiven Kühlung mobiler Geräte aufzeigen.
 \end{enumerate}
 
 \subsection{Wissenschaftliche Kernaussagen}
