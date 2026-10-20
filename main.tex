@@ -604,9 +604,9 @@ Standardmässig liefert Qualcomm für den Snapdragon 8 Gen 2 proprietäre Adreno
         \textcolor{white}{\textbf{CPU-Modus}} & 
         \textcolor{white}{\textbf{Referenztitel}} \\ \hline
         CHIP-8 & Rust-Eigenbau & SDL2 / Software & Interpreter & Pong \\ \hline
-        Nintendo 3DS & Azahar / Citra & Vulkan / Turnip & JIT (ARM11) & Mario Kart 7 \\ \hline
-        Nintendo Wii & Dolphin & Vulkan / UberShaders & JIT (PPC $\rightarrow$ ARM) & Mario Kart Wii \\ \hline
-        Nintendo Switch & Sudachi & Vulkan / Turnip & NCE (Nativ ARM64) & Super Mario Odyssey \\ \hline
+        Nintendo 3DS & AzaharPlus & OpenGL ES / Vulkan (Turnip) & JIT (ARM11) & Mario Kart 7 \\ \hline
+        Nintendo Wii & Dolphin & OpenGL ES / Vulkan (UberShaders) & JIT (PPC $\rightarrow$ ARM64) & Mario Kart Wii \\ \hline
+        Nintendo Switch & Eden & Vulkan (Mesa Turnip) & NCE (Nativ ARM64) & Mario Kart 8 Deluxe \\ \hline
     \end{tabularx}
 \end{table}
 
@@ -629,8 +629,8 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
     \small
     \setlength{\tabcolsep}{3pt}
     \renewcommand{\arraystretch}{1.3}
-    \caption{Statistische Frametime- und Stabilitätsanalyse aus den Scene-5-Messreihen}
-    \label{tab:frametime_statistik}
+    \caption{Gesamtvergleich der empirisch erhobenen Telemetriedaten auf dem Ayn Thor}
+    \label{tab:messungen_gesamt}
     \begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{1.6cm}|c|c|c|c|c|c|>{\centering\arraybackslash}X|}
         \hline
         \rowcolor{primaryTeal}
@@ -644,10 +644,10 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
         \textcolor{white}{\textbf{GPU \%}} & 
         \textcolor{white}{\textbf{Power}} & 
         \textcolor{white}{\textbf{Peak $T$}} \\ \hline
-        CHIP-8 & Rust-Eigenbau & Pong & 0.4 & 60.0 & 60.0 & 2.1\,\% & 1.0\,\% & 1.8\,W & 28.2\,°C \\ \hline
-        Nintendo 3DS & Azahar (Turnip, 3x) & Mario Kart 7 & 3.1 & 59.9 & 59.0 & 24.6\,\% & 14.5\,\% & 2.78\,W & 45.5\,°C \\ \hline
-        Nintendo Wii & Dolphin (UberShader) & Mario Kart Wii & 4.8 & 60.0 & 56.8 & 38.5\,\% & 22.0\,\% & 4.82\,W & 48.0\,°C \\ \hline
-        Nintendo Switch & Sudachi (NCE, Turnip) & Super Mario Odyssey & 12.4 & 48.2 & 34.1 & 62.4\,\% & 76.5\,\% & 8.95\,W & 58.4\,°C \\ \hline
+        CHIP-8 & Rust-Eigenbau & Pong & 0.4 & 60.0 & 60.0 & 2.1\,\% & 1.0\,\% & 1.80\,W & 28.2\,°C \\ \hline
+        Nintendo 3DS & AzaharPlus (1x Native) & Mario Kart 7 & 3.1 & 59.9 & 59.0 & 24.6\,\% & 10.5\,\% & 2.78\,W & 65.2\,°C \\ \hline
+        Nintendo Wii & Dolphin (1x Native) & Mario Kart Wii & 4.8 & 58.9 & 30.0 & 34.6\,\% & 10.8\,\% & 3.40\,W & 67.5\,°C \\ \hline
+        Nintendo Switch & Eden (1x Native NCE) & Mario Kart 8 Deluxe & 11.8 & 54.0 & 35.0 & 54.4\,\% & 56.9\,\% & 7.41\,W & 91.5\,°C \\ \hline
     \end{tabularx}
 \end{table}
 \begin{figure}[htbp]
@@ -673,10 +673,10 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
         \textcolor{white}{\textbf{Peak FrameTime}} & 
         \textcolor{white}{\textbf{Jank / BigJank}} & 
         \textcolor{white}{\textbf{Charakteristik des Frametime-Verlaufs}} \\ \hline
-        CHIP-8 & 16.66\,ms & $\pm 0.02$\,ms & 0 & Perfekt konsistent, reine Timer-Steuerung \\ \hline
-        Nintendo 3DS & 16.68\,ms & $\pm 0.35$\,ms & 1 & Nahezu perfekter 60\,Hz-Lock auf beiden Displays \\ \hline
-        Nintendo Wii & 16.67\,ms & $\pm 0.88$\,ms & 8 & Minimaler JIT-Overhead, sehr stabile Kurve \\ \hline
-        Nintendo Switch & 20.74\,ms & $\pm 5.12$\,ms & 76 & Schwankungen durch Shader-Kompilierung \\ \hline
+        CHIP-8 & 16.66\,ms & $\pm 0.02$\,ms & 16.7\,ms & 0\,/\,0 & Perfekt konsistent, reine Timer-Steuerung \\ \hline
+        Nintendo 3DS & 16.69\,ms & $\pm 0.35$\,ms & 16.0\,ms & 0\,/\,0 & Nahezu perfekter 60\,Hz-Lock auf beiden Displays (OpenGL ES) \\ \hline
+        Nintendo Wii & 16.98\,ms & $\pm 0.88$\,ms & 650.0\,ms & 50\,/\,0 & Minimaler JIT-Overhead, sehr stabile Kurve nach Boot \\ \hline
+        Nintendo Switch & 18.51\,ms & $\pm 4.21$\,ms & 1351.0\,ms & 14\,/\,2 & Hohe Grundstabilität, Spikes durch NVN-zu-Vulkan-Translation \\ \hline
     \end{tabularx}
 \end{table}
 
@@ -689,15 +689,31 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb16_fps_vergleich.png}{Abbildung 16: Durchschnittliche Bildrate und 1\,\% Low FPS}{Gegenüberstellung der durchschnittlichen Framerate und der Mikroruckler-Schwelle.}
-    \caption{Framerate-Stabilität und 1\,\% Low FPS im Plattformvergleich.}
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Azahar_Avg_FPS.png}
+        \caption*{(a) 3DS (AzaharPlus)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Dolphin_Avg_FPS.png}
+        \caption*{(b) Wii (Dolphin)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Eden_Avg_FPS.png}
+        \caption*{(c) Switch (Eden)}
+    \end{minipage}
+    \caption{Durchschnittliche Bildrate und 1\,\%-Low-FPS über alle getesteten Skalierungsstufen und Grafik-APIs.}
     \label{fig:fps_vergleich}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb17_frametimes_60s.png}{Abbildung 17: Frametime-Verlaufsgrafik über 60 Sekunden Spielzeit}{Vergleich der Bildabstands-Stabilität: Glatte Linie bei 3DS/Wii vs. Spikes bei der Switch.}
-    \caption{Zeitreihen-Frametime-Diagramm über einen 60-Sekunden-Ausschnitt.}
+    \includegraphics[width=0.72\linewidth]{abbildungen/Azahar_FPS.png}\\[0.25em]
+    \includegraphics[width=0.72\linewidth]{abbildungen/Dolphin_FPS.png}\\[0.25em]
+    \includegraphics[width=0.72\linewidth]{abbildungen/Eden_FPS.png}
+    \caption{Framerate- und Stabilitätsverlauf über 300 Sekunden Spielzeit für Nintendo 3DS, Wii und Switch.}
     \label{fig:frametimes_60s}
 \end{figure}
 
@@ -717,51 +733,122 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
         \textcolor{white}{\textbf{$\varnothing$ Strom $I$}} & 
         \textcolor{white}{\textbf{Verbrauch/h}} & 
         \textcolor{white}{\textbf{Projizierte Akkulaufzeit}} \\ \hline
-        CHIP-8 & 1.8\,W & 460\,mA & ca. 9.2\,\%/h & ca. 10.8 Stunden \\ \hline
-        Nintendo 3DS & 2.78\,W & 710\,mA & ca. 14.2\,\%/h & ca. 7.0 Stunden \\ \hline
-        Nintendo Wii & 4.82\,W & 1'240\,mA & ca. 24.8\,\%/h & ca. 4.0 Stunden \\ \hline
-        Nintendo Switch & 8.95\,W & 2'310\,mA & ca. 46.2\,\%/h & ca. 2.1 Stunden \\ \hline
+        CHIP-8 & 1.80\,W & 2.10\,W & 460\,mA & ca. 9.2\,\%/h & ca. 10.8 Stunden \\ \hline
+        Nintendo 3DS & 2.78\,W & 4.83\,W & 693\,mA & ca. 13.9\,\%/h & ca. 7.2 Stunden \\ \hline
+        Nintendo Wii & 3.40\,W & 5.49\,W & 901\,mA & ca. 18.0\,\%/h & ca. 5.6 Stunden \\ \hline
+        Nintendo Switch & 7.41\,W & 9.20\,W & 1'858\,mA & ca. 37.2\,\%/h & ca. 2.7 Stunden \\ \hline
     \end{tabularx}
 \end{table}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/Azahar_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
-    \smartfigure{abbildungen/Azahar_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
-    \smartfigure{abbildungen/Dolphin_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
-    \smartfigure{abbildungen/Dolphin_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
-    \smartfigure{abbildungen/Eden_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
-    \smartfigure{abbildungen/Eden_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
-    \caption{Verteilung der Auslastung auf CPU-Cluster und Adreno-GPU.}
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Azahar_Avg_Auslastung_CPU.png}
+        \caption*{(a) CPU-Auslastung 3DS (AzaharPlus)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Azahar_GPU_Auslastung.png}
+        \caption*{(b) GPU-Lastverlauf 3DS (AzaharPlus)}
+    \end{minipage}
+    \vspace{0.3em}
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Dolphin_Avg_Auslastung_CPU.png}
+        \caption*{(c) CPU-Auslastung Wii (Dolphin)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Dolphin_GPU_Auslastung.png}
+        \caption*{(d) GPU-Lastverlauf Wii (Dolphin)}
+    \end{minipage}
+    \vspace{0.3em}
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Eden_Avg_Auslastung_CPU.png}
+        \caption*{(e) CPU-Auslastung Switch (Eden)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Eden_GPU_Auslastung.png}
+        \caption*{(f) GPU-Lastverlauf Switch (Eden)}
+    \end{minipage}
+    \caption{Verteilung der Rechenlast auf CPU-Cluster und Adreno-740-GPU im Plattformvergleich.}
     \label{fig:cpu_gpu_last}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/Dolphin_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
-    \smartfigure{abbildungen/Azahar_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
-    \smartfigure{abbildungen/Eden_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
-    \caption{Leistungsaufnahme in Watt im generationenübergreifenden Vergleich.}
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Azahar_Avg_Leistung.png}
+        \caption*{(a) 3DS (AzaharPlus)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Dolphin_Avg_Leistung.png}
+        \caption*{(b) Wii (Dolphin)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Eden_Avg_Leistung.png}
+        \caption*{(c) Switch (Eden)}
+    \end{minipage}
+    \vspace{0.3em}
+    \includegraphics[width=0.72\linewidth]{abbildungen/Eden_Leistungsaufnahme.png}
+    \caption{Elektrische Leistungsaufnahme in Watt: Durchschnittsleistung über Skalierungsstufen sowie 300-s-Echtzeitverlauf unter Switch-Volllast.}
     \label{fig:power_consumption}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/Eden_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
-    \smartfigure{abbildungen/Dolphin_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
-    \smartfigure{abbildungen/Azahar_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
-    \caption{Thermische Entwicklung des Qualcomm-SoC unter standardisierter Dauerlast.}
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Azahar_Avg_CPU_Temp.png}
+        \caption*{(a) 3DS (AzaharPlus)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Dolphin_Avg_CPU_Temp.png}
+        \caption*{(b) Wii (Dolphin)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Eden_Avg_CPU_Temp.png}
+        \caption*{(c) Switch (Eden)}
+    \end{minipage}
+    \vspace{0.3em}
+    \includegraphics[width=0.72\linewidth]{abbildungen/Eden_CPU_Temp.png}
+    \caption{Thermische Entwicklung des Qualcomm-SoC unter standardisierter Dauerlast mit aktiver Thor-Kühlung.}
     \label{fig:temp_curve}
 \end{figure}
 
 \subsection{Einfluss von Grafiktreibern und Shader-Strategien}
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/Azahar_OpenGL.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
-    \smartfigure{abbildungen/Azahar_Vulkan.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
-    \smartfigure{abbildungen/Dolphin_OpenGL.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
-    \smartfigure{abbildungen/Dolphin_Vulkan.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
-    \caption{Leistungs- und Stabilitätsvergleich alternativer Treiber- und Shader-Architekturen.}
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Azahar_OpenGL.png}
+        \caption*{(a) Azahar: OpenGL ES (4x)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Azahar_Vulkan.png}
+        \caption*{(b) Azahar: Vulkan (4x)}
+    \end{minipage}
+    \vspace{0.3em}
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Dolphin_OpenGL.png}
+        \caption*{(c) Dolphin: OpenGL ES (4x)}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{abbildungen/Dolphin_Vulkan.png}
+        \caption*{(d) Dolphin: Vulkan (4x)}
+    \end{minipage}
+    \caption{Treiber- und Grafik-API-Vergleich (OpenGL ES vs. Vulkan) bei 4x-Auflösung: Zeitreihen von FPS, CPU-Temperatur und GPU-Last.}
     \label{fig:treiber_vergleich}
 \end{figure}
 
@@ -967,37 +1054,105 @@ Zürich, den 27. November 2026
 
 \vspace{0.8cm}
 
-\subsection{A.2 Standardisiertes Messprotokoll-Schema (Scene~5)}
+\subsection{A.2 Standardisiertes Messprotokoll-Schema und empirische Testprotokolle}
 \label{sec:messprotokoll_schema}
 
-\renewcommand{\arraystretch}{1.2}
-\begin{tcolorbox}[
-    colback=boxBg,
-    colframe=boxBorder,
-    arc=2mm,
-    title={\textbf{Standardisiertes Messprotokoll-Schema für Benchmarks}}
-]
+\renewcommand{\arraystretch}{1.15}
+
+\begin{tcolorbox}[colback=boxBg, colframe=boxBorder, arc=2mm, title={\textbf{Messprotokoll 1: Nintendo 3DS -- Mario Kart 7}}]
     \small
     \textbf{1. Test-Metadaten:}\\
-    $\bullet$ Test-ID: \texttt{TEST-[Plattform]-[Spiel]-[Nr]} \quad $\bullet$ Datum/Uhrzeit: \dots\dots\dots\dots \quad $\bullet$ Prüfer: \dots\dots\dots\dots\\
-    $\bullet$ Start-Akkustand: \dots\dots\,\% \quad $\bullet$ Lüfterprofil: Standard \quad $\bullet$ Raumtemperatur: \dots\dots\,°C
+    $\bullet$ Test-ID: \texttt{TEST-3DS-MK7-01} \quad $\bullet$ Datum: 19.10.2026 \quad $\bullet$ Prüfer: D.~Reichlin / G.~Di Giuseppe\\
+    $\bullet$ Start-Akkustand: 85\,\% \quad $\bullet$ Lüfterprofil: Standard \quad $\bullet$ Raumtemperatur: 21.5\,°C
 
     \medskip
     \textbf{2. Software-Konfiguration:}\\
-    $\bullet$ Emulator \& Version: \dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\\
-    $\bullet$ Grafik-Backend: [ ] Vulkan \quad [ ] OpenGL \qquad $\bullet$ GPU-Treiber: System / Mesa Turnip\\
-    $\bullet$ Spezifische Einstellungen: [ ] NCE aktiv \quad [ ] UberShaders aktiv \quad [ ] Async Shader
+    $\bullet$ Emulator \& Version: AzaharPlus (Lime3DS Android, v2115) \quad $\bullet$ Dual-Screen Routing: Aktiv\\
+    $\bullet$ Grafik-Backend: [x] OpenGL ES / [x] Vulkan \qquad $\bullet$ GPU-Treiber: Mesa Turnip (Adreno 740)\\
+    $\bullet$ Spezifische Einstellungen: [ ] NCE \quad [ ] UberShaders \quad [x] Async Shader \quad Skalierung: 1x--4x
 
     \medskip
-    \textbf{3. Scene~5 Telemetriewerte (Mittelwert aus 10 Minuten Spielzeit):}\\
-    $\bullet$ Bildrate: $\varnothing$ FPS = \dots\dots\dots \quad 1\,\% Low = \dots\dots\dots \quad Frametime $\varnothing$ = \dots\dots\,ms\\
-    $\bullet$ SoC-Auslastung: CPU Gesamt = \dots\dots\,\% \quad Prime-Core X3 = \dots\dots\,GHz \quad GPU = \dots\dots\,\%\\
-    $\bullet$ Energie \& Thermik: Leistung $P$ = \dots\dots\,W \quad Strom $I$ = \dots\dots\,mA \quad Peak-Temp SoC = \dots\dots\,°C\\
-    $\bullet$ Speicher: RAM Belegung = \dots\dots\,GB / 12\,GB
+    \textbf{3. Scene~5 Telemetriewerte (Mittelwert über 300\,s Spielzeit, 1x Native Profil):}\\
+    $\bullet$ Bildrate: $\varnothing$ FPS = 59.9 \quad 1\,\% Low = 59.0 \quad Frametime $\varnothing$ = 16.69\,ms \quad Peak FT = 16.0\,ms \quad Jank = 0\\
+    $\bullet$ SoC-Auslastung: CPU Gesamt = 24.6\,\% \quad Prime-Core X3 = 2.48\,GHz \quad GPU = 10.5\,\% (bis 30.8\,\% bei 4x)\\
+    $\bullet$ Energie \& Thermik: Leistung $P = 2.78$\,W (Peak: 4.83\,W) \quad Strom $I = 693$\,mA \quad Peak-Temp SoC = 65.2\,°C ($\varnothing$ 45.5\,°C)\\
+    $\bullet$ Speicher \& Akku: RAM = ca. 2.8\,GB / 12\,GB \quad Projizierte Akkulaufzeit: ca. 7.2\,h (13.9\,\%/h)
 
     \medskip
     \textbf{4. Qualitative Beurteilung (1 bis 6):}\\
-    $\bullet$ Spielbarkeit: \dots / 6 \quad $\bullet$ Audio-Stottern: [ ] Nein \ [ ] Ja \quad $\bullet$ Shader-Ruckler: [ ] Nein \ [ ] Ja
+    $\bullet$ Spielbarkeit: 5.9 / 6 \quad $\bullet$ Audio-Stottern: [x] Nein \ [ ] Ja \quad $\bullet$ Shader-Ruckler: [x] Nein \ [ ] Ja
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=boxBg, colframe=boxBorder, arc=2mm, title={\textbf{Messprotokoll 2: Nintendo Wii -- Mario Kart Wii}}]
+    \small
+    \textbf{1. Test-Metadaten:}\\
+    $\bullet$ Test-ID: \texttt{TEST-WII-MKW-01} \quad $\bullet$ Datum: 19./20.10.2026 \quad $\bullet$ Prüfer: D.~Reichlin / G.~Di Giuseppe\\
+    $\bullet$ Start-Akkustand: 82\,\% \quad $\bullet$ Lüfterprofil: Standard \quad $\bullet$ Raumtemperatur: 21.0\,°C
+
+    \medskip
+    \textbf{2. Software-Konfiguration:}\\
+    $\bullet$ Emulator \& Version: Dolphin Emulator (v2407 / Android) \quad $\bullet$ CPU-Modus: Dual-Core JIT\\
+    $\bullet$ Grafik-Backend: [x] OpenGL ES / [x] Vulkan \qquad $\bullet$ GPU-Treiber: Qualcomm Stock / Mesa Turnip\\
+    $\bullet$ Spezifische Einstellungen: [ ] NCE \quad [x] Hybrid UberShaders \quad [x] Async Shader \quad Skalierung: 1x--4x
+
+    \medskip
+    \textbf{3. Scene~5 Telemetriewerte (Mittelwert über 300\,s Spielzeit, 1x Native Profil):}\\
+    $\bullet$ Bildrate: $\varnothing$ FPS = 58.9 (bis 59.7 bei 3x) \quad 1\,\% Low = 30.0--55.0 \quad Frametime $\varnothing$ = 16.98\,ms \quad Peak FT = 650\,ms\\
+    $\bullet$ SoC-Auslastung: CPU Gesamt = 34.6\,\% \quad CPU-Thread = ca. 51.5\,\% \quad GPU = 10.8\,\% (bis 78.9\,\% bei 4x Vulkan)\\
+    $\bullet$ Energie \& Thermik: Leistung $P = 3.40$\,W (bis 7.82\,W bei 4x Vulkan) \quad Strom $I = 901$\,mA \quad Peak-Temp SoC = 67.5\,°C (4x: 91.9\,°C)\\
+    $\bullet$ Speicher \& Akku: RAM = ca. 3.2\,GB / 12\,GB \quad Projizierte Akkulaufzeit: ca. 5.6\,h (18.0\,\%/h, bei 4x ca. 2.3\,h)
+
+    \medskip
+    \textbf{4. Qualitative Beurteilung (1 bis 6):}\\
+    $\bullet$ Spielbarkeit: 5.7 / 6 \quad $\bullet$ Audio-Stottern: [x] Nein \ [ ] Ja \quad $\bullet$ Shader-Ruckler: [ ] Nein \ [x] Ja (minimal bei Boot)
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=boxBg, colframe=boxBorder, arc=2mm, title={\textbf{Messprotokoll 3: Nintendo Switch -- Mario Kart 8 Deluxe}}]
+    \small
+    \textbf{1. Test-Metadaten:}\\
+    $\bullet$ Test-ID: \texttt{TEST-NSW-MK8D-01} \quad $\bullet$ Datum: 19.10.2026 \quad $\bullet$ Prüfer: D.~Reichlin / G.~Di Giuseppe\\
+    $\bullet$ Start-Akkustand: 88\,\% \quad $\bullet$ Lüfterprofil: Standard \quad $\bullet$ Raumtemperatur: 21.8\,°C
+
+    \medskip
+    \textbf{2. Software-Konfiguration:}\\
+    $\bullet$ Emulator \& Version: Eden (Sudachi/Yuzu Android-Fork) \quad $\bullet$ CPU-Modus: Native Code Execution (NCE)\\
+    $\bullet$ Grafik-Backend: [x] Vulkan \quad [ ] OpenGL \qquad $\bullet$ GPU-Treiber: Mesa Turnip Driver (v26.x)\\
+    $\bullet$ Spezifische Einstellungen: [x] NCE aktiv \quad [ ] UberShaders \quad [x] Disk Shader Cache \quad Skalierung: 1x / 2x
+
+    \medskip
+    \textbf{3. Scene~5 Telemetriewerte (Mittelwert über 300\,s Spielzeit, 1x Handheld Native):}\\
+    $\bullet$ Bildrate: $\varnothing$ FPS = 54.0 (2x: 51.8) \quad 1\,\% Low = 35.0 \quad Frametime $\varnothing$ = 18.51\,ms \quad Peak FT = 1351\,ms \quad Jank = 14\\
+    $\bullet$ SoC-Auslastung: CPU Gesamt = 54.4\,\% \quad VulkanWorker = ca. 20.6\,\% \quad GPU = 56.9\,\% (2x: 95.8\,\%)\\
+    $\bullet$ Energie \& Thermik: Leistung $P = 7.41$\,W (Peak: 9.20\,W) \quad Strom $I = 1'858$\,mA \quad Peak-Temp SoC = 91.5\,°C ($\varnothing$ 80.7\,°C)\\
+    $\bullet$ Speicher \& Akku: RAM = ca. 6.4\,GB / 12\,GB \quad Projizierte Akkulaufzeit: ca. 2.7\,h (37.2\,\%/h)
+
+    \medskip
+    \textbf{4. Qualitative Beurteilung (1 bis 6):}\\
+    $\bullet$ Spielbarkeit: 4.8 / 6 \quad $\bullet$ Audio-Stottern: [ ] Nein \ [x] Ja (selten) \quad $\bullet$ Shader-Ruckler: [ ] Nein \ [x] Ja (bei Effekten)
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=boxBg, colframe=boxBorder, arc=2mm, title={\textbf{Messprotokoll 4: CHIP-8 Referenz-Interpreter (Baseline)}}]
+    \small
+    \textbf{1. Test-Metadaten:}\\
+    $\bullet$ Test-ID: \texttt{TEST-CHIP8-PONG-01} \quad $\bullet$ Datum: 19.10.2026 \quad $\bullet$ Prüfer: D.~Reichlin / G.~Di Giuseppe\\
+    $\bullet$ Start-Akkustand: 92\,\% \quad $\bullet$ Lüfterprofil: Standard \quad $\bullet$ Raumtemperatur: 21.0\,°C
+
+    \medskip
+    \textbf{2. Software-Konfiguration:}\\
+    $\bullet$ Emulator: Eigener Rust-Interpreter (\texttt{chip8\_core}) \quad $\bullet$ Rendering: SDL2 Software-Framebuffer\\
+    $\bullet$ Grafik-Backend: Software-Rasterizer \qquad $\bullet$ CPU-Modus: Sequentieller Fetch-Decode-Execute-Zyklus\\
+    $\bullet$ Spezifische Einstellungen: Taktung 700\,Hz CPU / 60\,Hz Delay-Timer \quad ROM: \textit{Pong}
+
+    \medskip
+    \textbf{3. Telemetriewerte (Baseline-Messung über 300\,s):}\\
+    $\bullet$ Bildrate: $\varnothing$ FPS = 60.0 \quad 1\,\% Low = 60.0 \quad Frametime $\varnothing$ = 16.66\,ms \quad Peak FT = 16.7\,ms \quad Jank = 0\\
+    $\bullet$ SoC-Auslastung: CPU Gesamt = 2.1\,\% \quad GPU = 1.0\,\%\\
+    $\bullet$ Energie \& Thermik: Leistung $P = 1.80$\,W (Peak: 2.10\,W) \quad Strom $I = 460$\,mA \quad Peak-Temp SoC = 28.2\,°C\\
+    $\bullet$ Speicher \& Akku: RAM = 1.2\,GB (System gesamt) \quad Projizierte Akkulaufzeit: ca. 10.8\,h (9.2\,\%/h)
+
+    \medskip
+    \textbf{4. Qualitative Beurteilung (1 bis 6):}\\
+    $\bullet$ Spielbarkeit: 6.0 / 6 \quad $\bullet$ Audio-Stottern: [x] Nein \ [ ] Ja \quad $\bullet$ Shader-Ruckler: [x] Nein \ [ ] Ja
 \end{tcolorbox}
 
 \vspace{0.6cm}
