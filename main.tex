@@ -297,7 +297,7 @@ Das von John von Neumann 1945 formulierte Modell gliedert ein Rechnersystem in f
 \begin{figure}[htbp]
     \centering
     \smartfigure{abbildungen/abb01_von_neumann.png}{Abbildung 1: Blockschaltbild der Von-Neumann-Architektur}{Strukturaufbau bestehend aus ALU, Steuerwerk, Speicher, Bus-System und I/O-Schnittstellen.}
-    \caption{Klassisches Von-Neumann-Architekturmodell mit gemeinsamem Befehls- und Datenspeicher.}
+    \caption[Klassisches Von-Neumann-Architekturmodell mit gemeinsamem Befehls- und Datenspeicher.]{Klassisches Von-Neumann-Architekturmodell mit gemeinsamem Befehls- und Datenspeicher (Quelle: Wikimedia Commons).}
     \label{fig:von_neumann}
 \end{figure}
 
@@ -506,6 +506,7 @@ pub struct Emu {
     pc: u16,                                      // Programmzaehler (Program Counter)
     ram: [u8; RAM_SIZE],                          // 4 KB Hauptspeicher (Von-Neumann-RAM)
     screen: [bool; SCREEN_WIDTH * SCREEN_HEIGHT], // Monochromer 64x32 Framebuffer
+
     v_reg: [u8; NUM_REGS],                        // 16 8-Bit Arbeitsregister (V0 bis VF)
     i_reg: u16,                                   // 16-Bit Indexregister fuer Adressen
     sp: u16,                                      // Stack Pointer
