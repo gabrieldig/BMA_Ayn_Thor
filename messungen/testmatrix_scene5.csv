@@ -1,8 +1,0 @@
-Test_ID;System;Emulator;Version;Referenztitel;Backend;Aufloesung;Ladezeit_s;Avg_FPS;Low_1pct_FPS;Frametime_ms;Jank_Rate_pct;CPU_Total_pct;Prime_X3_GHz;GPU_Load_pct;GPU_Freq_MHz;Power_W;Current_mA;Temp_SoC_Peak_C;Temp_Akku_C;Akku_Verbrauch_pct_h;RAM_Used_GB;Spielbarkeit_1_bis_6;Bemerkungen
-TEST-CHIP8-01;CHIP-8;Eigenentwicklung;1.0;Pong;Custom;1x;0.4;60.0;60.0;16.6;0.0;2;0.8;1;300;1.8;-450;28;26;4;1.2;6;Referenz Baseline, reine Software-Schleife
-TEST-ATARI-01;Atari 2600;Stella (RetroArch);1.18.0;Space Invaders;OpenGL;1x;1.2;60.0;59.8;16.6;0.1;4;1.1;2;300;2.1;-520;30;27;6;1.5;6;Perfekte Emulation ohne spuerbare Last
-TEST-NDS-01;Nintendo DS;melonDS;0.9.5;Mario Kart DS;OpenGL;1x;2.6;60.0;58.4;16.6;0.3;15;1.4;9;300;3.2;-790;34;29;11;2.1;6;Sehr fluessig, Touchscreen praezise
-TEST-PS2-01;PlayStation 2;NetherSX2;v1.9-4248;Gran Turismo 4;Vulkan;2x;6.8;49.3;38.1;20.2;4.2;68;2.6;42;560;6.7;-1680;48;35;25;3.8;5;Vulkan deutlich stabiler als OpenGL, luefter hoerbar
-TEST-NSW-01;Nintendo Switch;Sudachi;v1.0.8;Super Mario Odyssey;Vulkan (Turnip);1x Handheld;14.2;31.8;21.4;31.4;11.8;92;3.19;78;680;10.4;-2550;62;41;39;6.2;4;Shader-Kompilierungsruckler bei neuen Leveln, Peak Takt X3
-TEST-NSW-02;Nintendo Switch;Sudachi;v1.0.8;The Legend of Zelda: BotW;Vulkan (Turnip);1x Handheld;18.5;26.4;17.2;37.8;15.2;95;3.19;84;680;11.2;-2780;65;43;42;6.8;3;Sehr fordernd, Dynamic Resolution aktiv
-TEST-PS2-02;PlayStation 2;NetherSX2;v1.9-4248;God of War II;Vulkan;2x;7.2;54.1;41.5;18.4;3.8;71;2.6;48;560;7.1;-1750;51;36;27;4.1;5;Komplexe Szenen mit vielen Partikeln fordern VU1
