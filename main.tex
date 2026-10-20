@@ -52,7 +52,7 @@
 \pagestyle{scrheadings}
 
 % =========================================================
-% TABELLEN, ABBILDUNGEN & LISTEN
+% TABELLEN, ABBILDUNGEN & LISTEN6
 % =========================================================
 \usepackage{tabularx}
 \usepackage{booktabs}
@@ -63,6 +63,41 @@
 
 \usepackage{enumitem}
 \usepackage{amssymb} % Für \square Checkboxen
+\usepackage{listings}
+
+% Rust-Sprachdefinition und Stil für Code-Listings
+\lstdefinelanguage{Rust}{
+    keywords={fn, let, mut, pub, struct, impl, const, match, if, else, for, in, loop, return, break, true, false, self, Self, use, as},
+    morekeywords=[2]{u8, u16, u32, usize, i32, f32, f64, bool, Vec, Option, Some, None, Result, Ok},
+    sensitive=true,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]"
+}
+
+\lstdefinestyle{ruststyle}{
+    language=Rust,
+    backgroundcolor=\color{boxBg},
+    basicstyle=\ttfamily\footnotesize\singlespacing,
+    keywordstyle=\bfseries\color{primaryTeal},
+    keywordstyle=[2]\bfseries\color{headerTeal},
+    commentstyle=\itshape\color{textGray},
+    stringstyle=\color{orange!80!black},
+    numbers=left,
+    numberstyle=\tiny\color{textGray},
+    stepnumber=1,
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{boxBorder},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    showstringspaces=false,
+    captionpos=b,
+    xleftmargin=1.5em,
+    framexleftmargin=1.2em
+}
+\lstset{style=ruststyle}
 
 % =========================================================
 % INFO- UND HINWEISBOXEN (tcolorbox)
@@ -130,29 +165,64 @@
 % - Oberthema und Titel der Arbeit
 % - Name der begleitenden Lehrperson
 % - Namen und Klasse der Verfassenden
-% - Abgabetermin
+% - Abgabedatum
 % =========================================================
 \begin{titlepage}
     \thispagestyle{empty}
-    \vspace*{0.5cm}
+    \vspace*{0.2cm}
 
     \begin{center}
         {\Large \textbf{Berufsmaturitätsschule Zürich}}\\[0.3em]
-        {\large Ausrichtung: Technik, Architektur, Life Sciences}\\[1.5em]
+        {\large Ausrichtung: Technik, Architektur, Life Sciences}\\[1.2em]
 
-        {\LARGE \textbf{Berufsmaturitätsarbeit (BMA)}}\\[0.5em]
-        {\footnotesize Abschlussprojekt gemäss Art.~11 Abs.~4 BMV}\\[1.2em]
+        {\LARGE \textbf{Berufsmaturitätsarbeit (BMA)}}\\[0.4em]
+        {\footnotesize Abschlussprojekt gemäss Art.~11 Abs.~4 BMV}\\[0.8em]
 
-        \textcolor{primaryTeal}{\rule{\linewidth}{2pt}}\\[1.0em]
+        \textcolor{primaryTeal}{\rule{\linewidth}{2pt}}\\[0.8em]
         {\huge \textbf{\textcolor{primaryTeal}{Emulation mit Ayn Thor}}}\\[0.6em]
-        {\large \textbf{Funktionsweise, Systemgrenzen und Leistungsanalyse moderner Handheld-Emulation}}\\[1.0em]
         \textcolor{primaryTeal}{\rule{\linewidth}{1pt}}
+
+        \vspace{0.6cm}
+
+        % ---------------------------------------------------------
+        % TITELBILD: Foto des Ayn Thor mit sichtbaren Messdaten (Scene 5)
+        % Datei ablegen unter: "abbildungen/titelbild.jpg" oder ".png"
+        % ---------------------------------------------------------
+        \IfFileExists{abbildungen/titelbild.jpg}{%
+            \tcbox[colback=white, colframe=primaryTeal, boxrule=1pt, arc=2mm, left=2mm, right=2mm, top=2mm, bottom=2mm]{%
+                \includegraphics[width=0.85\linewidth, height=7.2cm, keepaspectratio]{abbildungen/titelbild.jpg}%
+            }%
+        }{%
+            \IfFileExists{abbildungen/titelbild.png}{%
+                \tcbox[colback=white, colframe=primaryTeal, boxrule=1pt, arc=2mm, left=2mm, right=2mm, top=2mm, bottom=2mm]{%
+                    \includegraphics[width=0.85\linewidth, height=7.2cm, keepaspectratio]{abbildungen/titelbild.png}%
+                }%
+            }{%
+                \begin{tcolorbox}[
+                    colback=boxBg,
+                    colframe=boxBorder,
+                    boxrule=1pt,
+                    arc=2mm,
+                    width=0.85\linewidth,
+                    height=6.8cm,
+                    valign=center,
+                    halign=center
+                ]
+                    {\large\textcolor{primaryTeal}{\textbf{[ Platzhalter für Titelbild ]}}}\\[0.6em]
+                    \footnotesize\textcolor{textGray}{Foto des \textbf{Ayn Thor} mit den auf dem Bildschirm\\
+                    sichtbaren Echtzeit-Messdaten (Scene~5 OSD).\\[0.6em]
+                    Speichert euer Foto einfach unter:\\[0.3em]
+                    \texttt{abbildungen/titelbild.jpg} \quad oder \quad \texttt{abbildungen/titelbild.png}}
+                \end{tcolorbox}%
+            }%
+        }%
+        \par\vspace{0.3em}
     \end{center}
 
-    \vspace{0.8cm}
+    \vspace{0.5cm}
 
     % Metadaten-Tabelle
-    \renewcommand{\arraystretch}{1.4}
+    \renewcommand{\arraystretch}{1.35}
     \noindent
     \begin{tabularx}{\linewidth}{|>{\bfseries\cellcolor{lightTeal}}p{4.8cm}|X|}
         \hline
@@ -162,17 +232,9 @@
         Klasse & BIN23e \\ \hline
         Schule & Berufsmaturitätsschule Zürich (BMZ) \\ \hline
         Begleitende Lehrperson & Alexander Körner \\ \hline
-        Abgabetermin & KW 48 / [Datum eintragen] \\ \hline
+        Abgabedatum & 27.11.2026 \\ \hline
         Version & 1.1 (Richtlinien-konform BMA 2026) \\ \hline
     \end{tabularx}
-
-    \vspace{1.0cm}
-
-    % Leitfrage-Box
-    \begin{guidelinebox}[title={Arbeitstitel \& Leitfrage}]
-        \textbf{Zentrale Leitfrage:}\\
-        \textit{Wie funktioniert Emulation auf dem Ayn Thor, und was läuft im Hintergrund ab, damit ältere Konsolen und Spiele auf moderner Hardware funktionieren? Welche Grenzen hat Emulation und warum sind gewisse Systeme schwieriger zu emulieren als andere?}
-    \end{guidelinebox}
 
     \vfill
 \end{titlepage}
@@ -193,13 +255,9 @@
 \section*{Abstract}
 \addcontentsline{toc}{section}{Abstract}
 
-\begin{guidelinebox}[title={Hinweis zum Abstract (Richtlinie 2.2)}]
-    Das Abstract umfasst ca. 150 Wörter, ist im Präsens verfasst und besteht genau aus folgenden 3 Absätzen:
-\end{guidelinebox}
-
 \noindent
 \textbf{1. Fragestellung / Zweck der Arbeit:}\\
-Die vorliegende Berufsmaturitätsarbeit untersucht die technischen Funktionsweisen, Mechanismen und praktischen Leistungsgrenzen moderner Konsolenemulation auf dem Android-basierten Gaming-Handheld Ayn Thor. Im Mittelpunkt steht die Leitfrage, welche Hard- und Softwarefaktoren über die Emulierbarkeit fremder Systemarchitekturen entscheiden und weshalb bestimmte Konsolengenerationen einen überproportional hohen Rechenaufwand erfordern.
+Diese Berufsmaturitätsarbeit untersucht die Funktionsweise von Software-Emulation auf Systemebene und analysiert die praktische Leistungsgrenze auf modernen Hand-held Geräten. 
 
 \medskip
 \noindent
@@ -240,7 +298,7 @@ Die Ergebnisse veranschaulichen, dass \dots \platzhalter{Ergebnisse und wichtigs
 \section{Einleitung}
 
 \subsection{Thematischer Kontext \& Bezug zum Oberthema}
-In der modernen Informationsgesellschaft unterliegt Computer-Hardware einem stetigen und rasanten Innovationszyklus. Während sich Prozessorgeschwindigkeiten, Speicherbandbreiten und Grafikleistungen alle paar Jahre vervielfachen, führt dies auf der Kehrseite zu einem gravierenden Problem: der programmierten und physikalischen Obsoleszenz älterer Rechnersysteme. Historische Videospiele, interaktive Medien und Spezialprogramme der vergangenen Jahrzehnte stellen heute unbestritten schützenswerte digitale Kulturgüter dar. Ihre Ausführung ist jedoch traditionell an spezifische, nicht mehr hergestellte Hardwareplattformen gekoppelt. Alternde Bauteile wie austrocknende Elektrolytkondensatoren, nachlassende Laseroptiken und korrodierende Platinen sorgen dafür, dass originale Konsolen zunehmend unzuverlässig oder gänzlich unbrauchbar werden.
+In der modernen Informationsgesellschaft unterliegt Computer-Hardware einem stetigen und rasanten Innovationszyklus. Während sich Prozessorgeschwindigkeiten, Speicherbandbreiten und Grafikleistungen alle paar Jahre vervielfachen, führt dies auf der Kehrseite zu einem gravierenden Problem. Der programmierten und physikalischen Obsoleszenz älterer Rechnersysteme. Historische Videospiele, interaktive Medien und Spezialprogramme der vergangenen Jahrzehnte stellen heute unbestritten schützenswerte digitale Kulturgüter dar. Ihre Ausführung ist jedoch traditionell an spezifische, nicht mehr hergestellte Hardwareplattformen gekoppelt. Alternde Bauteile wie austrocknende Elektrolytkondensatoren, nachlassende Laseroptiken und korrodierende Platinen sorgen dafür, dass originale Konsolen zunehmend unzuverlässig oder gänzlich unbrauchbar werden.
 
 Hier setzt die Technologie der Software-Emulation an. Ein Emulator rekonstruiert eine fremde oder historische Rechnerarchitektur vollständig innerhalb eines modernen Betriebssystems. Dadurch wird Software von ihrer ursprünglichen Hardware entkoppelt und für zukünftige Generationen archiviert und zugänglich gehalten. Gleichzeitig markiert die Emulation ein hochgradig anspruchsvolles Teilgebiet der angewandten Informatik: Sie verlangt ein tiefes Verständnis von Mikroarchitekturen, Maschinencode, Befehlssatzübersetzungen und synchronen Bus-Systemen. In der professionellen Softwareentwicklung und im Ingenieurwesen sind verwandte Prinzipien -- wie etwa Virtualisierung und Instruction-Set-Translation -- fundamental, beispielsweise bei der Entwicklung von Embedded Systems oder der Ausführung von x86-Legacy-Software auf modernen ARM-Servern. Diese Arbeit bettet die Emulationsthematik daher direkt in den Kontext der modernen Rechnerarchitektur und Systemprogrammierung ein.
 
@@ -478,20 +536,142 @@ Die Evaluierung erfolgt anhand von sieben quantitativen und qualitativen Kriteri
 \section{Praktische Untersuchung}
 \label{sec:praxis}
 
-\subsection{Eigenentwicklung und Analyse: Referenz-Interpreter (CHIP-8)}
-Um die theoretischen Grundlagen der Von-Neumann-Architektur und des Fetch-Decode-Execute-Zyklus auf Softwareebene nachzuvollziehen (Teilforschungsfrage~1), wurde ein eigener Interpreter für das CHIP-8-System implementiert. 
+\subsection{Eigenentwicklung und Analyse: Referenz-Interpreter (CHIP-8 in Rust)}
+\label{sec:chip8_rust}
 
+Um die in Kapitel~\ref{sec:theorie} beschriebenen Konzepte der Von-Neumann-Architektur, der Zustandsmaschine sowie des Fetch-Decode-Execute-Zyklus nicht nur theoretisch zu betrachten, sondern auf Code-Ebene nachzuvollziehen (Teilforschungsfrage~1), haben wir einen eigenen, voll funktionsfähigen Emulator für die virtuelle 8-Bit-Plattform \textit{CHIP-8} in der Systemprogrammiersprache \textbf{Rust} entwickelt. Im Gegensatz zu komplexen Konsolenemulatoren (wie für 3DS, Wii oder Switch), deren Codebasen Hunderttausende Zeilen umfassen, dient unser CHIP-8-Interpreter als «gläsernes Referenzmodell» (Stufe~0 / Baseline).
+
+\subsubsection{Modulare Softwarearchitektur (Core vs. Frontend)}
+Bei der Konzeption unseres Rust-Projekts haben wir die eigentliche Emulationslogik strikt von der Ein-/Ausgabe (Plattform-Frontend) getrennt. Das Repository gliedert sich in drei eigenständige Cargo-Pakete (\textit{Workspace-Architektur}):
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Architekturaufbau:} Emulation von 4096 Byte RAM, 16 8-Bit-Datenregistern ($V_0$ bis $V_F$), einem 16-Bit-Indexregister ($I$) sowie einem Programmzähler ($PC$).
-    \item \textbf{Fetch-Decode-Execute-Schleife:} 16-Bit-Opcodes werden aus dem Hauptspeicher gelesen, mittels bitweiser Maskierung und Shifts dekodiert und über Sprungtabellen abgearbeitet.
-    \item \textbf{Erkenntnisgewinn:} Der Interpreter dient im weiteren Versuchsverlauf als Referenz-Baseline für Systeme mit rein sequentieller Ausführung ohne dynamische Rekompilierung (JIT).
+    \item \textbf{\texttt{chip8\_core} (Plattformunabhängiges Backend):} Enthält ausschliesslich die reine Hardware-Nachbildung (RAM, CPU-Register, Opcode-Dekodierung, Timer und Framebuffer-Array) ohne externe Grafik- oder Audio-Abhängigkeiten.
+    \item \textbf{\texttt{desktop} (Natives SDL2-Frontend):} Bindet \texttt{chip8\_core} ein, lädt ROM-Dateien vom Dateisystem, verarbeitet Tastatureingaben und rendert das $64\times32$-Pixel-Bild über eine OpenGL/SDL2-Canvas mit 60\,Hz VSync.
+    \item \textbf{\texttt{wasm} (WebAssembly-Frontend):} Kompiliert denselben \texttt{chip8\_core} mittels \texttt{wasm-bindgen} zu WebAssembly, sodass unser Emulator ohne Code-Änderung am Kern direkt im Webbrowser (auch mobil auf dem Ayn Thor) auf einem HTML5-Canvas ausgeführt werden kann.
 \end{itemize}
+
+\subsubsection{Abbildung der Zustandsmaschine im Speicher (\texttt{struct Emu})}
+Wie in Abschnitt~3.1 dargelegt, lässt sich jedes Rechnersystem als endliche Zustandsmaschine (\textit{Finite State Machine}) auffassen, deren Gesamtzustand durch die Momentaufnahme aller Register und Speicherzellen definiert ist. In unserer Datei \texttt{chip8\_core/src/lib.rs} wird diese Architektur eins zu eins in einer einzigen Datenstruktur (\texttt{pub struct Emu}) abgebildet (siehe Listing~\ref{lst:chip8_struct}):
+
+\begin{lstlisting}[caption={Definition der CHIP-8-Zustandsmaschine in \texttt{chip8\_core/src/lib.rs}}, label={lst:chip8_struct}]
+pub const SCREEN_WIDTH: usize = 64;
+pub const SCREEN_HEIGHT: usize = 32;
+const RAM_SIZE: usize = 4096;
+const NUM_REGS: usize = 16;
+const STACK_SIZE: usize = 16;
+const NUM_KEYS: usize = 16;
+const START_ADDR: u16 = 0x200;
+
+pub struct Emu {
+    pc: u16,                                      // Programmzaehler (Program Counter)
+    ram: [u8; RAM_SIZE],                          // 4 KB Hauptspeicher (Von-Neumann-RAM)
+    screen: [bool; SCREEN_WIDTH * SCREEN_HEIGHT], // Monochromer 64x32 Framebuffer (1 Bit/Pixel)
+    v_reg: [u8; NUM_REGS],                        // 16 8-Bit Arbeitsregister (V0 bis VF)
+    i_reg: u16,                                   // 16-Bit Indexregister fuer Speicheradressen
+    sp: u16,                                      // Stack Pointer
+    stack: [u16; STACK_SIZE],                     // Call-Stack fuer bis zu 16 Unterprogramme
+    keys: [bool; NUM_KEYS],                       // Zustand des 16-Tasten-Hex-Keypads (0x0-0xF)
+    dt: u8,                                       // Delay Timer (zaehlt mit 60 Hz herunter)
+    st: u8,                                       // Sound Timer (Signalton solange > 0)
+}
+\end{lstlisting}
+
+Gemäss der Von-Neumann-Architektur teilen sich Systemdaten und Programmcode denselben 4096\,Byte grossen Arbeitsspeicher (\texttt{ram}). Da die ersten 512\,Byte (\texttt{0x000} bis \texttt{0x1FF}) historisch für den Interpreter selbst und das eingebaute 80-Byte-Zeichensatz-Fontset (`0`--`F`) reserviert sind, wird der Programmzähler (\texttt{pc}) beim Systemstart zwingend auf die Startadresse \texttt{0x200} (Dezimal~512) initialisiert, ab welcher auch das jeweilige Spiel-ROM per \texttt{copy\_from\_slice} in den RAM geladen wird.
+
+\subsubsection{Implementierung des Fetch-Decode-Execute-Zyklus}
+Jeder Taktzyklus unseres Interpreters durchläuft in der Methode \texttt{tick()} exakt die drei Phasen \textit{Fetch}, \textit{Decode} und \textit{Execute} (Listing~\ref{lst:chip8_fde}):
+
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Fetch (Befehl holen):} Da sämtliche 35 Opcodes des CHIP-8-Befehlssatzes 16\,Bit (2\,Byte) lang und im \textit{Big-Endian}-Format gespeichert sind, unser emulierter RAM jedoch aus 8-Bit-Zellen (\texttt{u8}) besteht, liest die Methode \texttt{fetch()} zwei aufeinanderfolgende Bytes ab Adresse \texttt{pc}. Mittels Bit-Shifting um 8 Stellen nach links (\texttt{higher\_byte << 8}) und bitweisem ODER (\texttt{| lower\_byte}) werden diese zu einem einzigen 16-Bit-Opcode (\texttt{u16}) zusammengefügt. Anschliessend wird der Programmzähler um 2 erhöht (\texttt{self.pc += 2}).
+    \item \textbf{Decode (Befehl zerlegen):} In \texttt{execute()} wird der 16-Bit-Opcode mithilfe von hexadezimalen Bitmasken (\texttt{0xF000}, \texttt{0x0F00}, \texttt{0x00F0}, \texttt{0x000F}) und Rechtsshifts in seine vier einzelnen Hexadezimalziffern (\textit{Nibbles}: \texttt{digit1} bis \texttt{digit4}, jeweils 4\,Bit) zerlegt.
+    \item \textbf{Execute (Befehl ausführen \& Status-Flags setzen):} Über das mächtige Tuple-Pattern-Matching von Rust (\texttt{match (digit1, digit2, digit3, digit4)}) wird die exakte Operation ausgewählt und auf den Registern ausgeführt.
+\end{enumerate}
+
+\begin{lstlisting}[caption={Fetch-Decode-Execute-Zyklus und ALU-Carry-Flag in \texttt{chip8\_core/src/lib.rs}}, label={lst:chip8_fde}]
+pub fn tick(&mut self) {
+    let op = self.fetch();
+    self.execute(op);
+}
+
+fn fetch(&mut self) -> u16 {
+    let higher_byte = self.ram[self.pc as usize] as u16;
+    let lower_byte = self.ram[(self.pc + 1) as usize] as u16;
+    let op = (higher_byte << 8) | lower_byte;
+    self.pc += 2;
+    op
+}
+
+fn execute(&mut self, op: u16) {
+    // Decode: Zerlegung des 16-Bit-Opcodes in vier 4-Bit-Nibbles
+    let digit1 = (op & 0xF000) >> 12;
+    let digit2 = (op & 0x0F00) >> 8;
+    let digit3 = (op & 0x00F0) >> 4;
+    let digit4 = op & 0x000F;
+
+    match (digit1, digit2, digit3, digit4) {
+        // 00E0: CLS - Bildschirm loeschen
+        (0, 0, 0xE, 0) => {
+            self.screen = [false; SCREEN_WIDTH * SCREEN_HEIGHT];
+        },
+        // 2NNN: CALL NNN - Unterprogramm aufrufen (Ruecksprungadresse auf Stack)
+        (2, _, _, _) => {
+            let nnn = op & 0xFFF;
+            self.push(self.pc);
+            self.pc = nnn;
+        },
+        // 8XY4: ADD VX, VY - Addition mit Hardware-Carry-Flag in Register VF
+        (8, _, _, 4) => {
+            let x = digit2 as usize;
+            let y = digit3 as usize;
+            let (new_vx, carry) = self.v_reg[x].overflowing_add(self.v_reg[y]);
+            let new_vf = if carry { 1 } else { 0 };
+            self.v_reg[x] = new_vx;
+            self.v_reg[0xF] = new_vf;
+        },
+        // DXYN: DRAW - Zeichnet ein 8xN Sprite per XOR und prueft Pixel-Kollision
+        (0xD, _, _, _) => {
+            let x_coord = self.v_reg[digit2 as usize] as u16;
+            let y_coord = self.v_reg[digit3 as usize] as u16;
+            let num_rows = digit4;
+            let mut flipped = false;
+            for y_line in 0..num_rows {
+                let addr = self.i_reg + y_line as u16;
+                let pixels = self.ram[addr as usize];
+                for x_line in 0..8 {
+                    if (pixels & (0b1000_0000 >> x_line)) != 0 {
+                        let x = (x_coord + x_line) as usize % SCREEN_WIDTH;
+                        let y = (y_coord + y_line) as usize % SCREEN_HEIGHT;
+                        let idx = x + SCREEN_WIDTH * y;
+                        flipped |= self.screen[idx];
+                        self.screen[idx] ^= true; // XOR-Zeichnen
+                    }
+                }
+            }
+            self.v_reg[0xF] = if flipped { 1 } else { 0 }; // Kollisions-Flag VF
+        },
+        // Weitere Opcodes ...
+        (_, _, _, _) => unimplemented!("Unimplemented opcode: {}", op),
+    }
+}
+\end{lstlisting}
+
+Besonders anschaulich zeigt sich in Listing~\ref{lst:chip8_fde} die Funktionsweise von \textbf{Status-Flags}: Da CHIP-8 kein dediziertes Flag-Register besitzt, fungiert das sechzehnte Arbeitsregister \texttt{V[0xF]} (\texttt{VF}) als Hardware-Flag-Register. Beim Additionsbefehl \texttt{8XY4} nutzen wir Rusts sichere Methode \texttt{overflowing\_add()}, welche bei einem 8-Bit-Überlauf ($> 255$) ein Wahrheitswert-Flag (\texttt{carry = true}) liefert und \texttt{v\_reg[0xF] = 1} setzt. Ebenso dient \texttt{VF} beim Zeichenbefehl \texttt{DXYN} als Hardware-Kollisionserkennung: Da Sprites per exklusivem ODER (\texttt{\^{}= true}) auf den Bildschirm gezeichnet werden, bedeutet das Erlöschen eines bereits aktiven Pixels eine Überlappung (\texttt{flipped = true}), was durch \texttt{VF = 1} direkt vom Spiel (z.\,B. für Trefferabfragen in \textit{Pong} oder \textit{Space Invaders}) ausgewertet wird.
+
+\subsubsection{Takt-Synchronisation, Fehlerquellen und Grenzen reiner Interpretation}
+Im Desktop- und WebAssembly-Frontend ist die Hauptschleife (\texttt{gameloop}) an die Bildwiederholrate des Displays von 60\,Hz gekoppelt. Während die beiden Hardware-Timer (\texttt{dt} und \texttt{st}) über \texttt{tick\_timers()} exakt einmal pro Frame (also mit 60\,Hz) dekrementiert werden, führt die Schleife pro Bildaufbau \texttt{TICKS\_PER\_FRAME = 10} CPU-Zyklen (\texttt{chip8.tick()}) aus. Daraus resultiert eine effektive emulierte Prozessortaktrate von:
+\[
+    f_{\mathrm{CPU}} = 60\,\mathrm{Frames/s} \times 10\,\mathrm{Ticks/Frame} = 600\,\mathrm{Hz}
+\]
+
+Während der Entwicklung zeigte sich zudem exemplarisch, wie empfindlich Emulatoren auf kleinste Implementierungsfehler reagieren: Ein anfänglicher Copy-Paste-Fehler in den bitweisen ALU-Instruktionen \texttt{8XY2} (\texttt{AND}) und \texttt{8XY3} (\texttt{XOR}), bei denen versehentlich wie in \texttt{8XY1} der ODER-Operator (\texttt{|=}) statt \texttt{\&=} bzw. \texttt{\^{}=} stand, führte nicht etwa zu einem Programmabsturz, sondern zu subtilen Logik- und Darstellungsfehlern in einzelnen ROMs. Dies verdeutlicht, weshalb die exakte Abbildung jedes einzelnen Opcodes für die Kompatibilität eines Emulators entscheidend ist.
+
+\paragraph{Erkenntnis für den Übergang zu modernen Konsolen:}
+Für ein System wie CHIP-8 mit lediglich 600 Instruktionen pro Sekunde verursacht unsere reine Interpreter-Schleife (jeden Befehl zur Laufzeit einzeln maskieren und per \texttt{match}-Verzweigung ausführen) auf moderner Hardware nahezu 0\,\% CPU-Last. Skalieren wir dieses Prinzip jedoch auf komplexere Konsolen wie den \textbf{Nintendo 3DS} (268\,MHz Dual-Core), die \textbf{Nintendo Wii} (729\,MHz PowerPC) oder die \textbf{Nintendo Switch} (1020\,MHz Quad-Core), müssten hunderte Millionen Befehle pro Sekunde durch eine solche \texttt{match}-Schleife geschleust werden. Der Verzweigungs-Overhead (\textit{Branch Misprediction}) eines reinen Interpreters würde selbst den leistungsstarken Ayn Thor sofort überlasten -- weshalb bei den nachfolgend untersuchten Systemen zwingend dynamische Rekompilierung (\textbf{JIT}) oder native Codeausführung (\textbf{NCE}) zum Einsatz kommen muss.
 
 \subsection{Auswahl der Testsysteme}
 Die Auswahl der Testsysteme deckt vier architektonische Entwicklungsstufen ab:
 \begin{enumerate}[leftmargin=1.8em]
-    \item \textbf{Atari 2600 / CHIP-8 (Retro/Einfach):} Monolithische 8-Bit-Architektur, MOS 6507 CPU (1.19\,MHz), rein sequentieller Interpreter ohne Framebuffer.
-    \item \textbf{Nintendo DS (Mittelstufe):} Dual-CPU-System (ARM946E-S @ 67\,MHz, ARM7TDMI @ 33\,MHz), 2D-Tile-Engines und fixe 3D-Rasterisierung.
+    \item \textbf{CHIP-8 (Retro/Einfach):} Monolithische 8-Bit-Architektur, MOS 6507 CPU (1.19\,MHz), rein sequentieller Interpreter ohne Framebuffer.
+    \item \textbf{Nintendo 3 DS (Mittelstufe):} Dual-CPU-System (ARM946E-S @ 67\,MHz, ARM7TDMI @ 33\,MHz), 2D-Tile-Engines und fixe 3D-Rasterisierung.
     \item \textbf{Sony PlayStation 2 (Komplex):} Emotion Engine (MIPS R5900 @ 294\,MHz) mit zwei synchronisierten Vektor-Coprozessoren (VU0, VU1) und Graphics Synthesizer mit 4\,MB Embedded DRAM. Hohe Anforderungen an Zyklensynchronisation.
     \item \textbf{Nintendo Switch (Hochkomplex):} 64-Bit ARM Cortex-A57 (Maxwell-basierte GPU), moderne programmierbare Shader und zwingender Einsatz eines JIT-Compilers zur Befehlssatzübersetzung.
 \end{enumerate}
@@ -826,36 +1006,5 @@ Für jeden einzelnen Benchmark-Durchlauf auf dem Ayn Thor wird folgendes standar
     \item \textbf{Bescheinigung unterschrieben:} Originalformular beider Autoren beigelegt bzw. eingebunden.
     \item \textbf{Drei gedruckte Exemplare:} In gebundener Form (Spiralheftung) fristgerecht bereitgestellt.
 \end{itemize}
-
-\newpage
-
-% =========================================================
-% 19. BESCHEINIGUNG / SELBSTSTÄNDIGKEITSERKLÄRUNG
-% (Richtlinie Kapitel 2.9 - Verbindlicher Abschluss)
-% =========================================================
-\section*{Bescheinigung (Selbstständigkeitserklärung)}
-\addcontentsline{toc}{section}{Bescheinigung}
-
-\vspace{1cm}
-
-\noindent
-Hiermit bestätigen wir, dass wir die vorliegende Berufsmaturitätsarbeit selbstständig und nur unter Verwendung der angegebenen Quellen, Hilfsmittel und erlaubten Werkzeuge verfasst haben.
-
-\bigskip
-\noindent
-Alle Stellen, die wörtlich oder sinngemäss aus Quellen (Büchern, Zeitschriften, Internet oder sonstigen Medien) entnommen wurden, sind im Text als Zitate bzw. Paraphrasen eindeutig kenntlich gemacht und im Quellenverzeichnis vollständig nachgewiesen.
-
-\bigskip
-\noindent
-Wir nehmen zur Kenntnis, dass ein Plagiat oder das Verschweigen von Hilfsmitteln (einschliesslich nicht deklarierter generativer KI-Nutzung) gemäss §~28 des Berufsmaturitätsreglements als Täuschung gewertet wird und zum Nichtbestehen der Berufsmaturitätsprüfung führen kann.
-
-\vspace{3cm}
-
-\noindent
-\begin{tabularx}{\linewidth}{X p{1cm} X}
-    Zürich, den \dots\dots\dots\dots\dots\dots\dots & & Zürich, den \dots\dots\dots\dots\dots\dots\dots \\[2cm]
-    \cline{1-1} \cline{3-3}
-    \textbf{David Martin Felicio Reichlin} & & \textbf{Gabriel Di Giuseppe}
-\end{tabularx}
 
 \end{document}

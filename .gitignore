@@ -14,3 +14,7 @@
 # Temporäre OS-Dateien
 .DS_Store
 Thumbs.db
+
+# Rust / Cargo Build-Verzeichnisse
+**/target/
+chip-8/wasm/pkg/
