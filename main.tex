@@ -724,21 +724,30 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb18_cpu_gpu_last.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Azahar_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Azahar_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Dolphin_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Dolphin_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Eden_Avg_Auslastung_CPU.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
+    \smartfigure{abbildungen/Eden_GPU_Auslastung.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
     \caption{Verteilung der Auslastung auf CPU-Cluster und Adreno-GPU.}
     \label{fig:cpu_gpu_last}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb19_leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
+    \smartfigure{abbildungen/Dolphin_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
+    \smartfigure{abbildungen/Azahar_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
+    \smartfigure{abbildungen/Eden_Leistungsaufnahme.png}{Abbildung 19: Elektrische Leistungsaufnahme in Watt ($P=U \times I$)}{Gemessene durchschnittliche Gesamtsystemleistung an der Batterieschnittstelle.}
     \caption{Leistungsaufnahme in Watt im generationenübergreifenden Vergleich.}
     \label{fig:power_consumption}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb20_temperaturverlauf.png}{Abbildung 20: Temperaturverlauf des SoC unter 10-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
+    \smartfigure{abbildungen/Eden_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
+    \smartfigure{abbildungen/Dolphin_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
+    \smartfigure{abbildungen/Azahar_CPU_Temp.png}{Abbildung 20: Temperaturverlauf des SoC unter 5-minütiger Dauerlast}{Verlauf der Chiptemperatur ($T_{\mathrm{SoC}}$ in °C) bei aktiver Standard-Lüfterkühlung.}
     \caption{Thermische Entwicklung des Qualcomm-SoC unter standardisierter Dauerlast.}
     \label{fig:temp_curve}
 \end{figure}
@@ -746,7 +755,10 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
 \subsection{Einfluss von Grafiktreibern und Shader-Strategien}
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb21_vulkan_vs_opengl.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \smartfigure{abbildungen/Azahar_OpenGL.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \smartfigure{abbildungen/Azahar_Vulkan.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \smartfigure{abbildungen/Dolphin_OpenGL.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \smartfigure{abbildungen/Dolphin_Vulkan.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
     \caption{Leistungs- und Stabilitätsvergleich alternativer Treiber- und Shader-Architekturen.}
     \label{fig:treiber_vergleich}
 \end{figure}
