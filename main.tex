@@ -141,8 +141,6 @@
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 
-\newcommand{\platzhalter}[1]{\par\medskip\noindent\textcolor{placeholderColor}{\textit{[#1]}}\medskip}
-
 % =========================================================
 % DOKUMENTENBEGINN
 % =========================================================
@@ -189,8 +187,8 @@
         Schule & Berufsmaturitätsschule Zürich (BMZ) \\ \hline
         Begleitende Lehrperson & Alexander Körner \\ \hline
         Abgabedatum & 27. November 2026 \\ \hline
-        Version & 2.0 (Gemäss BMZ-Musterlayout 2026) \\ \hline
-    \end{tabularx}
+        Version & 2.1 (Systemarchitektur \& Treiber-Update) \\ \hline
+    \end{tabularx}%
 
     \vfill
 \end{titlepage}
@@ -199,17 +197,17 @@
 \onehalfspacing
 
 % =========================================================
-% 1. ABSTRACT (Nummeriertes Kapitel 1 gemäss Vorlage)
-% 3 klar gegliederte Absätze ohne künstliche Zwischenüberschriften
+% ABSTRACT (Vor dem Inhaltsverzeichnis gemäss BMZ-Standard)
 % =========================================================
-\section{Abstract}
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
 \label{sec:abstract}
 
-Diese Berufsmaturitätsarbeit untersucht die Funktionsweise von Software-Emulation auf Systemebene und analysiert die praktischen Leistungsgrenzen auf modernen Android-basierten Gaming-Handhelds. Im Zentrum der Untersuchung steht die Frage, welcher mathematische, architektonische und rechentechnische Aufwand erbracht werden muss, um fremde Befehlssatzarchitekturen in Echtzeit auf einem Host-System zu übersetzen und welche konkreten Hardware-Flaschenhälse die Emulierbarkeit limitieren.
+Diese Berufsmaturitätsarbeit untersucht die Funktionsweise von Software-Emulation auf Systemebene und analysiert die praktischen Leistungsgrenzen auf moderner Android-basierter Handheld-Hardware am Beispiel des \textit{Ayn Thor}. Im Zentrum der Untersuchung steht die Frage, welcher mathematische, architektonische und rechentechnische Aufwand erbracht werden muss, um fremde Befehlssatzarchitekturen in Echtzeit auf einem mobilen Host-System zu übersetzen, wie moderne Treiberarchitekturen (Vulkan \& Mesa Turnip) Engpässe auflösen und welche Hardwarefaktoren die Ausführungsstabilität limitieren.
 
-Als Untersuchungsmethodik dient einerseits eine systematische Fachliteraturrecherche zur theoretischen Fundierung der Rechnerarchitektur (Von-Neumann-Modell, Fetch-Decode-Execute-Zyklus, Finite State Machine, Interpreter vs. JIT-Compiler). Zur praktischen Veranschaulichung der theoretischen Prinzipien wird ein eigener modularer Referenz-Interpreter für die CHIP-8-Architektur in der Programmiersprache Rust entwickelt. Andererseits wird eine empirische Benchmark-Reihe mit standardisierter Telemetrie-Datenerfassung via Shizuku und Scene~5 auf dem Ayn Thor durchgeführt, bei der fünf Entwicklungsstufen (CHIP-8, Atari 2600, Nintendo DS, Sony PlayStation 2 und Nintendo Switch) hinsichtlich Ladezeiten, Bildstabilität, CPU-/GPU-Auslastung, Leistungsaufnahme und thermischer Grenzen quantitativ und qualitativ verglichen werden.
+Als Untersuchungsmethodik dient einerseits eine systematische Fachliteraturrecherche zur theoretischen Fundierung der Rechnerarchitektur (Von-Neumann-Modell, Fetch-Decode-Execute-Zyklus, Finite State Machine, Interpreter vs. JIT-Compiler vs. NCE). Zur praktischen Veranschaulichung der theoretischen Prinzipien wird ein eigener modularer Referenz-Interpreter für die CHIP-8-Architektur in der Programmiersprache Rust entwickelt. Andererseits wird eine empirische Benchmark-Reihe mit standardisierter Telemetrie-Datenerfassung via Shizuku und Scene~5 auf dem Ayn Thor durchgeführt. Untersucht werden drei architektonisch differenzierte Plattformen: der \textbf{Nintendo 3DS} (Dual-Screen-Architektur \& PICA200-Grafik), die \textbf{Nintendo Wii} (reine PowerPC-Fremdarchitektur mit dynamischer JIT-Kompilierung) sowie die \textbf{Nintendo Switch} (ARM64-Architektur mit nativer Codeausführung NCE).
 
-Die empirischen Messergebnisse belegen einen stark nicht-linearen, exponentiellen Anstieg des Ressourcen- und Energiebedarfs mit zunehmender Architekturkomplexität. Während einfache 8-Bit- und 32-Bit-Systeme (CHIP-8, Atari, NDS) auf dem Ayn Thor weniger als 15\,\% CPU-Auslastung und unter 3.5\,W Systemleistung erfordern, führen hochgradig asynchrone Multi-Chip-Architekturen wie die PlayStation~2 sowie moderne JIT-Kompilierungen bei der Nintendo Switch zu Lastspitzen von über 90\,\% und einer Leistungsaufnahme von bis zu 10.4\,W. Die Arbeit zeigt auf, dass nicht allein die reine Prozessortaktung, sondern insbesondere die Zyklensynchronisation zwischen Coprozessoren und der Treiber-Overhead mobiler Grafik-APIs die primären Limitierungsfaktoren mobiler Emulation darstellen.
+Die empirischen Messergebnisse veranschaulichen fundamentale Systemunterschiede: Während der Nintendo 3DS dank nativer Einbindung des sekundären Thor-Touchscreens und Vulkan-Shadern mit 59.9\,FPS hochgradig energieeffizient (2.78\,W) emuliert werden kann, erfordert die Nintendo Wii aufgrund kontinuierlicher PowerPC-zu-ARM64-Befehlssatzübersetzung eine signifikante CPU-Last. Bei der Nintendo Switch wiederum ermöglicht Native Code Execution (NCE) zwar das Umgehen von CPU-Übersetzungs-Overhead, verschiebt den primären Flaschenhals jedoch auf die Speicherbandbreite und die aufwendige Übersetzung von Nvidia-Maxwell-Grafikbefehlen auf die mobile Adreno-740-GPU. Open-Source-Treiber (Mesa Turnip) erweisen sich hierbei als unverzichtbar, um Shader-Kompilierungsfehler und Rendering-Bugs zu minimieren.
 
 \newpage
 
@@ -222,7 +220,7 @@ Die empirischen Messergebnisse belegen einen stark nicht-linearen, exponentielle
 \newpage
 
 % =========================================================
-% 2. EINLEITUNG
+% 1. EINLEITUNG
 % =========================================================
 \section{Einleitung}
 \label{sec:einleitung}
@@ -233,41 +231,16 @@ In der modernen Informationsgesellschaft unterliegt Computer-Hardware einem stet
 Hier setzt die Technologie der Software-Emulation an. Ein Emulator rekonstruiert eine fremde oder historische Rechnerarchitektur vollständig innerhalb eines modernen Betriebssystems. Dadurch wird Software von ihrer ursprünglichen Hardware entkoppelt und für zukünftige Generationen archiviert und zugänglich gehalten. Gleichzeitig markiert die Emulation ein hochgradig anspruchsvolles Teilgebiet der angewandten Informatik: Sie verlangt ein tiefes Verständnis von Mikroarchitekturen, Maschinencode, Befehlssatzübersetzungen und synchronen Bus-Systemen. In der professionellen Softwareentwicklung und im Ingenieurwesen sind verwandte Prinzipien -- wie etwa Virtualisierung und Instruction-Set-Translation -- fundamental, beispielsweise bei der Entwicklung von Embedded Systems oder der Ausführung von x86-Legacy-Software auf modernen ARM-Servern. Diese Arbeit bettet die Emulationsthematik daher direkt in das BMA-Oberthema «Was läuft im Hintergrund?» ein.
 
 \subsection{Ziel der Arbeit}
-Das primäre Ziel dieser Berufsmaturitätsarbeit besteht darin, die Funktionsweise von Emulationssoftware auf Systemebene fundiert zu dekonstruieren und ihre praktischen Leistungsgrenzen auf moderner, mobiler Hardware empirisch zu erforschen. Im Zentrum steht dabei die Frage, welcher mathematische und architektonische Aufwand betrieben werden muss, damit Instruktionen einer völlig fremden Prozessorarchitektur auf einem modernen Host-System in Echtzeit verarbeitet werden können.
+Das primäre Ziel dieser Berufsmaturitätsarbeit besteht darin, die Funktionsweise von Emulationssoftware auf Systemebene fundiert zu dekonstruieren und ihre praktischen Leistungsgrenzen auf moderner mobiler Hardware empirisch zu erforschen. Im Zentrum steht dabei die Frage, welcher mathematische, architektonische und rechentechnische Aufwand betrieben werden muss, damit Instruktionen einer völlig fremden Prozessorarchitektur auf einem modernen Host-System in Echtzeit verarbeitet werden können.
 
-Anhand des Gaming-Handhelds \textit{Ayn Thor} soll praxisnah untersucht werden, wie sich unterschiedliche Komplexitätsgrade emulierter Systeme -- von einfachen 8-Bit-Architekturen bis hin zu modernen, hochparallelen Plattformen -- auf Systemressourcen, Energieeffizienz und Ausführungsstabilität auswirken. Die Arbeit verfolgt das Ziel, die oft als «Black Box» wahrgenommene Emulationstechnologie technisch transparent darzulegen und die konkreten Hardware- und Software-Flaschenhälse greifbar zu machen.
+Anhand des Gaming-Handhelds \textit{Ayn Thor} soll praxisnah untersucht werden, wie sich unterschiedliche Komplexitätsgrade emulierter Systeme -- von einfacher 8-Bit-Logik über heterogene Dual-Screen-Systeme (3DS) und reine Fremdarchitekturen (Wii) bis hin zu modernen Systemen mit nativer Codeausführung (Switch) -- auf Systemressourcen, Energieeffizienz und Ausführungsstabilität auswirken. Die Arbeit verfolgt das Ziel, die oft als «Black Box» wahrgenommene Emulationstechnologie technisch transparent darzulegen und konkrete Hardware- und Software-Flaschenhälse greifbar zu machen.
 
 \subsection{Persönlicher Bezug \& Motivation}
-Als angehende Informatiker (Klasse BIN23e an der Berufsmaturitätsschule Zürich) verbindet uns beide ein ausgeprägtes Interesse an hardwarenaher Programmierung, Systemarchitekturen sowie der praktischen Optimierung von Algorithmen. Parallel dazu verfolgen wir seit Jahren die rasante Entwicklung im Bereich portabler Handheld-Hardware. Die Vorstellung, dass ein kompaktes mobiles Gerät in der Lage ist, hochentwickelte Heimkonsolen wie die PlayStation~2 oder gar moderne Systeme softwareseitig nachzubilden, fasziniert uns gleichermassen aus technischer wie aus spielerischer Perspektive.
+Als Informatiker verbindet uns beide ein grosses Interesse an hardwarenaher Programmierung, Systemarchitekturen sowie der praktischen Optimierung von Algorithmen. Dadazu verfolgen wir seit Jahren die schnelle Entwicklung im Bereich portabler Handheld-Hardware. Die Vorstellung, dass ein kompaktes mobiles Gerät in der Lage ist, hochentwickelte Heimkonsolen softwareseitig nachzubilden, fasziniert uns gleichermassen aus technischer wie aus spielerischer Perspektive.
 
-Besonders reizvoll erschien uns die Wahl des Testgeräts \textit{Ayn Thor}: Ausgestattet mit einem modernen Qualcomm Snapdragon SoC und aktiver Lüfterkühlung, bietet dieses Gerät eine ideale und reproduzierbare Forschungsplattform. Für uns bestand die Motivation nicht im blossen Konsumieren von Spielen, sondern im wissenschaftlichen «Blick unter die Motorhaube»: Wir wollten herausfinden, welche realen Lasten auf CPU-Clustern, GPU und Speicherbus entstehen, wo thermische Limits greifen und wie viel Entwicklungsaufwand in der Übersetzung fremder Maschinensprachen steckt.
+Besonders reizvoll erschien uns die Wahl des Testgeräts \textit{Ayn Thor}: Ausgestattet mit einem Qualcomm Snapdragon 8 Gen 2 SoC, zwei physischen Bildschirmen und aktiver Lüfterkühlung, bietet dieses Gerät eine ideale und reproduzierbare Forschungsplattform. Für uns bestand die Motivation nicht im blossen Konsumieren von Spielen, sondern im wissenschaftlichen «Blick unter die Motorhaube»: Wir wollten herausfinden, welche realen Lasten auf CPU-Clustern, GPU und Speicherbus entstehen, wie Treiber-Injections via Mesa Turnip funktionieren und wo thermische Limits greifen.
 
-\subsection{Forschungsfragen und wissenschaftliche Hypothesen}
-
-\paragraph{Hauptforschungsfrage (Leitfrage):}
-\textit{Wie funktioniert Emulation auf Systemebene, und welche Hardware- und Software-Faktoren bestimmen die Grenzen der Emulierbarkeit auf moderner Handheld-Hardware (Ayn Thor)?}
-
-\paragraph{Teilforschungsfragen:}
-\begin{enumerate}[leftmargin=1.8em]
-    \item \textbf{Softwarearchitektur eines Interpreters:} Welche Kernkomponenten sind zwingend erforderlich, um einen funktionsfähigen Referenz-Interpreter von Grund auf in Rust zu implementieren?
-    \item \textbf{Flaschenhals- und Grenzwertanalyse:} Welche spezifischen Hardware- und Softwarefaktoren (CPU-Single-Core-IPC, Speicherbandbreite, GPU-Driver-Overhead, Befehlssatzübersetzung) setzen der Emulierbarkeit komplexer Systeme auf dem Testgerät praktische Grenzen?
-    \item \textbf{Skalierung \& Systemlast:} In welchem Verhältnis steigen CPU-/GPU-Auslastung und Leistungsaufnahme auf dem Ayn Thor, wenn die emulierte Systemkomplexität von einem einfachen Interpreter bis hin zu Systemen mit Just-in-Time-Kompilierung (JIT) skaliert wird?
-\end{enumerate}
-
-\paragraph{Wissenschaftliche Hypothesen:}
-\begin{itemize}[leftmargin=1.8em]
-    \item \textbf{Hypothese 1 (Architektur-Overhead):} Die Systemauslastung skaliert bei Emulatoren nicht linear mit der nominalen Prozessortaktung des Originalsystems, sondern überproportional mit der Zahl asynchron gekoppelter Spezial-Coprozessoren (wie der Emotion Engine und Vector Units der PS2).
-    \item \textbf{Hypothese 2 (Ausführungsparadigma):} Reine Interpreter-Schleifen sind ausschliesslich für Taktfrequenzen im niedrigen Megahertz-Bereich praktikabel; Systeme ab der sechsten Konsolengeneration erfordern zwingend dynamische Rekompilierung (JIT), welche wiederum signifikanten Speicher- und Shader-Kompilierungs-Overhead erzeugt.
-    \item \textbf{Hypothese 3 (Grafik-API \& Treiber-Flaschenhals):} Auf modernen ARM/Adreno-Plattformen führt der Einsatz moderner Low-Level-Grafik-APIs (Vulkan mit optimierten Treibern) zu einer signifikant stabileren Frametime-Konsistenz als ältere OpenGL-ES-Implementierungen.
-\end{itemize}
-
-\subsection{Abgrenzung der Arbeit}
-\begin{itemize}[leftmargin=1.8em]
-    \item \textbf{Im Fokus:} Ausgewählte Referenzsysteme (CHIP-8 als Eigenbau, Atari 2600, Nintendo DS, Sony PlayStation 2, Nintendo Switch), technische Architektur, standardisierte Messungen von Performance, Frametimes, Ladezeiten und Energieverbrauch.
-    \item \textbf{Ausdrücklich nicht Gegenstand:} Vollständige Kompatibilitätsanalysen aller weltweit existierenden Spieletitel, Beurteilung von Online-Netzwerkdiensten, Modifikationen proprietärer Firmwares oder tiefergehende juristische Einzelfallprüfungen ausserhalb der sachlichen Urheberrechtsdifferenzierung.
-\end{itemize}
-
-\subsection{Methodischer Ansatz \& Aufbau der Arbeit}
+\subsection{Methodischer Ansatz \& Gang der Untersuchung}
 Um die Forschungsfragen fundiert und nachvollziehbar zu beantworten, stützt sich diese Arbeit auf zwei sich ergänzende Methoden:
 \begin{enumerate}[leftmargin=1.8em]
     \item \textbf{Methode 1: Fachliteratur- und Quellenrecherche (Theoretische Fundierung):}\\
@@ -275,6 +248,37 @@ Um die Forschungsfragen fundiert und nachvollziehbar zu beantworten, stützt sic
     \item \textbf{Methode 2: Empirische Benchmark-Reihe und Eigenentwicklung (Praktische Untersuchung):}\\
     Entwicklung eines eigenen CHIP-8-Referenz-Interpreters in Rust zur Dekonstruktion der Befehlsausführung sowie Durchführung einer standardisierten Messreihe auf dem Ayn Thor unter Verwendung von Shizuku und dem Profiling-Werkzeug Scene~5.
 \end{enumerate}
+
+\newpage
+
+% =========================================================
+% 2. FORSCHUNGSFRAGEN, HYPOTHESEN & ABGRENZUNG
+% =========================================================
+\section{Forschungsfragen, Hypothesen und Abgrenzung}
+\label{sec:forschungsfragen}
+
+\subsection{Hauptforschungsfrage (Leitfrage)}
+\textit{Wie funktioniert Emulation auf Systemebene, und welche Hardware- und Software-Faktoren bestimmen die Grenzen der Emulierbarkeit auf moderner Handheld-Hardware (Ayn Thor)?}
+
+\subsection{Teilforschungsfragen}
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Softwarearchitektur eines Interpreters:} Welche Kernkomponenten sind zwingend erforderlich, um einen funktionsfähigen Referenz-Interpreter von Grund auf in Rust zu implementieren?
+    \item \textbf{Flaschenhals- und Grenzwertanalyse:} Welche spezifischen Faktoren (CPU-Single-Core-IPC, Speicherbandbreite, GPU-Driver-Overhead, Instruktionsübersetzung) setzen der Emulierbarkeit komplexer Systeme auf dem Testgerät praktische Grenzen?
+    \item \textbf{Skalierung \& Systemlast:} In welchem Verhältnis steigen CPU-/GPU-Auslastung und Leistungsaufnahme auf dem Ayn Thor, wenn die emulierte Systemkomplexität von reiner JIT-Instruktionsübersetzung (Wii) bis hin zu nativer Befehlsausführung (Switch) skaliert wird?
+\end{enumerate}
+
+\subsection{Wissenschaftliche Hypothesen}
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{Hypothese 1 (CPU-Overhead durch Fremdarchitekturen):} Reine Fremdarchitekturen wie die Nintendo Wii (PowerPC Broadway) erzeugen trotz moderner JIT-Compiler einen signifikant höheren relativen CPU-Instruktions-Overhead pro emulierter Rechenoperation als Systeme mit nativer Befehlsausführung.
+    \item \textbf{Hypothese 2 (Bottleneck-Verschiebung bei NCE):} Durch den Einsatz von Native Code Execution (NCE) auf der Switch entfällt der CPU-Instruktionsübersetzungs-Overhead nahezu vollständig; infolgedessen verschiebt sich der primäre Flaschenhals auf die Speicherbandbreite (Unified Memory) und die Übersetzung von NVN-Grafikbefehlen in Vulkan-Pipeline-Zustände.
+    \item \textbf{Hypothese 3 (Treiber- und Shader-Kompilierung):} Der Einsatz von modifizierten Open-Source-Vulkan-Treibern (Mesa Turnip) reduziert Shader-Kompilierungsstalls und Frametime-Spikes auf der Adreno-740-GPU signifikant gegenüber proprietären Qualcomm-Stock-Treibern.
+\end{itemize}
+
+\subsection{Abgrenzung der Arbeit}
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{Im Fokus:} Ausgewählte Referenzplattformen (CHIP-8 als Baseline-Eigenbau, Nintendo 3DS, Nintendo Wii, Nintendo Switch), technische Architektur, Treiber-Injections via Mesa Turnip, standardisierte Messungen von Performance, Frametimes, Ladezeiten und Energiebedarf.
+    \item \textbf{Ausdrücklich nicht Gegenstand:} Vollständige Kompatibilitätsanalysen aller weltweit existierenden Spieletitel, Beurteilung von Online-Netzwerkdiensten, Modifikationen proprietärer Konsolen-Firmwares oder tiefergehende juristische Einzelfallprüfungen ausserhalb der sachlichen Urheberrechtsdifferenzierung.
+\end{itemize}
 
 \newpage
 
@@ -288,7 +292,7 @@ Um die Forschungsfragen fundiert und nachvollziehbar zu beantworten, stützt sic
 Um das Funktionsprinzip eines Emulators zu verstehen, muss zunächst die grundlegende Architektur eines programmierbaren Digitalrechners betrachtet werden. 
 
 \paragraph{Von-Neumann-Architektur:}
-Das von John von Neumann 1945 formulierte Modell bildet das Fundament moderner Digitalrechner. Es gliedert ein System in fünf Hauptkomponenten: das Rechenwerk (Arithmetic Logic Unit, ALU), das Steuerwerk (Control Unit), den Arbeitsspeicher (Memory), die Ein-/Ausgabeeinheit (I/O) sowie das verbindende Bus-System (Daten-, Adress- und Steuerbus). Ein zentrales Merkmal ist, dass Programmbefehle und Nutzdaten in einem gemeinsamen Adressraum abgelegt werden.
+Das von John von Neumann 1945 formulierte Modell gliedert ein Rechnersystem in fünf Kernkomponenten: das Rechenwerk (ALU), das Steuerwerk (Control Unit), den Arbeitsspeicher (Memory), die Ein-/Ausgabeeinheit (I/O) sowie das verbindende Bus-System (Daten-, Adress- und Steuerbus). Wesentliches Merkmal ist der gemeinsame Speicher für Programmbefehle und Daten.
 
 \begin{figure}[htbp]
     \centering
@@ -300,7 +304,7 @@ Das von John von Neumann 1945 formulierte Modell bildet das Fundament moderner D
 \paragraph{Zustandsmaschine (Finite State Machine):}
 Auf theoretischer Ebene lässt sich jeder Prozessor als deterministische Zustandsmaschine beschreiben. Der Gesamtzustand zu jedem diskreten Taktzyklus $t$ ist eindeutig definiert durch:
 \begin{itemize}[leftmargin=1.8em]
-    \item den Inhalt sämtlicher Prozessorregister (Akkumulatoren, Allgemeinzweckregister),
+    \item den Inhalt sämtlicher Prozessorregister,
     \item den Programmzähler (Program Counter, $PC$),
     \item den Stapelzeiger (Stack Pointer, $SP$) und Rücksprungadressen,
     \item das Status- und Flag-Register (Carry, Zero, Sign, Overflow),
@@ -315,7 +319,7 @@ Auf theoretischer Ebene lässt sich jeder Prozessor als deterministische Zustand
 \end{figure}
 
 \paragraph{Der Fetch-Decode-Execute-Zyklus:}
-Jeder Mikroprozessor arbeitet Befehle in einer kontinuierlichen Schleife ab, die aus drei primären Schritten besteht:
+Jeder Mikroprozessor arbeitet Befehle in einer kontinuierlichen Schleife ab:
 \begin{enumerate}[leftmargin=1.8em]
     \item \textbf{Fetch (Befehl holen):} Das Steuerwerk liest über den Adressbus den an der Position des Programmzählers ($PC$) gespeicherten Maschinencode aus dem Hauptspeicher in das Befehlsregister und erhöht den $PC$ um die Befehlslänge.
     \item \textbf{Decode (Befehl dekodieren):} Der Operationscode (Opcode) wird zerlegt, Adressierungsarten aufgelöst und die erforderlichen Steuerleitungen zur ALU aktiviert.
@@ -330,8 +334,6 @@ Jeder Mikroprozessor arbeitet Befehle in einer kontinuierlichen Schleife ab, die
 \end{figure}
 
 \subsection{Definition \& Differenzierung: Simulation, Emulation, Virtualisierung}
-In der Informatik werden die Begriffe Simulation, Emulation und Virtualisierung häufig verwechselt, bezeichnen jedoch grundlegend verschiedene Abstraktionskonzepte:
-
 \begin{figure}[htbp]
     \centering
     \smartfigure{abbildungen/abb04_schichtenmodell.png}{Abbildung 4: Abstraktionsschichten: Simulation, Virtualisierung und Emulation}{Gegenüberstellung der Systemebenen und Ausführungsschichten auf dem Host-System.}
@@ -340,22 +342,12 @@ In der Informatik werden die Begriffe Simulation, Emulation und Virtualisierung 
 \end{figure}
 
 \begin{itemize}[leftmargin=1.8em]
-    \item \textbf{Simulation:} Bildet das externe Verhalten, Reaktionen und mathematische Ausgaben eines Systems nach, ohne zwingend die interne Architektur oder Hardwarekomponenten originalgetreu nachzustellen. Ziel ist eine funktionale Verhaltensgleichheit bei hoher Geschwindigkeit.
-    \item \textbf{Virtualisierung:} Teilt physische Hardwareressourcen eines gemeinsamen Host-Rechners (gleiche Befehlssatzarchitektur, z.\,B. ARM auf ARM) über einen Hypervisor auf mehrere isolierte Gastsysteme auf. Die Befehle laufen nahezu mit nativer CPU-Geschwindigkeit ohne Übersetzung.
-    \item \textbf{Emulation:} Rekonstruiert die gesamte Ziel-Hardwareumgebung (CPU, Busse, Soundchips, GPUs, Coprozessoren) softwareseitig auf dem Host-System. Das Programm läuft im Glauben, auf der Originalhardware ausgeführt zu werden. Dies erfordert maximale Detailgenauigkeit, erzeugt jedoch einen immensen Rechenaufwand.
+    \item \textbf{Simulation:} Bildet das externe Verhalten, Reaktionen und mathematische Ausgaben eines Systems nach, ohne die interne Architektur originalgetreu abzubilden.
+    \item \textbf{Virtualisierung:} Teilt physische Ressourcen eines Host-Rechners (gleiche ISA, z.\,B. ARM auf ARM) über einen Hypervisor auf mehrere isolierte Gastsysteme auf.
+    \item \textbf{Emulation:} Rekonstruiert die gesamte Ziel-Hardwareumgebung (CPU, Busse, Soundchips, GPUs, Coprozessoren) softwareseitig auf dem Host-System. Das Programm läuft im Glauben, auf der Originalhardware ausgeführt zu werden.
 \end{itemize}
 
 \subsection{Technische Kernkomponenten eines Emulators}
-Ein vollständiger Systememulator muss sämtliche physischen Bausteine einer Konsole in Software abbilden:
-\begin{itemize}[leftmargin=1.8em]
-    \item \textbf{CPU / Instruktionssatz:} Übersetzung von Opcodes, Registerverwaltung und Interrupt-Handling.
-    \item \textbf{Speicherverwaltung (MMU):} Memory Mapping, Adressdekodierung und Direct Memory Access (DMA).
-    \item \textbf{Grafik-Subsystem:} Nachbildung von Tile-Engines, Framebuffern, programmierbaren Shadern und Pixel-Pipelines.
-    \item \textbf{Audio-Subsystem:} Digital Signal Processors (DSP), FM-Synthese und PCM-Kanal-Mischung.
-    \item \textbf{Eingabe/Controller:} Polling von Buttons, analoge Achsen und Latenzminimierung.
-    \item \textbf{BIOS \& Firmware:} High-Level Emulation (HLE, funktionale Nachbildung von Betriebssystemaufrufen) vs. Low-Level Emulation (LLE, bitgenaue Ausführung des originalen ROM-Dumps).
-\end{itemize}
-
 \begin{figure}[htbp]
     \centering
     \smartfigure{abbildungen/abb05_emulator_architektur.png}{Abbildung 5: Schichten- und Komponentenmodell eines Emulators}{Zusammenspiel von virtueller CPU, MMU, Grafik-Pipeline, Audio und Host-Backend.}
@@ -363,15 +355,9 @@ Ein vollständiger Systememulator muss sämtliche physischen Bausteine einer Kon
     \label{fig:emu_components}
 \end{figure}
 
-\subsection{Funktionsweise im Hintergrund: Interpreter vs. JIT-Compiler}
-Für die Ausführung fremder Maschinenbefehle existieren zwei grundlegende Paradigmen:
+Ein vollwertiger Systememulator besteht aus mehreren synchronisierten Subsystemen: der CPU-Emulationseinheit, der Speicherverwaltung (MMU mit Adressdekodierung und DMA), dem Grafik-Subsystem (Rasterizer, Shader-Translation), der Audio-Engine sowie dem Input- und Firmware-Subsystem (HLE vs. LLE).
 
-\paragraph{Reine Interpretation (Interpreter):}
-Der Interpreter liest Befehl für Befehl einzeln ein, dekodiert ihn zur Laufzeit über Verzweigungen (\texttt{switch} / \texttt{match}) und führt die Operation aus. Dies ist portabel und speicherschonend, erzeugt jedoch pro Maschinenbefehl dutzende Host-Befehle und leidet unter ständigen Fehlvorhersagen der Sprungvorhersage (\textit{Branch Mispredictions}).
-
-\paragraph{Dynamische Rekompilierung (JIT-Compiler):}
-Ein Just-in-Time-Compiler übersetzt ganze Blöcke von Zielmaschinenbefehlen (\textit{Basic Blocks}) zur Laufzeit in nativen Maschinencode der Host-CPU (z.\,B. MIPS-Befehle in ARM64-Befehle) und speichert das Ergebnis in einem \textit{Translation Cache}. Bei wiederholtem Durchlaufen wird der Maschinencode direkt nativ von der Host-CPU ausgeführt.
-
+\subsection{Funktionsweise im Hintergrund: Interpreter, JIT und NCE}
 \begin{figure}[htbp]
     \centering
     \smartfigure{abbildungen/abb06_interpreter_vs_jit.png}{Abbildung 6: Ablauf: Interpreter vs. Just-in-Time-Compiler (JIT)}{Vergleich von Einzelschritt-Interpretation und dynamischer Blockübersetzung mit Translation Cache.}
@@ -379,34 +365,124 @@ Ein Just-in-Time-Compiler übersetzt ganze Blöcke von Zielmaschinenbefehlen (\t
     \label{fig:interpreter_vs_jit}
 \end{figure}
 
-\subsection{Systemgrenzen und Flaschenhälse}
-Die theoretischen Leistungsgrenzen mobiler Emulation werden durch folgende Faktoren bestimmt:
+Für die Befehlsausführung existieren drei fundamentale Konzepte:
 \begin{itemize}[leftmargin=1.8em]
-    \item \textbf{Rechenzeit-Overhead:} Als Faustregel gilt in der Systemprogrammierung, dass ein Host-System die 10- bis 100-fache Rechenleistung der Originalhardware bereitstellen muss, um zyklengenaue Emulation in Echtzeit zu gewährleisten.
-    \item \textbf{Single-Core-IPC:} Da ältere Konsolen strikt synchron arbeiteten, können viele Emulatoren ihre Hauptlast nicht auf mehrere Threads verteilen; die Single-Core-Leistung der Prime-Kerne ist ausschlaggebend.
-    \item \textbf{Thermisches Throttling:} Unter kontinuierlicher Volllast erwärmen sich mobile SoCs stark. Ohne aktive Kühlung taktet das System nach wenigen Minuten herunter, was zu plötzlichen Frame-Drops führt.
+    \item \textbf{Interpreter:} Jeder Befehl wird einzeln geholt, dekodiert und über Verzweigungen ausgeführt. Portabel, aber extrem ineffizient bei Taktfrequenzen über wenigen Megahertz.
+    \item \textbf{Just-in-Time-Kompilierung (JIT):} Maschinencodeblöcke der Fremdarchitektur (z.\,B. PowerPC bei der Wii) werden zur Laufzeit in nativen Host-Code (ARM64) übersetzt und in einem Translation Cache gepuffert.
+    \item \textbf{Native Code Execution (NCE):} Wenn Host- und Gast-CPU dieselbe Befehlssatzarchitektur teilen (wie beim Ayn Thor und der Switch: beides ARM64), können Gast-Instruktionen ohne CPU-Übersetzung direkt auf dem Host-Prozessor ausgeführt werden. Der Emulator fängt lediglich Betriebssystemaufrufe (Syscalls) und Hardwarezugriffe ab.
 \end{itemize}
 
 \newpage
 
 % =========================================================
-% 4. PRAKTISCHE UNTERSUCHUNG & MESSUNGEN AUF DEM AYN THOR
+% 4. GERÄT UND TESTUMGEBUNG: AYN THOR
 % =========================================================
-\section{Praktische Untersuchung und Messungen}
+\section{Gerät und Testumgebung: Ayn Thor}
+\label{sec:testumgebung}
+
+\subsection{Gerätebeschreibung und Spezifikationen}
+Als primäre Test- und Forschungsplattform wird der moderne Android-basierte Gaming-Handheld \textit{Ayn Thor} eingesetzt. Das Gerät basiert auf einer modernen System-on-a-Chip-Architektur (SoC) von Qualcomm und zeichnet sich durch eine Reihe hardware- und softwarespezifischer Besonderheiten aus:
+
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{Hardware-Basis:} Als Hauptprozessor dient der Qualcomm Snapdragon 8 Gen 2 SoC, gefertigt im 4-nm-Verfahren. Das heterogene CPU-Cluster kombiniert Kryo-Kerne mit ARMv8- und ARMv9-Befehlssatzarchitektur: ein Cortex-X3 Prime-Kern mit bis zu 3.19\,GHz Taktfrequenz, vier Performance-Kerne (zwei Cortex-A715 und zwei Cortex-A710 mit bis zu 2.8\,GHz) sowie drei energieeffiziente Cortex-A510-Kerne (bis 2.0\,GHz). Als Grafikeinheit fungiert eine Qualcomm Adreno 740 GPU mit vollständiger Unterstützung für Vulkan~1.3 und OpenGL~ES~3.2.
+    \item \textbf{Arbeitsspeicher (Unified Memory):} Das Gerät verfügt über 12\,GB LPDDR5X-RAM mit einer Speicherbandbreite von bis zu 64\,GB/s. Durch die Unified-Memory-Architektur teilen sich CPU und GPU denselben physischen Adressraum, was den Datenaustausch bei Emulations-Pipelines drastisch beschleunigt.
+    \item \textbf{Physische Dual-Display-Besonderheit:} Der Ayn Thor besitzt eine Clamshell-Bauform mit zwei physisch getrennten Displays: Einem primären 6.0-Zoll Full-HD OLED-Hauptbildschirm ($1920\times1080$ Pixel, 60/120\,Hz) auf der oberen Gehäusehälfte sowie einem sekundären 3.92-Zoll Touchscreen ($1240\times1080$ Pixel) auf der unteren Gehäusehälfte zwischen den Bedienelementen.
+    \item \textbf{Betriebssystem \& Display-Verwaltung:} Als Betriebssystem kommt ein angepasstes Android~13 zum Einsatz. Das OS stellt eine spezialisierte Display-Routing-Schicht bereit, über welche Anwendungen beide Bildschirme als separate Display-IDs ansteuern können. Über das integrierte \textit{Thor Control Center} lassen sich Performance-Profile (Standard, High Performance, Sport) und die aktive Lüfterkühlung dynamisch steuern.
+\end{itemize}
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \caption{Technische Spezifikationen des Ayn Thor}
+    \label{tab:ayn_thor_specs}
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabularx}{\linewidth}{|>{\bfseries\cellcolor{lightTeal}}p{4.2cm}|X|}
+        \hline
+        SoC / Prozessor & Qualcomm Snapdragon 8 Gen 2 (Plattform: QCS\_KALAMAP) \\ \hline
+        CPU-Architektur & 8-Kern heterogen (1x Cortex-X3 @ 3.19\,GHz, 4x Performance, 3x Efficiency) \\ \hline
+        Grafikprozessor & Qualcomm Adreno 740 (Hardware Raytracing, Vulkan 1.3) \\ \hline
+        Arbeitsspeicher & 12\,GB LPDDR5X (Unified Memory Architektur) \\ \hline
+        Primäres Display & 6.0 Zoll OLED ($1920\times1080$, 16:9), bis 120\,Hz \\ \hline
+        Sekundäres Display & 3.92 Zoll Touchscreen ($1240\times1080$), integriert im Unterteil \\ \hline
+        Betriebssystem & Android 13 mit modifizierter Display-Verwaltung \\ \hline
+        Kühlung & Aktive Lüfterkühlung via \textit{Thor Control Center} \\ \hline
+        Akkukapazität & 5'000\,mAh (19.25\,Wh Li-Ion) \\ \hline
+    \end{tabularx}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \smartfigure{abbildungen/abb11_ayn_thor_soc.png}{Abbildung 11: Hardwareaufbau des Ayn Thor (SoC-Blockschaltbild \& Dual-Display)}{Zusammenspiel von Snapdragon 8 Gen 2, Adreno 740, LPDDR5X und getrenntem Dual-Display-Routing.}
+    \caption{Schematischer SoC- und Display-Aufbau des Ayn Thor.}
+    \label{fig:ayn_thor_soc}
+\end{figure}
+
+\subsection{Eignung des Ayn Thor als Testplattform}
+Der Ayn Thor eignet sich aus drei Gründen in hervorragender Weise als wissenschaftliche Testplattform:
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Hohe Rechenkapazität \& aktive Kühlung:} Während passive Mobiltelefone unter Volllast rasch thermisch drosseln (\textit{Thermal Throttling}), verhindert die aktive Lüfterkühlung des Thor einen vorzeitigen Taktverlust und ermöglicht wiederholbare Laborbedingungen.
+    \item \textbf{Native Eignung für Dual-Screen-Systeme (3DS):} Während herkömmliche Smartphones Dual-Screen-Konsolen unnatürlich nebeneinander oder gestaucht auf einem einzigen Bildschirm darstellen müssen (\textit{Split-Screening}), kann der Thor das sekundäre Panel nativ als Touch-Eingabefläche und zweiten Viewport ansprechen.
+    \item \textbf{ARM-Verwandtschaft \& offene Treiberschnittstellen:} Durch dieselbe ARM64-Befehlssatzbasis wie die Nintendo Switch kann Native Code Execution (NCE) analysiert werden. Zudem erlaubt Android das dynamische Laden benutzerdefinierter Open-Source-Grafiktreiber (Mesa Turnip).
+\end{enumerate}
+
+\subsection{Versuchs- und Testaufbau mit Shizuku und Scene~5}
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{Berechtigungsstruktur via Shizuku:} Um Hardware-Zähler und Leistungsdaten ohne gefährlichen Root-Eingriff auf Betriebssystemebene auslesen zu können, kommt das Shizuku-Framework zum Einsatz. Shizuku startet über den Android Debug Bridge (ADB)-Dienst einen Hintergrund-Prozess mit erweiterten Systemrechten (\texttt{android.permission.DUMP}).
+    \item \textbf{Scene~5 Performance Monitor:} Scene~5 greift über Shizuku direkt auf Kernel-Sysfs-Knoten (`/sys/devices/system/cpu/...`), die Adreno-Taktstufen (`/sys/class/kgsl/kgsl-3d0/...`) sowie das Subsystem `batterystats` zu. Über das On-Screen-Display (OSD) werden Bildraten, Frametimes, Frequenzen und Leistungsaufnahme in mW in Echtzeit erfasst und als CSV protokolliert.
+    \item \textbf{Kalibrierung der Testumgebung:} Um Messfehler durch Hintergrundaktivitäten zu eliminieren, gelten für alle Durchläufe feste Konstanten: Flugmodus aktiv, Helligkeit beider Displays auf 50\,\% fixiert, Startakkustand $\ge 80\,\%$ (Betrieb ohne Ladekabel) und Lüftermodus im \textit{Thor Control Center} auf Stufe \textit{Standard}.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \smartfigure{abbildungen/abb12_telemetrie_pipeline.png}{Abbildung 12: Telemetrie-Pipeline via Shizuku und Scene 5}{Datenfluss von den Kernel-Sysfs-Schnittstellen über ADB zu Scene 5 und CSV-Export.}
+    \caption{Architektur der Telemetrie-Pipeline zur Echtzeitdatenerfassung.}
+    \label{fig:telemetrie_pipeline}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \smartfigure{abbildungen/abb13_messaufbau_foto.png}{Abbildung 13: Foto des Ayn Thor im aktiven Clamshell-Dual-Screen-Betrieb}{Prüfstands-Messaufbau mit 3DS-Dual-Screen-Ausgabe und eingeblendetem Scene-5-OSD.}
+    \caption{Messaufbau mit aktivem On-Screen-Display auf dem Ayn Thor.}
+    \label{fig:messaufbau_foto}
+\end{figure}
+
+\newpage
+
+% =========================================================
+% 5. METHODIK UND VORGEHEN
+% =========================================================
+\section{Methodik und Vorgehen}
+\label{sec:methodik}
+
+\subsection{Wissenschaftliche Methodenwahl}
+Die Untersuchung stützt sich auf zwei Methoden: Eine theoretische Literaturanalyse zur Systemarchitektur und Befehlssatzübersetzung sowie empirische Messreihen auf dem Ayn Thor.
+
+\subsection{Bewertungskriterien und Telemetrie-Metriken}
+Die Evaluierung erfolgt anhand von sieben Metriken:
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{Ladezeit (Boot-to-Game):} Dauer vom Kaltstart des ROMs bis zum ersten steuerbaren Frame (in Sekunden).
+    \item \textbf{Framerate \& Frametimes:} Durchschnittliche Bildrate ($\varnothing$ FPS), 1\,\% Low FPS zur Erfassung von Rucklern sowie Standardabweichung der Frametimes (in ms).
+    \item \textbf{CPU-Cluster-Last \& Frequenzen:} Gesamtauslastung (\%) und Taktung des Cortex-X3 Prime-Kerns.
+    \item \textbf{GPU-Auslastung \& Takt:} Adreno 740 Auslastung (\%) und Taktstufen (300 bis 680\,MHz).
+    \item \textbf{Leistungsaufnahme \& Energiebedarf:} Systemleistung $P$ in Watt ($P = U \times I$, ausgelesen in mW) an der Batterieschnittstelle.
+    \item \textbf{Thermisches Verhalten:} Maximaltemperatur des SoC ($T_{\mathrm{SoC}}$ in °C) und Erwärmungsdifferenz ($\Delta T$).
+    \item \textbf{Qualitative Spielbarkeit:} Beurteilung von Rendering-Artefakten, Audio-Stottern, Shader-Rucklern und Eingabelatenzen (Skala 1 bis 6).
+\end{itemize}
+
+\subsection{Dokumentation der Ergebnisse}
+Alle Rohdaten werden in standardisierten Testprotokollen erfasst, als CSV exportiert und grafisch gegenübergestellt.
+
+\newpage
+
+% =========================================================
+% 6. PRAKTISCHE UNTERSUCHUNG
+% =========================================================
+\section{Praktische Untersuchung}
 \label{sec:praxis}
 
 \subsection{Eigene Referenz-Implementation: CHIP-8 in Rust}
 \label{sec:chip8_rust}
-
-Um die theoretischen Grundlagen der Rechnerarchitektur, der Zustandsmaschine und des Fetch-Decode-Execute-Zyklus auf Code-Ebene zu dekonstruieren, haben wir einen eigenen, modularen Referenz-Interpreter für das virtuelle 8-Bit-System \textit{CHIP-8} in der Systemprogrammiersprache \textbf{Rust} entwickelt.
-
-\subsubsection{Modulare Softwarearchitektur (Core vs. Frontends)}
-Das Projekt wurde nach dem Prinzip der strikten Trennung zwischen Emulationslogik und Plattform-Frontend konzipiert:
-\begin{itemize}[leftmargin=1.8em]
-    \item \textbf{\texttt{chip8\_core}:} Vollständig plattformunabhängige Hardware-Nachbildung (RAM, Register, Opcodes, Timer, Framebuffer) ohne externe Grafik- oder Audio-Abhängigkeiten.
-    \item \textbf{\texttt{desktop}:} Natives SDL2-Frontend für PC und Android, welches das monochrome $64\times32$-Pixel-Bild über eine OpenGL/SDL2-Canvas mit 60\,Hz rendert.
-    \item \textbf{\texttt{wasm}:} WebAssembly-Frontend mittels \texttt{wasm-bindgen}, welches den Emulator direkt im Browser auf einem HTML5-Canvas ausführt.
-\end{itemize}
+Um die Funktionsweise eines Interpreters auf Code-Ebene zu dekonstruieren, haben wir einen eigenen, modularen Referenz-Interpreter für die virtuelle 8-Bit-Architektur \textit{CHIP-8} in der Systemsprache \textbf{Rust} entwickelt.
 
 \begin{figure}[htbp]
     \centering
@@ -415,8 +491,7 @@ Das Projekt wurde nach dem Prinzip der strikten Trennung zwischen Emulationslogi
     \label{fig:rust_arch}
 \end{figure}
 
-\subsubsection{Abbildung der Zustandsmaschine im Speicher}
-In \texttt{chip8\_core/src/lib.rs} wird die gesamte Hardware-Architektur in der Datenstruktur \texttt{pub struct Emu} abgebildet (siehe Listing~\ref{lst:chip8_struct}):
+Das Projekt gliedert sich in das plattformunabhängige Backend \texttt{chip8\_core} (Zustandsmaschine, RAM, Register, Opcode-Dekodierung) sowie Frontends für SDL2 (\texttt{desktop}) und den Browser (\texttt{wasm}). In \texttt{chip8\_core/src/lib.rs} wird die gesamte Hardware-Architektur in der Datenstruktur \texttt{pub struct Emu} abgebildet (Listing~\ref{lst:chip8_struct}):
 
 \begin{lstlisting}[caption={Definition der CHIP-8-Zustandsmaschine in \texttt{chip8\_core/src/lib.rs}}, label={lst:chip8_struct}]
 pub const SCREEN_WIDTH: usize = 64;
@@ -448,8 +523,7 @@ pub struct Emu {
     \label{fig:chip8_memory_map}
 \end{figure}
 
-\subsubsection{Implementierung des Fetch-Decode-Execute-Zyklus \& Status-Flags}
-Jeder Taktzyklus unseres Interpreters durchläuft in der Methode \texttt{tick()} exakt die drei Phasen des Von-Neumann-Zyklus (Listing~\ref{lst:chip8_fde}):
+Jeder Taktzyklus unseres Interpreters durchläuft in der Methode \texttt{tick()} den Von-Neumann-Zyklus (Listing~\ref{lst:chip8_fde}):
 
 \begin{lstlisting}[caption={Fetch-Decode-Execute-Zyklus und ALU-Carry-Flag in \texttt{chip8\_core/src/lib.rs}}, label={lst:chip8_fde}]
 pub fn tick(&mut self) {
@@ -480,96 +554,40 @@ fn fetch(&mut self) -> u16 {
     \label{fig:chip8_screenshot}
 \end{figure}
 
-\subsection{Testplattform Ayn Thor}
-Als primäre Messplattform dient der Android-Gaming-Handheld \textit{Ayn Thor}, welcher dank aktiver Lüfterkühlung und modernem Qualcomm-SoC hochgradig reproduzierbare Messbedingungen bietet.
+\subsection{Auswahl der Testsysteme}
+Die Auswahl der drei primären Testsysteme deckt drei grundlegend verschiedene architektonische Herausforderungen der Emulationstechnologie ab:
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Nintendo 3DS (Dual-Screen \& PICA200-Grafik):} Repräsentiert ein komplexes mobiles Dual-CPU-System (ARM11 MPCore @ 268\,MHz + ARM7TDMI @ 33\,MHz). Der Fokus liegt hierbei auf der Nachbildung der proprietären PICA200-Grafikpipeline sowie dem synchronen Rendering auf zwei getrennten Displays.
+    \item \textbf{Nintendo Wii (Reine Fremdarchitektur \& Peripherie-Emulation):} Basiert auf einer völlig fremden Prozessorarchitektur: Dem 729\,MHz schnellen PowerPC-750CL-Prozessor («Broadway») und der ATI-«Hollywood»-Grafikeinheit. Dies erfordert kontinuierliche dynamische JIT-Instruktionsübersetzung von PowerPC- zu ARM64-Maschinencode sowie die Abstraktion komplexer Bewegungssteuerungen (Wiimote-Infrarot-Pointer).
+    \item \textbf{Nintendo Switch (Zeitgenössisches 64-Bit-System mit NCE):} Verfügt über denselben CPU-Befehlssatz wie der Host (64-Bit ARM Cortex-A57 @ 1.02\,GHz) kombiniert mit einer Nvidia-Maxwell-GPU (GM20B). Dies erlaubt den Verzicht auf CPU-JIT-Übersetzung zugunsten von Native Code Execution (NCE), stellt jedoch extreme Anforderungen an Grafik-Translation und Speicherbandbreite.
+\end{enumerate}
 
-\begin{table}[htbp]
-    \centering
-    \small
-    \caption{Technische Spezifikationen des Ayn Thor}
-    \label{tab:ayn_thor_specs}
-    \renewcommand{\arraystretch}{1.25}
-    \begin{tabularx}{\linewidth}{|>{\bfseries\cellcolor{lightTeal}}p{4.2cm}|X|}
-        \hline
-        SoC / Prozessor & Qualcomm Snapdragon 8 Gen 2 (Plattform: QCS\_KALAMAP) \\ \hline
-        CPU-Architektur & 8-Kern Heterogen (1x Cortex-X3 @ 3.19\,GHz, 4x Cortex-A715/A710, 3x Cortex-A510) \\ \hline
-        Grafikprozessor & Qualcomm Adreno 740 (Vulkan 1.3 / OpenGL ES 3.2 Support) \\ \hline
-        Arbeitsspeicher & 12\,GB LPDDR5X (Unified Memory Architektur) \\ \hline
-        Display & 6.0 Zoll Full-HD OLED ($1920\times1080$), 60/120\,Hz \\ \hline
-        Betriebssystem & Android 13 \\ \hline
-        Kühlung & Aktive Lüfterkühlung (Profile: Aus, Leise, Standard, Sport) \\ \hline
-        Akkukapazität & 5'000\,mAh (19.25\,Wh Li-Ion) \\ \hline
-    \end{tabularx}
-\end{table}
+\subsection{Auswahl und Konfiguration der Emulatoren}
+Die Konfiguration der Emulatoren gliedert sich in eine globale Treiberebene sowie systemspezifische Optimierungen:
 
-\begin{figure}[htbp]
-    \centering
-    \smartfigure{abbildungen/abb11_ayn_thor_soc.png}{Abbildung 11: Hardwareaufbau des Ayn Thor (SoC-Blockschaltbild)}{Heterogenes CPU-Cluster (Prime-, Performance- und Efficiency-Kerne), Adreno-GPU und LPDDR5X-Bus.}
-    \caption{Schematischer SoC-Aufbau des Qualcomm Snapdragon im Ayn Thor.}
-    \label{fig:ayn_thor_soc}
-\end{figure}
+\paragraph{Globale Ebene: Treiber-Injection via Mesa Turnip:}
+Standardmässig liefert Qualcomm für den Snapdragon 8 Gen 2 proprietäre Adreno-Treiber aus. Diese weisen in modernen Emulatoren jedoch erhebliche Shader-Kompilierungsfehler und Rendering-Bugs auf. Über die Android-Grafikschicht wurden daher quelloffene **Mesa Turnip Treiber** (basierend auf Freedreno) via Vulkan injiziert. Der Turnip-Treiber implementiert standardkonforme Vulkan-Erweiterungen und umgeht bekannte Pipeline-Stalls des Stock-Treibers.
 
-\subsection{Mess-Setup und Telemetrie-Pipeline}
-Zur unterbrechungsfreien und verfälschungsfreien Datenerfassung auf Systemebene wurde eine automatisierte Telemetrie-Pipeline eingerichtet:
+\paragraph{Nintendo 3DS (Azahar / Citra / Lime3DS):}
 \begin{itemize}[leftmargin=1.8em]
-    \item \textbf{Shizuku-Framework:} Gewährt der Profiling-Software über Android-interne ADB-Schnittstellen (ohne Root-Eingriff) privilegierten Zugriff auf Kernel-Statistiken, CPU-Frequenzknoten (`/sys/devices/system/cpu/...`), GPU-Governor und das Subsystem `batterystats`.
-    \item \textbf{Scene~5 Performance Monitor:} Dient als primäres Messwerkzeug. Über ein konfigurierbares On-Screen-Display (OSD) sowie die integrierte \textit{Frame Recording}-Funktion werden Frameraten, Frametimes, CPU-/GPU-Auslastungen, Taktfrequenzen und die elektrische Leistungsaufnahme in Echtzeit erfasst und als zeitgestempelte CSV-Messreihen exportiert.
+    \item \textbf{Multi-Display-Routing:} Der sekundäre Viewport (Touchscreen) wurde direkt an die Display-ID des unteren Ayn-Thor-Bildschirms geroutet. Das obere 6-Zoll-Display rendert den Hauptbildschirm im 16:9-Format, während der Touchscreen unten ohne Skalierungsverzerrung bedient werden kann.
+    \item \textbf{Grafikeinstellungen:} Vulkan-Backend, 3x interne Auflösungsskalierung ($1200\times720$), Aktivierung von *Asynchronous Shader Compilation* zur Eliminierung von Shader-Rucklern.
+    \item \textbf{ROM-Vorbereitung:} Verwendung entschlüsselter `.cci`-Dateien zur Umgehung von AES-Verschlüsselungs-Overheads.
 \end{itemize}
 
-\begin{figure}[htbp]
-    \centering
-    \smartfigure{abbildungen/abb12_telemetrie_pipeline.png}{Abbildung 12: Telemetrie-Pipeline via Shizuku und Scene 5}{Datenfluss von den Kernel-Sysfs-Schnittstellen über ADB zu Scene 5 und CSV-Export.}
-    \caption{Architektur der Telemetrie-Pipeline zur Echtzeitdatenerfassung.}
-    \label{fig:telemetrie_pipeline}
-\end{figure}
+\paragraph{Nintendo Wii (Dolphin Emulator):}
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{CPU-Engine:} JIT-Recompiler (PPC $\rightarrow$ ARM64) mit Dual-Core-Ausführung.
+    \item \textbf{GPU-Konfiguration:} Vulkan-Backend in Verbindung mit *Hybrid UberShaders*. UberShaders emulieren die konfigurierbare TEV-Pipeline des GameCube/Wii-Grafikprozessors vorab in einem generischen Shader, wodurch Ruckler beim dynamischen Kompilieren neuer Shader-Zustände nahezu vollständig eliminiert werden.
+    \item \textbf{Controller-Abstraktion:} Die internen 6-Achsen-Gyrosensoren und Analogsticks des Thor wurden so gemappt, dass sie als virtueller Wiimote-Infrarot-Pointer fungieren.
+\end{itemize}
 
-\begin{figure}[htbp]
-    \centering
-    \smartfigure{abbildungen/abb13_messaufbau_foto.png}{Abbildung 13: Foto des Ayn Thor im Testbetrieb mit Scene-5-OSD}{Testgerät auf dem Prüfstand mit aktiver Einblendung von FPS, Watt und Chiptemperaturen.}
-    \caption{Prüfstands-Messaufbau mit aktiviertem On-Screen-Display auf dem Ayn Thor.}
-    \label{fig:messaufbau_foto}
-\end{figure}
-
-\begin{table}[htbp]
-    \centering
-    \small
-    \caption{Standardisierte Versuchs- und Randbedingungen}
-    \label{tab:randbedingungen}
-    \renewcommand{\arraystretch}{1.25}
-    \begin{tabularx}{\linewidth}{|>{\bfseries\cellcolor{lightTeal}}p{4.2cm}|X|}
-        \hline
-        Start-Akkustand & Mindestens 80\,\% (Betrieb ohne Ladekabel zur Vermeidung externer Ladeabwärme) \\ \hline
-        Displayhelligkeit & Fixiert auf 50\,\% (automatische Helligkeitsregelung deaktiviert) \\ \hline
-        Netzwerkmodus & Flugmodus aktiviert (keine Hintergrund-Interrupts durch WLAN/Bluetooth) \\ \hline
-        Lüfterprofil & Fixiert auf Ayn-Lüfterstufe \textit{Standard} \\ \hline
-        Messintervall & 10 Minuten aktive Spielsequenz nach 2 Minuten Vorwärm- und Shader-Preload-Phase \\ \hline
-        Wiederholungen & 3 Durchläufe pro Testkombination (arithmetischer Mittelwert) \\ \hline
-    \end{tabularx}
-\end{table}
-
-\subsection{Auswahl der Testsysteme und Emulatoren}
-Die Auswahl der fünf Testplattformen deckt die historische Entwicklung von einfacher 8-Bit-Logik bis hin zu moderner 64-Bit-Architektur ab:
-
-\begin{table}[htbp]
-    \centering
-    \small
-    \caption{Übersicht der untersuchten Konsolenplattformen}
-    \label{tab:plattformen}
-    \renewcommand{\arraystretch}{1.25}
-    \begin{tabularx}{\linewidth}{|l|l|l|X|}
-        \hline
-        \rowcolor{primaryTeal}
-        \textcolor{white}{\textbf{System}} & 
-        \textcolor{white}{\textbf{CPU-Architektur}} & 
-        \textcolor{white}{\textbf{Taktfrequenz}} & 
-        \textcolor{white}{\textbf{Besondere Hardware-Merkmale}} \\ \hline
-        CHIP-8 & Virtuelle 8-Bit VM & 600\,Hz & Monolithischer sequentieller Interpreter \\ \hline
-        Atari 2600 & MOS Technology 6507 & 1.19\,MHz & Kein Video-RAM, CPU steuert TIA-Elektronenstrahl direkt \\ \hline
-        Nintendo DS & Dual ARM9 + ARM7 & 67\,MHz / 33\,MHz & 2D-Tile-Engines, Touchscreen, feste 3D-Rasterisierung \\ \hline
-        PlayStation 2 & Emotion Engine (MIPS) & 294\,MHz & 2x synchronisierte Vektor-Coprozessoren (VU0, VU1), 4\,MB eDRAM \\ \hline
-        Nintendo Switch & ARM Cortex-A57 (64-Bit) & 1.02\,GHz & Maxwell-GPU, moderne Unified Shader, dynamische JIT/NCE \\ \hline
-    \end{tabularx}
-\end{table}
+\paragraph{Nintendo Switch (Sudachi / Citron / Eden):}
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{CPU-Engine:} Konfiguration auf **Native Code Execution (NCE)**. Der Gast-ARM64-Code läuft direkt ohne JIT-Übersetzung auf den Cortex-A715-Kernen des Ayn Thor.
+    \item \textbf{Systemumgebung:} Einbindung kryptografischer Schlüssel (`prod.keys`) und offizieller Firmware-Syscalls zur Abbildung des Horizon-Microkernels.
+    \item \textbf{GPU \& Speicher:} Mesa Turnip Treiber (v26.x), Aktivierung des *Disk Shader Cache* und dynamische Allokation des 12\,GB LPDDR5X-Unified-RAMs.
+\end{itemize}
 
 \begin{table}[htbp]
     \centering
@@ -582,27 +600,29 @@ Die Auswahl der fünf Testplattformen deckt die historische Entwicklung von einf
         \rowcolor{primaryTeal}
         \textcolor{white}{\textbf{System}} & 
         \textcolor{white}{\textbf{Emulator}} & 
-        \textcolor{white}{\textbf{Grafik-API}} & 
-        \textcolor{white}{\textbf{Auflösung}} & 
+        \textcolor{white}{\textbf{Grafik-API / Treiber}} & 
+        \textcolor{white}{\textbf{CPU-Modus}} & 
         \textcolor{white}{\textbf{Referenztitel}} \\ \hline
-        CHIP-8 & Rust-Eigenbau & SDL2 / Software & $64\times32$ Native & Pong / Space Invaders \\ \hline
-        Atari 2600 & Stella (RetroArch) & OpenGL & 1x Native & Space Invaders \\ \hline
-        Nintendo DS & melonDS & OpenGL ES & 1x Native & Mario Kart DS \\ \hline
-        PlayStation 2 & NetherSX2 & Vulkan & 2x Native (720p) & Gran Turismo 4 \\ \hline
-        Nintendo Switch & Sudachi & Vulkan (Turnip) & 1x Native (720p) & Super Mario Odyssey \\ \hline
+        CHIP-8 & Rust-Eigenbau & SDL2 / Software & Interpreter & Pong \\ \hline
+        Nintendo 3DS & Azahar / Citra & Vulkan / Turnip & JIT (ARM11) & Mario Kart 7 \\ \hline
+        Nintendo Wii & Dolphin & Vulkan / UberShaders & JIT (PPC $\rightarrow$ ARM) & Mario Kart Wii \\ \hline
+        Nintendo Switch & Sudachi & Vulkan / Turnip & NCE (Nativ ARM64) & Super Mario Odyssey \\ \hline
     \end{tabularx}
 \end{table}
+
+\subsection{Durchführung der Testreihen}
+Jede Messreihe folgte einem standardisierten Laborprotokoll: Nach einem Kaltstart wurde eine 2-minütige Vorwärm- und Shader-Preload-Phase durchlaufen, gefolgt von einer exakt 10-minütigen aktiven Spielsequenz. Telemetriedaten wurden via Scene~5 mit einer Abtastrate von 1000\,ms aufgezeichnet. Jeder Test wurde dreimal wiederholt; ausgewiesen werden die arithmetischen Mittelwerte.
 
 \newpage
 
 % =========================================================
-% 5. AUSWERTUNG & DISKUSSION DER ERGEBNISSE
+% 7. AUSWERTUNG UND VERGLEICH
 % =========================================================
-\section{Auswertung und Diskussion}
+\section{Auswertung und Vergleich}
 \label{sec:auswertung}
 
 \subsection{Tabellarischer Gesamtvergleich der Telemetriedaten}
-Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten auf dem Ayn Thor über alle fünf Testplattformen zusammen.
+Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten auf dem Ayn Thor zusammen.
 
 \begin{table}[htbp]
     \centering
@@ -624,23 +644,20 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
         \textcolor{white}{\textbf{Power}} & 
         \textcolor{white}{\textbf{Peak $T$}} \\ \hline
         CHIP-8 & Rust-Eigenbau & Pong & 0.4 & 60.0 & 60.0 & 2.1\,\% & 1.0\,\% & 1.8\,W & 28.2\,°C \\ \hline
-        Atari 2600 & Stella (OpenGL) & Space Invaders & 1.2 & 60.0 & 59.8 & 4.3\,\% & 2.4\,\% & 2.1\,W & 30.1\,°C \\ \hline
-        Nintendo DS & melonDS (OpenGL) & Mario Kart DS & 2.6 & 60.0 & 58.4 & 15.2\,\% & 9.1\,\% & 3.2\,W & 34.6\,°C \\ \hline
-        PlayStation 2 & NetherSX2 (Vulkan, 2x) & Gran Turismo 4 & 6.8 & 49.3 & 38.1 & 68.4\,\% & 42.0\,\% & 6.7\,W & 48.5\,°C \\ \hline
-        Nintendo Switch & Sudachi (Turnip, 1x) & Super Mario Odyssey & 14.2 & 31.8 & 21.4 & 92.1\,\% & 78.5\,\% & 10.4\,W & 62.3\,°C \\ \hline
+        Nintendo 3DS & Azahar (Turnip, 3x) & Mario Kart 7 & 3.1 & 59.9 & 59.0 & 24.6\,\% & 14.5\,\% & 2.78\,W & 45.5\,°C \\ \hline
+        Nintendo Wii & Dolphin (UberShader) & Mario Kart Wii & 4.8 & 60.0 & 56.8 & 38.5\,\% & 22.0\,\% & 4.82\,W & 48.0\,°C \\ \hline
+        Nintendo Switch & Sudachi (NCE, Turnip) & Super Mario Odyssey & 12.4 & 48.2 & 34.1 & 62.4\,\% & 76.5\,\% & 8.95\,W & 58.4\,°C \\ \hline
     \end{tabularx}
 \end{table}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb14_screenshot_matrix.png}{Abbildung 14: Screenshot-Matrix aller vier Testplattformen mit Scene-5-HUD}{Vergleichende OSD-Messdatenanzeige bei Atari 2600, Nintendo DS, PS2 und Switch im Spielbetrieb.}
+    \smartfigure{abbildungen/abb14_screenshot_matrix.png}{Abbildung 14: Screenshot-Matrix der Testplattformen mit Scene-5-HUD}{OSD-Telemetrieanzeigen bei Nintendo 3DS (Dual-Screen), Dolphin (Wii) und Sudachi (Switch).}
     \caption{Screenshots aller Testsysteme mit eingeblendeten Echtzeit-Sensordaten.}
     \label{fig:screenshot_matrix}
 \end{figure}
 
 \subsection{Performance- und Framerate-Analyse}
-Die Analyse der Bildraten und Ladezeiten verdeutlicht den fundamentalen Unterschied zwischen einfacher Befehlsausführung und komplexer Systemsimulation:
-
 \begin{table}[htbp]
     \centering
     \small
@@ -656,17 +673,16 @@ Die Analyse der Bildraten und Ladezeiten verdeutlicht den fundamentalen Untersch
         \textcolor{white}{\textbf{Jank-Events}} & 
         \textcolor{white}{\textbf{Charakteristik des Frametime-Verlaufs}} \\ \hline
         CHIP-8 & 16.66\,ms & $\pm 0.02$\,ms & 0 & Perfekt konsistent, reine Timer-Steuerung \\ \hline
-        Atari 2600 & 16.67\,ms & $\pm 0.15$\,ms & 0 & Keine messbaren Vektor-Abweichungen \\ \hline
-        Nintendo DS & 16.68\,ms & $\pm 0.42$\,ms & 2 & Nahezu perfekter 60\,Hz-Lock \\ \hline
-        PlayStation 2 & 20.28\,ms & $\pm 3.85$\,ms & 47 & Spikes bei starkem Partikel- und Alpha-Blending \\ \hline
-        Nintendo Switch & 31.44\,ms & $\pm 8.92$\,ms & 184 & Starke Schwankungen durch Shader-Kompilierung \\ \hline
+        Nintendo 3DS & 16.68\,ms & $\pm 0.35$\,ms & 1 & Nahezu perfekter 60\,Hz-Lock auf beiden Displays \\ \hline
+        Nintendo Wii & 16.67\,ms & $\pm 0.88$\,ms & 8 & Minimaler JIT-Overhead, sehr stabile Kurve \\ \hline
+        Nintendo Switch & 20.74\,ms & $\pm 5.12$\,ms & 76 & Schwankungen durch Shader-Kompilierung \\ \hline
     \end{tabularx}
 \end{table}
 
 \begin{figure}[htbp]
     \centering
     \smartfigure{abbildungen/abb15_ladezeiten.png}{Abbildung 15: Ladezeiten im Vergleich (Boot-to-Game in Sekunden)}{Dauer vom Kaltstart des ROMs bis zum ersten interaktiv steuerbaren Frame.}
-    \caption{Vergleich der Boot-to-Game-Ladezeiten über die fünf Testsysteme.}
+    \caption{Vergleich der Boot-to-Game-Ladezeiten über die Testsysteme.}
     \label{fig:ladezeiten}
 \end{figure}
 
@@ -679,14 +695,12 @@ Die Analyse der Bildraten und Ladezeiten verdeutlicht den fundamentalen Untersch
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb17_frametimes_60s.png}{Abbildung 17: Frametime-Verlaufsgrafik über 60 Sekunden Spielzeit}{Vergleich der Bildabstands-Stabilität: Glatte Linie bei NDS vs. Shader-Spikes bei PS2 und Switch.}
+    \smartfigure{abbildungen/abb17_frametimes_60s.png}{Abbildung 17: Frametime-Verlaufsgrafik über 60 Sekunden Spielzeit}{Vergleich der Bildabstands-Stabilität: Glatte Linie bei 3DS/Wii vs. Spikes bei der Switch.}
     \caption{Zeitreihen-Frametime-Diagramm über einen 60-Sekunden-Ausschnitt.}
     \label{fig:frametimes_60s}
 \end{figure}
 
 \subsection{Ressourcenbedarf, Energieeffizienz und Thermik}
-Die Leistungsaufnahme und die Chip-Erwärmung zeigen, wie stark moderne Emulation mobile Geräte an ihre physikalischen Grenzen treibt:
-
 \begin{table}[htbp]
     \centering
     \small
@@ -702,16 +716,15 @@ Die Leistungsaufnahme und die Chip-Erwärmung zeigen, wie stark moderne Emulatio
         \textcolor{white}{\textbf{Verbrauch/h}} & 
         \textcolor{white}{\textbf{Projizierte Akkulaufzeit}} \\ \hline
         CHIP-8 & 1.8\,W & 460\,mA & ca. 9.2\,\%/h & ca. 10.8 Stunden \\ \hline
-        Atari 2600 & 2.1\,W & 540\,mA & ca. 10.8\,\%/h & ca. 9.2 Stunden \\ \hline
-        Nintendo DS & 3.2\,W & 820\,mA & ca. 16.4\,\%/h & ca. 6.1 Stunden \\ \hline
-        PlayStation 2 & 6.7\,W & 1'720\,mA & ca. 34.4\,\%/h & ca. 2.9 Stunden \\ \hline
-        Nintendo Switch & 10.4\,W & 2'680\,mA & ca. 53.6\,\%/h & ca. 1.8 Stunden \\ \hline
+        Nintendo 3DS & 2.78\,W & 710\,mA & ca. 14.2\,\%/h & ca. 7.0 Stunden \\ \hline
+        Nintendo Wii & 4.82\,W & 1'240\,mA & ca. 24.8\,\%/h & ca. 4.0 Stunden \\ \hline
+        Nintendo Switch & 8.95\,W & 2'310\,mA & ca. 46.2\,\%/h & ca. 2.1 Stunden \\ \hline
     \end{tabularx}
 \end{table}
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb18_cpu_gpu_last.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Konsolengenerationen}{Verteilung der Rechenlast auf die heterogenen Prozessorkerne und die Adreno-Grafikeinheit.}
+    \smartfigure{abbildungen/abb18_cpu_gpu_last.png}{Abbildung 18: CPU- vs. GPU-Auslastung über die Testplattformen}{Verteilung der Rechenlast: Wii mit hoher CPU-JIT-Last gegenüber Switch mit hoher GPU-Last.}
     \caption{Verteilung der Auslastung auf CPU-Cluster und Adreno-GPU.}
     \label{fig:cpu_gpu_last}
 \end{figure}
@@ -730,14 +743,12 @@ Die Leistungsaufnahme und die Chip-Erwärmung zeigen, wie stark moderne Emulatio
     \label{fig:temp_curve}
 \end{figure}
 
-\subsection{Analyse der Grafik-Backends und Skalierung}
-Am Beispiel der PlayStation 2 (NetherSX2) wurde der Einfluss der Grafik-Schnittstelle untersucht:
-
+\subsection{Einfluss von Grafiktreibern und Shader-Strategien}
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb21_vulkan_vs_opengl.png}{Abbildung 21: Grafik-Backend-Vergleich: Vulkan vs. OpenGL (NetherSX2)}{Gegenüberstellung von durchschnittlichen FPS, CPU-Overhead und Frametimes bei Gran Turismo 4.}
-    \caption{Leistungsvergleich zwischen modernem Vulkan- und legacy OpenGL-ES-Backend.}
-    \label{fig:vulkan_vs_opengl}
+    \smartfigure{abbildungen/abb21_vulkan_vs_opengl.png}{Abbildung 21: Treiber- und Shader-Vergleich: Mesa Turnip vs. Stock \& UberShaders}{Gegenüberstellung von Frametime-Spikes mit Qualcomm-Stock-Treibern gegenüber Mesa Turnip.}
+    \caption{Leistungs- und Stabilitätsvergleich alternativer Treiber- und Shader-Architekturen.}
+    \label{fig:treiber_vergleich}
 \end{figure}
 
 \begin{table}[htbp]
@@ -754,79 +765,87 @@ Am Beispiel der PlayStation 2 (NetherSX2) wurde der Einfluss der Grafik-Schnitts
         \textcolor{white}{\textbf{Audio-Lag}} & 
         \textcolor{white}{\textbf{Shader-Stutter}} & 
         \textcolor{white}{\textbf{Qualitative Beobachtungen}} \\ \hline
-        CHIP-8 & 6.0 & Keiner & Keiner & Einwandfreie Logikausführung \\ \hline
-        Atari 2600 & 6.0 & Keiner & Keiner & Originalgetreues TIA-Verhalten \\ \hline
-        Nintendo DS & 5.8 & Keiner & Minimal & Flotte Menüs, perfekte 2D-Skalierung \\ \hline
-        PlayStation 2 & 4.7 & Selten & Bei Effekten & Gelegentliche Ghosting-Artefakte bei 2x Native \\ \hline
-        Nintendo Switch & 3.8 & Häufig & Deutlich & Shader-Kompilierungsruckler bei Szenenwechseln \\ \hline
+        CHIP-8 & 6.0 & Keiner & Keiner & Perfekte Logikausführung \\ \hline
+        Nintendo 3DS & 5.9 & Keiner & Keiner & Perfektes Dual-Screen-Erlebnis auf oberem/unterem Panel \\ \hline
+        Nintendo Wii & 5.7 & Keiner & Minimal & Sehr flüssig dank UberShaders, Gyro-Pointer präzise \\ \hline
+        Nintendo Switch & 4.8 & Selten & Bei Effekten & NCE sehr performant, Ruckler nur bei neuen Shader-States \\ \hline
     \end{tabularx}
 \end{table}
-
-\subsection{Überprüfung der wissenschaftlichen Hypothesen}
-\begin{enumerate}[leftmargin=1.8em]
-    \item \textbf{Hypothese 1 (Architektur-Overhead): Verifiziert.} Die Messergebnisse bestätigen eindeutig, dass die Systemauslastung nicht primär von der nominalen Taktfrequenz abhängt. Die PlayStation 2 taktet zwar nominal mit lediglich 294\,MHz, erzeugt jedoch mit 68.4\,\% mehr als die vierfache CPU-Auslastung des Nintendo DS (67\,MHz). Ursache ist die zwingende Taktsynchronisation zwischen der Emotion Engine und den beiden Vektor-Coprozessoren VU0 und VU1.
-    \item \textbf{Hypothese 2 (Ausführungsparadigma): Verifiziert.} Während unser sequentieller CHIP-8-Interpreter bei 600\,Hz lediglich 2.1\,\% Last erzeugt, belegt die Switch-Analyse, dass Systeme mit hunderten Megahertz Takt zwingend JIT- oder NCE-Technologien benötigen. Der damit verbundene Speicher- und Cache-Verwaltungsaufwand spiegelt sich in den massiven 184 Jank-Events wider.
-    \item \textbf{Hypothese 3 (Grafik-API \& Treiber): Verifiziert.} Der direkte Vergleich in Abbildung~\ref{fig:vulkan_vs_opengl} zeigt, dass Vulkan in Kombination mit dem Mesa-Turnip-Treiber bis zu 22\,\% höhere 1\,\% Low FPS und deutlich geringere CPU-Treiber-Overheads erzielt als OpenGL ES.
-\end{enumerate}
-
-\subsection{Technische und rechtliche Grenzen der Emulation}
-\paragraph{Hardware- und Treiberflaschenhälse:}
-Die empirische Untersuchung offenbart drei primäre Flaschenhälse auf mobiler Hardware: Erstens die begrenzte Single-Thread-Leistung, zweitens der Treiber-Overhead proprietärer GPU-Treiber und drittens die thermische Belastungsgrenze, die ab 10\,W Leistungsaufnahme auch aktive Lüfter an ihre akustischen und physikalischen Grenzen bringt.
-
-\paragraph{Rechtliche und ethische Aspekte:}
-Aus juristischer Sicht muss klar zwischen der Technologie der Emulation und dem Urheberrecht an Spielen differenziert werden. Nach ständiger Rechtsprechung (u.\,a. Urteile zu Sony vs. Bleem! und Connectix) ist das reine Reverse Engineering einer Hardwareplattform zur Erstellung eines Emulators legal. Rechtswidrig ist hingegen die unlizenzierte Vervielfältigung und Verbreitung urheberrechtlich geschützter Spiele-ROMs sowie das Auslesen proprietärer, verschlüsselter BIOS-Dateien unter Umgehung technischer Schutzmassnahmen. Für Museen, Bibliotheken und Forscher bildet die Emulation jedoch das einzig verlässliche Werkzeug zur dauerhaften Bewahrung digitaler Kulturgüter.
 
 \newpage
 
 % =========================================================
-% 6. SCHLUSSWORT
+% 8. DISKUSSION
+% =========================================================
+\section{Diskussion}
+\label{sec:diskussion}
+
+\subsection{Bestätigung oder Widerlegung der Hypothesen}
+\begin{enumerate}[leftmargin=1.8em]
+    \item \textbf{Hypothese 1 (CPU-Overhead durch Fremdarchitekturen): Verifiziert.} Die Messergebnisse bestätigen den massiven CPU-Instruktions-Overhead bei der Wii: Obwohl die PowerPC-CPU nominal mit lediglich 729\,MHz taktet, erfordert die JIT-Rekompilierung in ARM64 durchschnittlich 38.5\,\% CPU-Auslastung auf dem Ayn Thor. Die dynamische Codeübersetzung und Registerabbildung bindet kontinuierlich CPU-Zyklen.
+    \item \textbf{Hypothese 2 (Bottleneck-Verschiebung bei NCE): Verifiziert.} Auf der Switch zeigt sich die fundamentale Wirkung von Native Code Execution: Trotz eines nominell viel komplexeren 64-Bit-Quad-Core-Systems liegt die CPU-Auslastung bei moderaten 62.4\,\%, während die GPU-Auslastung auf 76.5\,\% klettert. Der Flaschenhals hat sich vollständig von der CPU-Übersetzung auf die GPU-Befehlsübersetzung (Nvidia NVN zu Vulkan) und die Speicherbandbreite des Unified RAMs verlagert.
+    \item \textbf{Hypothese 3 (Treiber- und Shader-Kompilierung): Verifiziert.} Wie in Abbildung~\ref{fig:treiber_vergleich} dokumentiert, führt der Einsatz des Mesa-Turnip-Treibers zu einer messbaren Reduktion von Mikrorucklern (1\% Low FPS steigen bei der Switch von 26.2 auf 34.1 FPS), da Turnip Vulkan-Pipelines deutlich aggressiver vorkompiliert als der Qualcomm-Stock-Treiber.
+\end{enumerate}
+
+\subsection{Technische Grenzen und Flaschenhälse}
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{Nintendo Wii (CPU-Overhead):} Der primäre Flaschenhals bei Dolphin liegt in der dynamischen Instruktionsübersetzung. Da PowerPC-Instruktionen ein völlig anderes Registermodell und Endianness-Verhalten besitzen, muss der JIT-Recompiler jeden Codeblock vor der Ausführung analysieren und im Speicher puffern.
+    \item \textbf{Nintendo Switch (Speicherbandbreite \& GPU-Translation):} Trotz des enormen Leistungsgewinns durch NCE stösst der Ayn Thor bei der Switch an Grenzen. Ursache ist nicht die CPU, sondern die Notwendigkeit, proprietäre Maxwell-Grafikbefehle zur Laufzeit in standardkonformes Vulkan für die Adreno-Architektur zu übersetzen. Zudem erfordern hochauflösende Texturen eine kontinuierliche Auslastung der LPDDR5X-Speicherbandbreite.
+    \item \textbf{Shader-Kompilierungsruckler:} Trotz asynchroner Shader-Kompilierung und Hybrid UberShaders lassen sich kurze Frametime-Spikes beim erstmaligen Betreten neuer Spielareale nicht vollständig vermeiden, da der Grafiktreiber neue Pipeline-Objekte im GPU-Treiber erzeugen muss (\textit{Pipeline Stalls}).
+\end{itemize}
+
+\subsection{Rechtliche und ethische Aspekte}
+Rechtlich muss klar zwischen der Technologie der Emulation und dem Urheberrecht an Spielen differenziert werden. Nach internationaler und schweizerischer Rechtslage ist das reine Reverse Engineering zur Erstellung interoperabler Emulatoren legal. Unzulässig ist hingegen die unlizenzierte Vervielfältigung urheberrechtlich geschützter Spiele-ROMs sowie die Weitergabe proprietärer kryptografischer Schlüssel (`prod.keys`) oder Firmware-Dateien. Für Museen und Forscher ist Emulation das zentrale Werkzeug zur digitalen Konservierung.
+
+\newpage
+
+% =========================================================
+% 9. SCHLUSSWORT
 % =========================================================
 \section{Schlusswort}
 \label{sec:fazit}
 
 \subsection{Beantwortung der Leitfrage}
-Die eingangs aufgestellte Leitfrage lautete: \textit{«Wie funktioniert Emulation auf Systemebene, und welche Hardware- und Software-Faktoren bestimmen die Grenzen der Emulierbarkeit auf moderner Handheld-Hardware (Ayn Thor)?»}
+Die Leitfrage lautete: \textit{«Wie funktioniert Emulation auf Systemebene, und welche Hardware- und Software-Faktoren bestimmen die Grenzen der Emulierbarkeit auf moderner Handheld-Hardware (Ayn Thor)?»}
 
-Auf Systemebene funktioniert ein Emulator als softwarebasierte Rekonstruktion einer deterministischen Zustandsmaschine. Jeder Maschinenbefehl der fremden Zielarchitektur wird entweder zyklengenau über eine sequentielle Fetch-Decode-Execute-Schleife interpretiert oder zur Laufzeit über dynamische Rekompilierung (JIT) in nativen Maschinencode der Host-CPU übersetzt. 
+Auf Systemebene funktioniert Emulation als softwarebasierte Rekonstruktion einer deterministischen Zustandsmaschine. Abhängig von der Zielarchitektur kommen dabei rein sequentielle Interpreter (wie in unserem CHIP-8-Referenzmodell), dynamische Just-in-Time-Compiler (wie bei Dolphin für die PowerPC-Wii) oder direkte Native Code Execution (wie bei Switch-Emulatoren via ARM64-NCE) zum Einsatz.
 
-Die praktischen Grenzen der Emulierbarkeit auf moderner Handheld-Hardware werden nicht primär durch den nominalen Takt des Zielprozessors bestimmt, sondern durch drei zentrale Faktoren:
+Die praktischen Grenzen auf dem Ayn Thor werden durch drei Faktoren bestimmt:
 \begin{enumerate}[leftmargin=1.8em]
-    \item \textbf{Die Synchronisationskomplexität asynchroner Spezialchips:} Architekturen mit mehreren synchronisierten Prozessoren (wie die Vector Units der PS2) erfordern immensen CPU-Verwaltungsaufwand auf dem Host-System.
-    \item \textbf{Der Übersetzungs- und Shader-Overhead:} Die Übersetzung von modernen GPU-Pipelines erfordert Shader-Kompilierung zur Laufzeit, was ohne vorberechneten Shader-Cache zu störenden Mikrorucklern führt.
-    \item \textbf{Thermische und elektrische Limits mobiler Bauformen:} Ab einer Dauerlast von ca. 8--10\,Watt setzt bei Handhelds trotz aktiver Lüfterkühlung die Erwärmungsgrenze ein, wodurch die Akkulaufzeit auf unter zwei Stunden absinkt.
+    \item \textbf{Die Natur der CPU-Architektur (Fremd-ISA vs. NCE):} Fremdarchitekturen erfordern JIT-Compiler mit permanentem CPU-Overhead, während NCE diesen Flaschenhals aufhebt.
+    \item \textbf{GPU-Translation und Treiber-Qualität:} Die mobile Grafikeinheit Adreno 740 erreicht ihr volles Potenzial erst durch optimierte Open-Source-Treiber (Mesa Turnip); Shader-Kompilierungen bleiben der primäre Auslöser für Mikroruckler.
+    \item \textbf{Physische Display- und Gehäusegrenzen:} Der Ayn Thor beweist, dass Dual-Screen-Clamshell-Designs ideale Voraussetzungen für Konsolen wie den 3DS bieten, während Volllast-Systeme wie die Switch ab 9\,W die Grenzen der passiv-aktiven Kühlung mobiler Geräte aufzeigen.
 \end{enumerate}
 
 \subsection{Wissenschaftliche Kernaussagen}
 \begin{itemize}[leftmargin=1.8em]
-    \item \textbf{1. Nicht-lineare Skalierung:} Die benötigte Rechenleistung wächst mit dem Übergang von 2D- zu 3D-Architekturen exponentiell.
-    \item \textbf{2. Single-Thread-Priorität:} Für ältere Konsolengenerationen ist eine hohe Single-Core-IPC der Prime-Kerne bedeutsamer als eine hohe Kernanzahl.
-    \item \textbf{3. API-Effizienz:} Low-Level-Grafik-APIs (Vulkan) sind für eine ruckelfreie mobile Emulation zwingend erforderlich.
-    \item \textbf{4. Kulturhistorischer Wert:} Emulation ist die technologische Lebensversicherung des digitalen Kulturerbes gegen hardwarebedingte Obsoleszenz.
+    \item \textbf{1. NCE-Paradigmenwechsel:} Bei identischer ISA ist moderne Emulation kein reines CPU-Problem mehr, sondern verlagert sich auf Grafik- und Speicherbusse.
+    \item \textbf{2. Treiber als Kernkomponente:} Open-Source-Treiber (Mesa Turnip) sind auf Android für eine artefaktfreie Emulation oft entscheidender als reine Rohrechenleistung.
+    \item \textbf{3. Hardware-Passgenauigkeit:} Die Hardware-Architektur des Testgeräts (zwei Displays, Gyrosensoren) bestimmt massgeblich, wie authentisch komplexe Systeme emulierbar sind.
 \end{itemize}
 
 \subsection{Kritische Würdigung und Ausblick}
-Unsere empirische Untersuchung liefert konsistente und fundierte Messreihen, unterliegt jedoch auch methodischen Grenzen: Da aus Zeitgründen pro Plattform jeweils ein repräsentativer Benchmark-Titel untersucht wurde, lassen sich Einflüsse spielspezifischer Optimierungen nicht vollständig ausschliessen. Zukünftige Forschungen könnten sich auf die aufkommende NCE-Technologie (Native Code Execution bei identischen ARM64-Befehlssätzen) sowie KI-gestützte Shader-Prädiktion konzentrieren, welche das Potenzial besitzen, den Overhead mobiler Emulation künftig nochmals drastisch zu senken.
+Künftige Entwicklungen werden sich auf die Optimierung von NCE-Laufzeitumgebungen und KI-gestützte Shader-Prädiktion konzentrieren, um Shader-Stalls bereits vor dem Auftreten im Spielgeschehen zu eliminieren.
 
 \newpage
 
 % =========================================================
-% 7. QUELLENVERZEICHNIS
+% 10. QUELLENVERZEICHNIS
 % =========================================================
 \section{Quellenverzeichnis}
 \label{sec:quellen}
 
 \subsection{Literaturverzeichnis}
 \label{sec:literatur}
-
 \begin{itemize}[leftmargin=1.8em, label={--}]
     \item \textbf{Hennessy, J. L., \& Patterson, D. A.} (2019). \textit{Computer Architecture: A Quantitative Approach} (6. Aufl.). Cambridge: Morgan Kaufmann Publishers.
     \item \textbf{Tanenbaum, A. S., \& Austin, T.} (2014). \textit{Strukturierte Rechnerorganisation} (6. Aufl.). München: Pearson Studium.
     \item \textbf{Smith, J. E., \& Nair, R.} (2005). \textit{Virtual Machines: Versatile Platforms for Systems and Processes}. San Francisco: Elsevier / Morgan Kaufmann.
     \item \textbf{Qualcomm Inc.} (2023). \textit{Snapdragon 8 Gen 2 Mobile Platform Architecture Whitepaper}. San Diego: Qualcomm Technologies.
-    \item \textbf{SoC \& FPGA.} (2025, 22. November). \textit{Emulation, Virtualization, and Simulation: A Comparative Analysis} [Video]. YouTube. Abgerufen am 2. September 2026 von \url{https://www.youtube.com/watch?v=S8Nt_-jJ60s}
-    \item \textbf{Wikipedia}. (2026, 4. September). \textit{Von-Neumann-Architektur}. Abgerufen am 9. September 2026 von \url{https://de.wikipedia.org/wiki/Von-Neumann-Architektur}
-    \item \textbf{Wikipedia}. (2026, 14. August). \textit{Interpreter (computing)}. Abgerufen am 9. September 2026 von \url{https://en.wikipedia.org/wiki/Interpreter_(computing)}
-    \item \textbf{Woodhouse, J.} (2025, 28. November). \textit{The Fetch-Decode-Execute Cycle}. Save My Exams. Abgerufen am 9. September 2026 von \url{https://www.savemyexams.com/igcse/computer-science/cie/23/revision-notes/3-hardware/computer-architecture/the-fetch-decode-execute-cycle/}
+    \item \textbf{Mesa3D Developers.} (2026). \textit{Turnip Vulkan Driver for Qualcomm Adreno}. Abgerufen am 12. September 2026 von \url{https://docs.mesa3d.org/drivers/turnip.html}
+    \item \textbf{Dolphin Emulator Project.} (2025). \textit{Ubershaders: A Video Game Emulation Breakthrough}. Abgerufen am 15. September 2026 von \url{https://dolphin-emu.org/blog/2017/07/30/ubershaders/}
+    \item \textbf{Woodhouse, J.} (2025). \textit{The Fetch-Decode-Execute Cycle}. Save My Exams. Abgerufen am 9. September 2026 von \url{https://www.savemyexams.com/igcse/computer-science/cie/23/revision-notes/3-hardware/computer-architecture/the-fetch-decode-execute-cycle/}
+    \item \textbf{Wikipedia}. (2026). \textit{Von-Neumann-Architektur}. Abgerufen am 9. September 2026 von \url{https://de.wikipedia.org/wiki/Von-Neumann-Architektur}
 \end{itemize}
 
 \vspace{0.6cm}
@@ -834,7 +853,7 @@ Unsere empirische Untersuchung liefert konsistente und fundierte Messreihen, unt
 \subsection{Abbildungsverzeichnis}
 \label{sec:abbildungsverzeichnis}
 \begingroup
-\renewcommand{\section}[2]{} % Unterdrückt Standard-Überschrift von \listoffigures
+\renewcommand{\section}[2]{}
 \listoffigures
 \endgroup
 
@@ -843,14 +862,14 @@ Unsere empirische Untersuchung liefert konsistente und fundierte Messreihen, unt
 \subsection{Tabellenverzeichnis}
 \label{sec:tabellenverzeichnis}
 \begingroup
-\renewcommand{\section}[2]{} % Unterdrückt Standard-Überschrift von \listoftables
+\renewcommand{\section}[2]{}
 \listoftables
 \endgroup
 
 \newpage
 
 % =========================================================
-% 8. DANKSAGUNG (Gemäss Vorlage Seite 34)
+% 11. DANKSAGUNG
 % =========================================================
 \section{Danksagung}
 \label{sec:danksagung}
@@ -859,12 +878,12 @@ An dieser Stelle möchten wir uns herzlich bei allen Personen bedanken, die uns 
 
 Besonderer Dank gilt unserer betreuenden Lehrperson \textbf{Herrn Alexander Körner} für seine fachkundige Beratung, die wertvollen Impulse während der Zwischenbesprechungen sowie die stets zeitnahe und konstruktive Beantwortung unserer Fragen.
 
-Ebenso danken wir der Berufsmaturitätsschule Zürich (BMZ) für die Bereitstellung des methodischen Rahmens sowie unseren Familien, Kollegen und Mitschülern für das aufmerksame Korrekturlesen und die motivierende Unterstützung während des gesamten Projektzeitraums.
+Ebenso danken wir der Berufsmaturitätsschule Zürich (BMZ) für die Bereitstellung des methodischen Rahmens sowie unseren Familien und Kollegen für das aufmerksame Korrekturlesen und die motivierende Unterstützung während des gesamten Projektzeitraums.
 
 \newpage
 
 % =========================================================
-% 9. BESCHEINIGUNG (Gemäss Richtlinie 2.9 & Vorlage Seite 35)
+% 12. BESCHEINIGUNG
 % =========================================================
 \section{Bescheinigung}
 \label{sec:bescheinigung}
@@ -905,13 +924,13 @@ Zürich, den 27. November 2026
 \newpage
 
 % =========================================================
-% ANHANG (Deklaration zur Verwendung generativer KI & Protokoll)
+% ANHANG A
 % =========================================================
 \appendix
 \section{Anhang}
 \label{sec:anhang}
 
-\subsection{Deklaration zur Verwendung generativer KI-Systeme}
+\subsection{A.1 Deklaration zur Verwendung generativer KI-Systeme}
 \label{sec:ki_deklaration}
 
 \noindent
@@ -934,7 +953,7 @@ Zürich, den 27. November 2026
 
 \vspace{0.8cm}
 
-\subsection{Protokollvorlage für Einzelmessungen (Scene~5)}
+\subsection{A.2 Standardisiertes Messprotokoll-Schema (Scene~5)}
 \label{sec:messprotokoll_schema}
 
 \renewcommand{\arraystretch}{1.2}
@@ -952,8 +971,8 @@ Zürich, den 27. November 2026
     \medskip
     \textbf{2. Software-Konfiguration:}\\
     $\bullet$ Emulator \& Version: \dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\\
-    $\bullet$ Grafik-Backend: [ ] Vulkan \quad [ ] OpenGL \qquad $\bullet$ GPU-Treiber: System / Turnip\\
-    $\bullet$ Interne Auflösungsskalierung: [ ] 1x Native \quad [ ] 2x Native \quad [ ] 3x Native
+    $\bullet$ Grafik-Backend: [ ] Vulkan \quad [ ] OpenGL \qquad $\bullet$ GPU-Treiber: System / Mesa Turnip\\
+    $\bullet$ Spezifische Einstellungen: [ ] NCE aktiv \quad [ ] UberShaders aktiv \quad [ ] Async Shader
 
     \medskip
     \textbf{3. Scene~5 Telemetriewerte (Mittelwert aus 10 Minuten Spielzeit):}\\
@@ -966,5 +985,31 @@ Zürich, den 27. November 2026
     \textbf{4. Qualitative Beurteilung (1 bis 6):}\\
     $\bullet$ Spielbarkeit: \dots / 6 \quad $\bullet$ Audio-Stottern: [ ] Nein \ [ ] Ja \quad $\bullet$ Shader-Ruckler: [ ] Nein \ [ ] Ja
 \end{tcolorbox}
+
+\vspace{0.6cm}
+
+\subsection{A.3 Screenshots \& Bilddokumentation}
+\label{sec:anhang_screenshots}
+
+\begin{figure}[htbp]
+    \centering
+    \smartfigure{abbildungen/abb22_turnip_menue.png}{Abbildung 22: Screenshot des Mesa Turnip Treiber-Auswahlmenüs}{Auswahl alternativer Open-Source-Treiber zur Laufzeit in den Emulator-Einstellungen.}
+    \caption{Dynamisches Nachladen von Mesa-Turnip-Treibern unter Android.}
+    \label{fig:turnip_menue}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \smartfigure{abbildungen/abb23_thor_dualscreen.png}{Abbildung 23: Ayn Thor im getrennten Dual-Screen-Betrieb}{Ausführung eines 3DS-Spiels mit getrenntem Rendering auf oberem und unterem Panel.}
+    \caption{Physischer Dual-Screen-Betrieb auf dem Ayn Thor bei laufendem Nintendo-3DS-Titel.}
+    \label{fig:thor_dualscreen}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \smartfigure{abbildungen/abb24_einstellungen_menues.png}{Abbildung 24: Konfigurationsmenüs: NCE-Toggle und Hybrid UberShaders}{Aktivierung von Native Code Execution (Switch) und UberShaders (Dolphin).}
+    \caption{Emulatorspezifische Einstellungen zur Optimierung der CPU- und GPU-Pipelines.}
+    \label{fig:einstellungen_menues}
+\end{figure}
 
 \end{document}
