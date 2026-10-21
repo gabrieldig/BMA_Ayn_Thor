@@ -193,6 +193,10 @@
     \vfill
 \end{titlepage}
 
+\thispagestyle{empty}
+\null
+\newpage
+
 % Ab hier 1.5-Zeilenabstand gemäss Richtlinie
 \onehalfspacing
 
@@ -203,11 +207,11 @@
 \addcontentsline{toc}{section}{Abstract}
 \label{sec:abstract}
 
-Diese Berufsmaturitätsarbeit untersucht die Funktionsweise von Software-Emulation auf Systemebene und analysiert die praktischen Leistungsgrenzen auf moderner Android-basierter Handheld-Hardware am Beispiel des \textit{Ayn Thor}. Im Zentrum der Untersuchung steht die Frage, welcher mathematische, architektonische und rechentechnische Aufwand erbracht werden muss, um fremde Befehlssatzarchitekturen in Echtzeit auf einem mobilen Host-System zu übersetzen, wie moderne Treiberarchitekturen (Vulkan \& Mesa Turnip) Engpässe auflösen und welche Hardwarefaktoren die Ausführungsstabilität limitieren.
+Diese Berufsmaturitätsarbeit untersucht die Funktionsweise von Software-Emulation auf Systemebene und analysiert die praktischen Leistungsgrenzen auf moderner Android-basierter Handheld-Hardware am Beispiel des \textit{Ayn Thor}. Im Zentrum der Untersuchung steht die Frage, welcher mathematische, architektonische und rechentechnische Aufwand erbracht werden muss, um Befehlssatzarchitekturen eines anderen Systems in Echtzeit auf einem mobilen Host-System zu übersetzen, wie moderne Treiberarchitekturen (Vulkan \& Mesa Turnip) langsame Stellen im System auflösen und welche Hardwarefaktoren die Ausführungsstabilität limitieren.
 
-Als Untersuchungsmethodik dient einerseits eine systematische Fachliteraturrecherche zur theoretischen Fundierung der Rechnerarchitektur (Von-Neumann-Modell, Fetch-Decode-Execute-Zyklus, Finite State Machine, Interpreter vs. JIT-Compiler vs. NCE). Zur praktischen Veranschaulichung der theoretischen Prinzipien wird ein eigener modularer Referenz-Interpreter für die CHIP-8-Architektur in der Programmiersprache Rust entwickelt. Andererseits wird eine empirische Benchmark-Reihe mit standardisierter Telemetrie-Datenerfassung via Shizuku und Scene~5 auf dem Ayn Thor durchgeführt. Untersucht werden drei architektonisch differenzierte Plattformen: der \textbf{Nintendo 3DS} (Dual-Screen-Architektur \& PICA200-Grafik), die \textbf{Nintendo Wii} (reine PowerPC-Fremdarchitektur mit dynamischer JIT-Kompilierung) sowie die \textbf{Nintendo Switch} (ARM64-Architektur mit nativer Codeausführung NCE).
+Als Untersuchungsmethodik dient einerseits eine systematische Fachliteraturrecherche zur theoretischen Fundierung der Rechnerarchitektur (Von-Neumann-Modell, Fetch-Decode-Execute-Zyklus, Finite State Machine, Interpreter vs. JIT-Compiler vs. NCE). Zur praktischen Veranschaulichung der theoretischen Prinzipien wird ein eigener Interpreter für die CHIP-8-Architektur in der Programmiersprache Rust entwickelt. Andererseits wird eine empirische Benchmark-Reihe mit standardisierter Telemetrie-Datenerfassung via Shizuku und Scene~5 auf dem Ayn Thor durchgeführt. Untersucht werden drei architektonisch differenzierte Plattformen: der \textbf{Nintendo 3DS} (Dual-Screen-Architektur \& PICA200-Grafik), die \textbf{Nintendo Wii} (reine PowerPC-Fremdarchitektur mit dynamischer JIT-Kompilierung) sowie die \textbf{Nintendo Switch} (ARM64-Architektur mit nativer Codeausführung NCE).
 
-Die empirischen Messergebnisse veranschaulichen fundamentale Systemunterschiede: Während der Nintendo 3DS dank nativer Einbindung des sekundären Thor-Touchscreens und Vulkan-Shadern mit 59.9\,FPS hochgradig energieeffizient (2.78\,W) emuliert werden kann, erfordert die Nintendo Wii aufgrund kontinuierlicher PowerPC-zu-ARM64-Befehlssatzübersetzung eine signifikante CPU-Last. Bei der Nintendo Switch wiederum ermöglicht Native Code Execution (NCE) zwar das Umgehen von CPU-Übersetzungs-Overhead, verschiebt den primären Flaschenhals jedoch auf die Speicherbandbreite und die aufwendige Übersetzung von Nvidia-Maxwell-Grafikbefehlen auf die mobile Adreno-740-GPU. Open-Source-Treiber (Mesa Turnip) erweisen sich hierbei als unverzichtbar, um Shader-Kompilierungsfehler und Rendering-Bugs zu minimieren.
+Die durch Beobachtung gewonnenen Messergebnisse veranschaulichen fundamentale Systemunterschiede: Während der Nintendo 3DS dank nativer Einbindung des sekundären Thor-Touchscreens und Vulkan-Shadern mit 59.9\,FPS hochgradig energieeffizient (2.78\,W) emuliert werden kann, erfordert die Nintendo Wii aufgrund kontinuierlicher PowerPC-zu-ARM64-Befehlssatzübersetzung eine signifikante CPU-Last. Bei der Nintendo Switch wiederum ermöglicht Native Code Execution (NCE) zwar das Umgehen des CPU-Übersetzungsaufwands, verschiebt den primären Flaschenhals jedoch auf die Speicherbandbreite und die aufwendige Übersetzung von Nvidia-Maxwell-Grafikbefehlen auf die mobile Adreno-740-GPU. Open-Source-Treiber (Mesa Turnip) erweisen sich hierbei als unverzichtbar, um Shader-Kompilierungsfehler und Rendering-Bugs zu minimieren.
 
 \newpage
 
@@ -228,7 +232,7 @@ Die empirischen Messergebnisse veranschaulichen fundamentale Systemunterschiede:
 \subsection{Thematischer Kontext \& Bezug zum Oberthema}
 In der modernen Informationsgesellschaft unterliegt Computer-Hardware einem stetigen und rasanten Innovationszyklus. Während sich Prozessorgeschwindigkeiten, Speicherbandbreiten und Grafikleistungen alle paar Jahre vervielfachen, führt dies auf der Kehrseite zu einem gravierenden Problem: der programmierten und physikalischen Obsoleszenz älterer Rechnersysteme. Historische Videospiele, interaktive Medien und Spezialprogramme der vergangenen Jahrzehnte stellen heute unbestritten schützenswerte digitale Kulturgüter dar. Ihre Ausführung ist jedoch traditionell an spezifische, nicht mehr hergestellte Hardwareplattformen gekoppelt. Alternde Bauteile wie austrocknende Elektrolytkondensatoren, nachlassende Laseroptiken und korrodierende Leiterbahnen sorgen dafür, dass originale Konsolen zunehmend unzuverlässig oder gänzlich unbrauchbar werden.
 
-Hier setzt die Technologie der Software-Emulation an. Ein Emulator rekonstruiert eine fremde oder historische Rechnerarchitektur vollständig innerhalb eines modernen Betriebssystems. Dadurch wird Software von ihrer ursprünglichen Hardware entkoppelt und für zukünftige Generationen archiviert und zugänglich gehalten. Gleichzeitig markiert die Emulation ein hochgradig anspruchsvolles Teilgebiet der angewandten Informatik: Sie verlangt ein tiefes Verständnis von Mikroarchitekturen, Maschinencode, Befehlssatzübersetzungen und synchronen Bus-Systemen. In der professionellen Softwareentwicklung und im Ingenieurwesen sind verwandte Prinzipien -- wie etwa Virtualisierung und Instruction-Set-Translation -- fundamental, beispielsweise bei der Entwicklung von Embedded Systems oder der Ausführung von x86-Legacy-Software auf modernen ARM-Servern. Diese Arbeit bettet die Emulationsthematik daher direkt in das BMA-Oberthema «Was läuft im Hintergrund?» ein.
+Hier setzt die Technologie der Software-Emulation an. Ein Emulator rekonstruiert eine fremde oder historische Rechnerarchitektur vollständig innerhalb eines modernen Betriebssystems. Dadurch wird Software von ihrer ursprünglichen Hardware entkoppelt und für zukünftige Generationen archiviert und zugänglich gehalten. Gleichzeitig ist die Emulation ein hochgradig anspruchsvolles Teilgebiet der angewandten Informatik: Sie verlangt ein tiefes Verständnis von Mikroarchitekturen, Maschinencode, Befehlssatzübersetzungen und synchronen Bus-Systemen. In der professionellen Softwareentwicklung und im Ingenieurwesen sind verwandte Prinzipien -- wie etwa Virtualisierung und Befehlssatzübersetzungen -- fundamental, beispielsweise bei der Entwicklung von Embedded Systems (etwa Steuergeräten im Auto oder in der Waschmaschine) oder der Ausführung von x86-Legacy-Software auf modernen ARM-Servern. Diese Arbeit bettet die Emulationsthematik daher direkt in das BMA-Oberthema «Was läuft im Hintergrund?» ein.
 
 \subsection{Ziel der Arbeit}
 Das primäre Ziel dieser Berufsmaturitätsarbeit besteht darin, die Funktionsweise von Emulationssoftware auf Systemebene fundiert zu dekonstruieren und ihre praktischen Leistungsgrenzen auf moderner mobiler Hardware empirisch zu erforschen. Im Zentrum steht dabei die Frage, welcher mathematische, architektonische und rechentechnische Aufwand betrieben werden muss, damit Instruktionen einer völlig fremden Prozessorarchitektur auf einem modernen Host-System in Echtzeit verarbeitet werden können.
@@ -236,9 +240,9 @@ Das primäre Ziel dieser Berufsmaturitätsarbeit besteht darin, die Funktionswei
 Anhand des Gaming-Handhelds \textit{Ayn Thor} soll praxisnah untersucht werden, wie sich unterschiedliche Komplexitätsgrade emulierter Systeme -- von einfacher 8-Bit-Logik über heterogene Dual-Screen-Systeme (3DS) und reine Fremdarchitekturen (Wii) bis hin zu modernen Systemen mit nativer Codeausführung (Switch) -- auf Systemressourcen, Energieeffizienz und Ausführungsstabilität auswirken. Die Arbeit verfolgt das Ziel, die oft als «Black Box» wahrgenommene Emulationstechnologie technisch transparent darzulegen und konkrete Hardware- und Software-Flaschenhälse greifbar zu machen.
 
 \subsection{Persönlicher Bezug \& Motivation}
-Als Informatiker verbindet uns beide ein grosses Interesse an hardwarenaher Programmierung, Systemarchitekturen sowie der praktischen Optimierung von Algorithmen. Dadazu verfolgen wir seit Jahren die schnelle Entwicklung im Bereich portabler Handheld-Hardware. Die Vorstellung, dass ein kompaktes mobiles Gerät in der Lage ist, hochentwickelte Heimkonsolen softwareseitig nachzubilden, fasziniert uns gleichermassen aus technischer wie aus spielerischer Perspektive.
+Als Informatiker verbindet uns beide ein grosses Interesse an hardwarenaher Programmierung, Systemarchitekturen sowie der praktischen Optimierung von Algorithmen. Dadazu verfolgen wir beide seit Jahren die schnelle Entwicklung im Bereich portabler Handheld-Hardware. Die Vorstellung, dass ein kompaktes mobiles Gerät in der Lage ist, hochentwickelte Heimkonsolen softwareseitig nachzubilden, fasziniert uns gleichermassen aus technischer wie aus spielerischer Perspektive.
 
-Besonders reizvoll erschien uns die Wahl des Testgeräts \textit{Ayn Thor}: Ausgestattet mit einem Qualcomm Snapdragon 8 Gen 2 SoC, zwei physischen Bildschirmen und aktiver Lüfterkühlung, bietet dieses Gerät eine ideale und reproduzierbare Forschungsplattform. Für uns bestand die Motivation nicht im blossen Konsumieren von Spielen, sondern im wissenschaftlichen «Blick unter die Motorhaube»: Wir wollten herausfinden, welche realen Lasten auf CPU-Clustern, GPU und Speicherbus entstehen, wie Treiber-Injections via Mesa Turnip funktionieren und wo thermische Limits greifen.
+Besonders reizvoll erschien uns die Wahl des Testgeräts \textit{Ayn Thor}: Ausgestattet mit einem Qualcomm Snapdragon 8 Gen 2 SoC, zwei physischen Bildschirmen und aktiver Lüfterkühlung, bietet dieses Gerät eine ideale und reproduzierbare Forschungsplattform. Für uns bestand die Motivation nicht im blossen Konsumieren von Spielen, sondern als wissenschaftlicher «Blick hinter die Kulissen» moderner Rechnersysteme: Wir wollten herausfinden, welche realen Lasten auf CPU-Clustern, GPU und Speicherbus entstehen, wie Treiber-Injections via Mesa Turnip funktionieren und wo thermische Limits greifen.
 
 \subsection{Methodischer Ansatz \& Gang der Untersuchung}
 Um die Forschungsfragen fundiert und nachvollziehbar zu beantworten, stützt sich diese Arbeit auf zwei sich ergänzende Methoden:
@@ -246,7 +250,7 @@ Um die Forschungsfragen fundiert und nachvollziehbar zu beantworten, stützt sic
     \item \textbf{Methode 1: Fachliteratur- und Quellenrecherche (Theoretische Fundierung):}\\
     Systematische Aufarbeitung der Grundlagen der Rechnerarchitektur, des Von-Neumann-Zyklus sowie der softwaretechnischen Differenzierung zwischen Simulation, Virtualisierung und Emulation anhand anerkannter Fachliteratur.
     \item \textbf{Methode 2: Empirische Benchmark-Reihe und Eigenentwicklung (Praktische Untersuchung):}\\
-    Entwicklung eines eigenen CHIP-8-Referenz-Interpreters in Rust zur Dekonstruktion der Befehlsausführung sowie Durchführung einer standardisierten Messreihe auf dem Ayn Thor unter Verwendung von Shizuku und dem Profiling-Werkzeug Scene~5.
+    Entwicklung eines eigenen CHIP-8-Referenz-Interpreters in Rust zur Dekonstruktion der Befehlsausführung sowie Durchführung einer standardisierten Messreihe auf dem Ayn Thor unter Verwendung von der Android Debug Bridge Applikation Shizuku und dem Profiling- und Monitoring-Werkzeug Scene~5.
 \end{enumerate}
 
 \newpage
@@ -412,7 +416,7 @@ Als primäre Test- und Forschungsplattform wird der moderne Android-basierte Gam
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/AYN_Thor_Dual_Screen.png}{Abbildung 11: Hardwareaufbau des Ayn Thor (SoC-Blockschaltbild \& Dual-Display)}{Zusammenspiel von Snapdragon 8 Gen 2, Adreno 740, LPDDR5X und getrenntem Dual-Display-Routing.}
+    \smartfigure{abbildungen/abb11.png}{Abbildung 11: Hardwareaufbau des Ayn Thor (SoC-Blockschaltbild \& Dual-Display)}{Zusammenspiel von Snapdragon 8 Gen 2, Adreno 740, LPDDR5X und getrenntem Dual-Display-Routing.}
     \caption{Schematischer SoC- und Display-Aufbau des Ayn Thor.}
     \label{fig:ayn_thor_soc}
 \end{figure}
@@ -1010,7 +1014,7 @@ Zürich, den 27. November 2026
 
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/abb23_thor_dualscreen.png}{Abbildung 23: Ayn Thor im getrennten Dual-Screen-Betrieb}{Ausführung eines 3DS-Spiels mit getrenntem Rendering auf oberem und unterem Panel.}
+    \smartfigure{abbildungen/AYN_Thor_Dual_Screen.png}{Abbildung 23: Ayn Thor im getrennten Dual-Screen-Betrieb}{Ausführung eines 3DS-Spiels mit getrenntem Rendering auf oberem und unterem Panel.}
     \caption{Physischer Dual-Screen-Betrieb auf dem Ayn Thor bei laufendem Nintendo-3DS-Titel.}
     \label{fig:thor_dualscreen}
 \end{figure}
