@@ -211,7 +211,7 @@ Diese Berufsmaturitätsarbeit untersucht die Funktionsweise von Software-Emulati
 
 Als Untersuchungsmethodik dient einerseits eine systematische Fachliteraturrecherche zur theoretischen Fundierung der Rechnerarchitektur (Von-Neumann-Modell, Fetch-Decode-Execute-Zyklus, Finite State Machine, Interpreter vs. JIT-Compiler vs. NCE). Zur praktischen Veranschaulichung der theoretischen Prinzipien wird ein eigener Interpreter für die CHIP-8-Architektur in der Programmiersprache Rust entwickelt. Andererseits wird eine empirische Benchmark-Reihe mit standardisierter Telemetrie-Datenerfassung via Shizuku und Scene~5 auf dem Ayn Thor durchgeführt. Untersucht werden drei architektonisch differenzierte Plattformen: der \textbf{Nintendo 3DS} (Dual-Screen-Architektur \& PICA200-Grafik), die \textbf{Nintendo Wii} (reine PowerPC-Fremdarchitektur mit dynamischer JIT-Kompilierung) sowie die \textbf{Nintendo Switch} (ARM64-Architektur mit nativer Codeausführung NCE).
 
-Die durch Beobachtung gewonnenen Messergebnisse veranschaulichen fundamentale Systemunterschiede: Während der Nintendo 3DS dank nativer Einbindung des sekundären Thor-Touchscreens und Vulkan-Shadern mit 59.9\,FPS hochgradig energieeffizient (2.78\,W) emuliert werden kann, erfordert die Nintendo Wii aufgrund kontinuierlicher PowerPC-zu-ARM64-Befehlssatzübersetzung eine signifikante CPU-Last. Bei der Nintendo Switch wiederum ermöglicht Native Code Execution (NCE) zwar das Umgehen des CPU-Übersetzungsaufwands, verschiebt den primären Flaschenhals jedoch auf die Speicherbandbreite und die aufwendige Übersetzung von Nvidia-Maxwell-Grafikbefehlen auf die mobile Adreno-740-GPU. Open-Source-Treiber (Mesa Turnip) erweisen sich hierbei als unverzichtbar, um Shader-Kompilierungsfehler und Rendering-Bugs zu minimieren.
+Die durch Beobachtung gewonnenen Messergebnisse veranschaulichen fundamentale Systemunterschiede: Während der Nintendo 3DS dank nativer Einbindung des sekundären Thor-Touchscreens und Vulkan-Shadern mit 59.9\,FPS hochgradig energieeffizient (2.78\,W) emuliert werden kann, erfordert die Nintendo Wii aufgrund kontinuierlicher PowerPC-zu-ARM64-Befehlssatzübersetzung eine signifikante CPU-Last. Bei der Nintendo Switch wiederum ermöglicht Native Code Execution (NCE) zwar das Umgehen des CPU-Übersetzungsaufwands, verschiebt den primären Flaschenhals (eine Stelle in einem System, die die Gesamtleistung begrenzt) jedoch auf die Speicherbandbreite und die aufwendige Übersetzung von Nvidia-Maxwell-Grafikbefehlen auf die mobile Adreno-740-GPU. Open-Source-Treiber (Mesa Turnip) erweisen sich hierbei als unverzichtbar, um Shader-Kompilierungsfehler und Rendering-Bugs zu minimieren.
 
 \newpage
 
@@ -685,6 +685,8 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
     \label{fig:ladezeiten}
 \end{figure}
 
+Abbildung~\ref{fig:fps_vergleich} demonstriert die Durchschnittliche FPS und den tiefsten 1\%-Perzentil FPS der drei Emulatoren Azahar, Dolphin und Eden. Somit ist also ersichtlich, wie tief die FPS beim stärksten Ruckler der einzelnen Analysen sank und wie viel die Durchschnittliche Performance bei den einzelnen Bildschirmauflösungen betragen.
+
 \begin{figure}[htbp]
     \centering
     \begin{minipage}[t]{0.32\linewidth}
@@ -706,15 +708,33 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
     \label{fig:fps_vergleich}
 \end{figure}
 
+Interessant sind die nahezu konstanten 60 Bilder pro Sekunde beim 3DS-Emulator Azahar, woraufhin der Treiberwechsel von OpenGL zu Vulkan eine schlechtere Performance beträgt.
+Der Dolphin-Emulator weist darauf hin, dass eine höhere Bildschirmauflösung keinen grossen Unterschied bei der durchschnittlichen FPS ausmacht. Die 1\%-Perzentil FPS ist aber bereits in der nativen Bildschirmauflösung tiefer als die vierfache Bildschirmauflösung des 3DS sowohl beim OpenGL Treiber wie auch Vulkan.
+Eden
+
+Abbildung~\ref{fig:fps_60s} zeigt den Frames-per-Second-Verlauf der drei Emulatoren Azahar, Dolphin und Eden über die ersten 60 Sekunden Spielzeit. Damit ist der Boot des Emulators miteinbezogen. Die Frametime gibt den zeitlichen Abstand zwischen zwei dargestellten Bildern an. Eine gleichmäßige Linie steht für eine flüssige Wiedergabe, einzelne Ausschläge nach oben entsprechen Rucklern, die auch bei hoher durchschnittlicher Bildrate spürbar sein können. Bei dem Graph des Emulatoren Dolphin ist zu beachten, dass der erste Spike ein Fehler seitens Analyse beschreibt, da zuerst das falsche Spiel geöffnet wurde und anschliessend geschlossen wurde.
+
 \begin{figure}[htbp]
     \centering
-    \smartfigure{abbildungen/Azahar_First_60_Sec.png}{Abbildung 17: Frametime-Verlaufsgrafik über 60 Sekunden Spielzeit}{Vergleich der Bildabstands-Stabilität: Glatte Linie bei 3DS/Wii vs. Spikes bei der Switch.}
-    \smartfigure{abbildungen/Dolphin_First_60_Sec.png}{Abbildung 17: Frametime-Verlaufsgrafik über 60 Sekunden Spielzeit}{Vergleich der Bildabstands-Stabilität: Glatte Linie bei 3DS/Wii vs. Spikes bei der Switch.}
-    \smartfigure{abbildungen/Eden_First_60_Sec.png}{Abbildung 17: Frametime-Verlaufsgrafik über 60 Sekunden Spielzeit}{Vergleich der Bildabstands-Stabilität: Glatte Linie bei 3DS/Wii vs. Spikes bei der Switch.}
-    \caption{Zeitreihen-Frametime-Diagramm über einen 60-Sekunden-Ausschnitt.}
-    \label{fig:frametimes_60s}
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{abbildungen/Azahar_First_60_Sec.png}
+        \caption*{(a) 3DS (AzaharPlus)}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{abbildungen/Dolphin_First_60_Sec.png}
+        \caption*{(b) Wii (Dolphin)}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \includegraphics[width=\textwidth]{abbildungen/Eden_First_60_Sec.png}
+        \caption*{(c) Switch (Eden)}
+    \end{subfigure}
+    \caption{Frametime-Verlauf über 60 Sekunden Spielzeit im Vergleich}
+    \label{fig:fps_60s}
 \end{figure}
 
+Auffällig ist, dass im Vergleich zum Aufstarts des Emulators Azahar, die Emulatoren Eden und Dolphin einen deutlich ersehbare längere Boot-Time haben. Dies kann unter anderem durch das Laden der benötigten Shaders erklärt werden. Die GPU der 3DS (PICA200) ist vergleichsweise einfach gebaut und benötigt wenige Shaders zum laden.
+Dolphin nutzt sogenannte Ubershader, universelle Shader-Programme, die sofort einsatzbereit sind, während spezialisierte Shader im Hintergrund kompiliert werden. Dadurch wird zwar allgemein die Ladezeit für jedes einzelne Bild langsamer (Beziehungsweise von 6ms Ladezeit zu 9ms), jedoch werden Ruckler bei der Shader-Kompilierung vermieden. Falls der Ubershader nicht bereits im Shader-Cache vorhanden ist, muss dieser zuerst  kompiliert werden. Da der Dolphin-Emulator wiederum mit dem JIT-Interpreter arbeitet, und der JIT-Cache beim start eines Spiels anfänglich leer ist, braucht dieser Zeit um die ersten Befehle zu übersetzen.
+Eden auf der anderen Seite muss wegen der komplexeren NVIDIA-Maxwell-GPU viele Shader laden. Ist der Shader-Cache anfänglich leer, entstehen bei neuen Effekten Ruckler. Ausserdem müssen etliche Systemdienste geladen werden, da das Switch-OS deutlich komplexer ist.
 
 \subsection{Ressourcenbedarf, Energieeffizienz und Thermik}
 \begin{table}[htbp]
@@ -732,7 +752,6 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
         \textcolor{white}{\textbf{$\varnothing$ Strom $I$}} & 
         \textcolor{white}{\textbf{Verbrauch/h}} & 
         \textcolor{white}{\textbf{Projizierte Akkulaufzeit}} \\ \hline
-        CHIP-8 & 1.80\,W & 2.10\,W & 460\,mA & ca. 9.2\,\%/h & ca. 10.8 Stunden \\ \hline
         Nintendo 3DS & 2.78\,W & 4.83\,W & 693\,mA & ca. 13.9\,\%/h & ca. 7.2 Stunden \\ \hline
         Nintendo Wii & 3.40\,W & 5.49\,W & 901\,mA & ca. 18.0\,\%/h & ca. 5.6 Stunden \\ \hline
         Nintendo Switch & 7.41\,W & 9.20\,W & 1'858\,mA & ca. 37.2\,\%/h & ca. 2.7 Stunden \\ \hline
