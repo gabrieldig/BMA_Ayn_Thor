@@ -867,6 +867,8 @@ obwohl die CPU-Last dort tiefer ist.
 Eine tiefe CPU-Last allein sagt demnach nichts über die Leistung aus,
 entscheidend ist, ob der Hauptthread oder die GPU zuerst an ihre Grenze kommt.
 
+Folgende Abbildung~\ref{fig:power_consumption} demonstriert die Durchschnittliche Leistung aller Durchläufe unterteilt nach den drei Emulatoren.
+Die Leistung wurde vom Messtool als Produkt aus Akkuspannung und Akkustrom bestimmt.
 
 
 \begin{figure}[htbp]
@@ -891,6 +893,28 @@ entscheidend ist, ob der Hauptthread oder die GPU zuerst an ihre Grenze kommt.
     \caption{Elektrische Leistungsaufnahme in Watt: Durchschnittsleistung über Skalierungsstufen sowie 300-s-Echtzeitverlauf unter Switch-Volllast.}
     \label{fig:power_consumption}
 \end{figure}
+
+
+Der 3DS-Emulator Azahar hat mit 2.78 bis 4.39~W den tiefsten Energiebedarf.
+Mit OpenGL steigt die Leistung mit der Auflösung von 2.78~W (nativ) über 3.02 und 3.34~W auf 3.68~W bei vierfacher Auflösung, was einer Zunahme von 32~\% entspricht.
+Die Mehrleistung ist daher vor allem der Grafikeinheit zuzuschreiben.
+Der Wechsel von OpenGL auf Vulkan erhöht den Bedarf bei vierfacher Auflösung nochmals um 19~\% auf 4.39~W, obwohl die Bildrate mit 56.6~FPS tiefer liegt.
+Vulkan ist in diesem Fall also sowohl leistungshungriger als auch weniger leistungsfähig.
+
+Der Dolphin-Emulator liegt bei nativer Auflösung mit 3.40~W leicht über Azahar, steigt aber deutlich steiler an:
+4.17~W bei doppelter, 4.30~W bei dreifacher und 6.38~W bei vierfacher Auflösung mit OpenGL (+88~\% gegenüber nativ).
+Mit Vulkan beträgt der Wert bei vierfacher Auflösung 7.82~W und ist damit 23~\% höher als mit OpenGL, bei praktisch gleicher Bildrate (59.4 gegenüber 59.3~FPS).
+Dazu passt, dass die CPU-Temperatur mit Vulkan auf bis zu 92~\textdegree C steigt, mit OpenGL dagegen nur auf 73~\textdegree C.
+
+Der Eden-Emulator hat mit 7.41~W (nativ) und 7.33~W (doppelte Auflösung) den höchsten Energiebedarf bei gleichzeitig der tiefsten Bildrate.
+Das ist rund das 2.7-Fache von Azahar bei nativer Auflösung.
+Auffällig ist, dass die Leistung bei doppelter Auflösung nicht höher liegt als bei nativer, obwohl die GPU-Last von 57 auf 96~\% steigt.
+Eine mögliche Erklärung ist die hohe Temperatur bei nativer Auflösung (im Mittel 81~\textdegree C, Spitze 92~\textdegree C), die auf Thermal Throttling hindeutet.
+
+Zu beachten ist, dass der Akkustand zu Beginn der Messungen zwischen 26 und 80~\% lag und die Akkuspannung dadurch zwischen 3.61 und 4.01~V schwankte.
+Da die Leistung aus Spannung und Strom berechnet wird, sind die Werte nicht ganz unabhängig vom Ladezustand.
+Der Trend bleibt jedoch auch beim Strom sichtbar (Azahar nativ 693~mA, Dolphin 4x Vulkan 2170~mA, Eden 1858 bis 1940~mA).
+
 
 \begin{figure}[htbp]
     \centering
