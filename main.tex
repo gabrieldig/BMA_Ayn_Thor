@@ -221,7 +221,7 @@ Die durch Beobachtung gewonnenen Messergebnisse veranschaulichen fundamentale Sy
 \singlespacing
 \tableofcontents
 \onehalfspacing
-\newpage    
+\newpage
 
 % =========================================================
 % 1. EINLEITUNG
@@ -240,7 +240,8 @@ Das primäre Ziel dieser Berufsmaturitätsarbeit besteht darin, die Funktionswei
 Anhand des Gaming-Handhelds \textit{Ayn Thor} soll praxisnah untersucht werden, wie sich unterschiedliche Komplexitätsgrade emulierter Systeme -- von einfacher 8-Bit-Logik über heterogene Dual-Screen-Systeme (3DS) und reine Fremdarchitekturen (Wii) bis hin zu modernen Systemen mit nativer Codeausführung (Switch) -- auf Systemressourcen, Energieeffizienz und Ausführungsstabilität auswirken. Die Arbeit verfolgt das Ziel, die oft als «Black Box» wahrgenommene Emulationstechnologie technisch transparent darzulegen und konkrete Hardware- und Software-Flaschenhälse greifbar zu machen.
 
 \subsection{Persönlicher Bezug \& Motivation}
-Als Informatiker verbindet uns beide ein grosses Interesse an hardwarenaher Programmierung, Systemarchitekturen sowie der praktischen Optimierung von Algorithmen. Dadazu verfolgen wir beide seit Jahren die schnelle Entwicklung im Bereich portabler Handheld-Hardware. Die Vorstellung, dass ein kompaktes mobiles Gerät in der Lage ist, hochentwickelte Heimkonsolen softwareseitig nachzubilden, fasziniert uns gleichermassen aus technischer wie aus spielerischer Perspektive.
+Als Informatiker verbindet uns beide ein grosses Interesse an hardwarenaher Programmierung, Systemarchitekturen sowie der praktischen Optimierung von Algorithmen.
+Dadazu verfolgen wir beide seit Jahren die schnelle Entwicklung im Bereich portabler Handheld-Hardware. Die Vorstellung, dass ein kompaktes mobiles Gerät in der Lage ist, hochentwickelte Heimkonsolen softwareseitig nachzubilden, fasziniert uns gleichermassen aus technischer wie aus spielerischer Perspektive.
 
 Besonders reizvoll erschien uns die Wahl des Testgeräts \textit{Ayn Thor}: Ausgestattet mit einem Qualcomm Snapdragon 8 Gen 2 SoC, zwei physischen Bildschirmen und aktiver Lüfterkühlung, bietet dieses Gerät eine ideale und reproduzierbare Forschungsplattform. Für uns bestand die Motivation nicht im blossen Konsumieren von Spielen, sondern als wissenschaftlicher «Blick hinter die Kulissen» moderner Rechnersysteme: Wir wollten herausfinden, welche realen Lasten auf CPU-Clustern, GPU und Speicherbus entstehen, wie Treiber-Injections via Mesa Turnip funktionieren und wo thermische Limits greifen.
 
@@ -293,7 +294,7 @@ Um die Forschungsfragen fundiert und nachvollziehbar zu beantworten, stützt sic
 \label{sec:theorie}
 
 \subsection{Statische Grundlagen eines Rechnersystems}
-Um das Funktionsprinzip eines Emulators zu verstehen, muss zunächst die grundlegende Architektur eines programmierbaren Digitalrechners betrachtet werden. 
+Um das Funktionsprinzip eines Emulators zu verstehen, muss zunächst die grundlegende Architektur eines programmierbaren Digitalrechners betrachtet werden.
 
 \paragraph{Von-Neumann-Architektur:}
 Das von John von Neumann 1945 formulierte Modell gliedert ein Rechnersystem in fünf Kernkomponenten: das Rechenwerk (ALU), das Steuerwerk (Control Unit), den Arbeitsspeicher (Memory), die Ein-/Ausgabeeinheit (I/O) sowie das verbindende Bus-System (Daten-, Adress- und Steuerbus). Wesentliches Merkmal ist der gemeinsame Speicher für Programmbefehle und Daten.
@@ -596,10 +597,10 @@ Standardmässig liefert Qualcomm für den Snapdragon 8 Gen 2 proprietäre Adreno
     \begin{tabularx}{\linewidth}{|l|l|l|l|X|}
         \hline
         \rowcolor{primaryTeal}
-        \textcolor{white}{\textbf{System}} & 
-        \textcolor{white}{\textbf{Emulator}} & 
-        \textcolor{white}{\textbf{Grafik-API / Treiber}} & 
-        \textcolor{white}{\textbf{CPU-Modus}} & 
+        \textcolor{white}{\textbf{System}} &
+        \textcolor{white}{\textbf{Emulator}} &
+        \textcolor{white}{\textbf{Grafik-API / Treiber}} &
+        \textcolor{white}{\textbf{CPU-Modus}} &
         \textcolor{white}{\textbf{Referenztitel}} \\ \hline
         CHIP-8 & Rust-Eigenbau & SDL2 / Software & Interpreter & Pong \\ \hline
         Nintendo 3DS & AzaharPlus & OpenGL ES / Vulkan (Turnip) & JIT (ARM11) & Mario Kart 7 \\ \hline
@@ -632,15 +633,15 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
     \begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{1.5cm}|>{\centering\arraybackslash}p{1.8cm}|>{\centering\arraybackslash}p{1.6cm}|c|c|c|c|c|c|>{\centering\arraybackslash}X|}
         \hline
         \rowcolor{primaryTeal}
-        \textcolor{white}{\textbf{System}} & 
-        \textcolor{white}{\textbf{Emulator / API}} & 
-        \textcolor{white}{\textbf{Referenztitel}} & 
-        \textcolor{white}{\textbf{Boot (s)}} & 
-        \textcolor{white}{\textbf{$\varnothing$ FPS}} & 
-        \textcolor{white}{\textbf{1\% Low}} & 
-        \textcolor{white}{\textbf{CPU \%}} & 
-        \textcolor{white}{\textbf{GPU \%}} & 
-        \textcolor{white}{\textbf{Power}} & 
+        \textcolor{white}{\textbf{System}} &
+        \textcolor{white}{\textbf{Emulator / API}} &
+        \textcolor{white}{\textbf{Referenztitel}} &
+        \textcolor{white}{\textbf{Boot (s)}} &
+        \textcolor{white}{\textbf{$\varnothing$ FPS}} &
+        \textcolor{white}{\textbf{1\% Low}} &
+        \textcolor{white}{\textbf{CPU \%}} &
+        \textcolor{white}{\textbf{GPU \%}} &
+        \textcolor{white}{\textbf{Power}} &
         \textcolor{white}{\textbf{Peak $T$}} \\ \hline
         CHIP-8 & Rust-Eigenbau & Pong & 0.4 & 60.0 & 60.0 & 2.1\,\% & 1.0\,\% & 1.80\,W & 28.2\,°C \\ \hline
         Nintendo 3DS & AzaharPlus (1x Native) & Mario Kart 7 & 3.1 & 59.9 & 59.0 & 24.6\,\% & 10.5\,\% & 2.78\,W & 65.2\,°C \\ \hline
@@ -665,11 +666,11 @@ Tabelle~\ref{tab:messungen_gesamt} fasst die empirisch erhobenen Leistungsdaten 
     \begin{tabularx}{\linewidth}{|l|c|c|c|c|X|}
         \hline
         \rowcolor{primaryTeal}
-        \textcolor{white}{\textbf{System}} & 
-        \textcolor{white}{\textbf{$\varnothing$ Frametime}} & 
-        \textcolor{white}{\textbf{Std.-Abw. $\sigma$}} & 
-        \textcolor{white}{\textbf{Peak FrameTime}} & 
-        \textcolor{white}{\textbf{Jank / BigJank}} & 
+        \textcolor{white}{\textbf{System}} &
+        \textcolor{white}{\textbf{$\varnothing$ Frametime}} &
+        \textcolor{white}{\textbf{Std.-Abw. $\sigma$}} &
+        \textcolor{white}{\textbf{Peak FrameTime}} &
+        \textcolor{white}{\textbf{Jank / BigJank}} &
         \textcolor{white}{\textbf{Charakteristik des Frametime-Verlaufs}} \\ \hline
         CHIP-8 & 16.66\,ms & $\pm 0.02$\,ms & 16.7\,ms & 0\,/\,0 & Perfekt konsistent, reine Timer-Steuerung \\ \hline
         Nintendo 3DS & 16.69\,ms & $\pm 0.35$\,ms & 16.0\,ms & 0\,/\,0 & Nahezu perfekter 60\,Hz-Lock auf beiden Displays (OpenGL ES) \\ \hline
@@ -708,11 +709,29 @@ Abbildung~\ref{fig:fps_vergleich} demonstriert die Durchschnittliche FPS und den
     \label{fig:fps_vergleich}
 \end{figure}
 
-Interessant sind die nahezu konstanten 60 Bilder pro Sekunde beim 3DS-Emulator Azahar, woraufhin der Treiberwechsel von OpenGL zu Vulkan eine schlechtere Performance beträgt.
-Der Dolphin-Emulator weist darauf hin, dass eine höhere Bildschirmauflösung keinen grossen Unterschied bei der durchschnittlichen FPS ausmacht. Die 1\%-Perzentil FPS ist aber bereits in der nativen Bildschirmauflösung tiefer als die vierfache Bildschirmauflösung des 3DS sowohl beim OpenGL Treiber wie auch Vulkan.
-Eden
+Interessant ist, dass der 3DS-Emulator Azahar mit OpenGL bei nativer sowie dreifacher und vierfacher Auflösung nahezu identische Resultate von durchschnittlich 59.9~FPS erreicht.
+Einzig bei doppelter Auflösung liegt der Durchschnitt mit 59.5~FPS minimal tiefer.
+Dies ist auf einzelne Aussetzer zurückzuführen, bei denen die Bildrate für kurze Zeit auf 0~FPS fiel (zwei Sekunden unter 30~FPS), und nicht auf eine dauerhaft geringere Leistung.
+Der 1\%-Perzentil-Wert liegt bei allen OpenGL-Messungen bei 59~FPS.
+Der Wechsel von OpenGL auf Vulkan führt bei vierfacher Auflösung hingegen zu einer deutlich schlechteren Performance:
+Die durchschnittlichen FPS sinken von 59.9 auf 56.6~FPS (94~\% der Zielgeschwindigkeit) und der 1\%-Perzentil-Wert bricht von 59 auf 31~FPS ein.
 
-Abbildung~\ref{fig:fps_60s} zeigt den Frames-per-Second-Verlauf der drei Emulatoren Azahar, Dolphin und Eden über die ersten 60 Sekunden Spielzeit. Damit ist der Boot des Emulators miteinbezogen. Die Frametime gibt den zeitlichen Abstand zwischen zwei dargestellten Bildern an. Eine gleichmäßige Linie steht für eine flüssige Wiedergabe, einzelne Ausschläge nach oben entsprechen Rucklern, die auch bei hoher durchschnittlicher Bildrate spürbar sein können. Bei dem Graph des Emulatoren Dolphin ist zu beachten, dass der erste Spike ein Fehler seitens Analyse beschreibt, da zuerst das falsche Spiel geöffnet wurde und anschliessend geschlossen wurde.
+Beim Dolphin-Emulator hat eine höhere Auflösung keinen grossen Einfluss auf die durchschnittlichen FPS, sie liegen bei allen Einstellungen zwischen 58.8 und 59.7~FPS (98 bis 99~\% des Ziels).
+Der 1\%-Perzentil-Wert ist dagegen bereits bei nativer Auflösung mit 30~FPS tiefer als bei vierfacher Auflösung, wo er mit OpenGL 48~FPS und mit Vulkan 50~FPS beträgt.
+Bei doppelter Auflösung liegt er mit 34~FPS ebenfalls tief, bei dreifacher mit 55~FPS am höchsten.
+Dieser Unterschied ist nicht durch die Auflösung zu erklären, sondern durch die Anlaufphase mit Shader-Kompilierung und leerem JIT-Cache (siehe Abbildung~\ref{fig:fps_60s}),
+die die 1\%-Werte der nativen und der doppelten Auflösung nach unten zieht.
+
+Die durchschnittlichen FPS des Eden-Emulators sind mit 54.0~FPS (90~\% des Ziels) bei nativer und 51.8~FPS (86~\%) bei doppelter Auflösung die tiefsten aller Messungen.
+Dies weist weniger auf eine ineffiziente Umsetzung hin als auf die höheren Anforderungen der Switch-Plattform:
+Bei doppelter Auflösung ist die GPU im Mittel zu 96~\% ausgelastet und damit der limitierende Faktor.
+Der 1\%-Perzentil-Wert ist mit 35~FPS (nativ) und 43~FPS (doppelte Auflösung) ebenfalls tiefer als bei den anderen Emulatoren.
+
+Abbildung~\ref{fig:fps_60s} zeigt den Frames-per-Second-Verlauf der drei Emulatoren Azahar, Dolphin und Eden über die ersten 60 Sekunden Spielzeit.
+Damit ist der Boot des Emulators miteinbezogen.
+Die Frametime gibt den zeitlichen Abstand zwischen zwei dargestellten Bildern an.
+Eine gleichmäßige Linie steht für eine flüssige Wiedergabe, einzelne Ausschläge nach oben entsprechen Rucklern, die auch bei hoher durchschnittlicher Bildrate spürbar sein können.
+Bei dem Graph des Emulatoren Dolphin ist zu beachten, dass der erste Spike ein Fehler seitens Analyse beschreibt, da zuerst das falsche Spiel geöffnet wurde und anschliessend geschlossen wurde.
 
 \begin{figure}[htbp]
     \centering
@@ -732,9 +751,33 @@ Abbildung~\ref{fig:fps_60s} zeigt den Frames-per-Second-Verlauf der drei Emulato
     \label{fig:fps_60s}
 \end{figure}
 
-Auffällig ist, dass im Vergleich zum Aufstarts des Emulators Azahar, die Emulatoren Eden und Dolphin einen deutlich ersehbare längere Boot-Time haben. Dies kann unter anderem durch das Laden der benötigten Shaders erklärt werden. Die GPU der 3DS (PICA200) ist vergleichsweise einfach gebaut und benötigt wenige Shaders zum laden.
-Dolphin nutzt sogenannte Ubershader, universelle Shader-Programme, die sofort einsatzbereit sind, während spezialisierte Shader im Hintergrund kompiliert werden. Dadurch wird zwar allgemein die Ladezeit für jedes einzelne Bild langsamer (Beziehungsweise von 6ms Ladezeit zu 9ms), jedoch werden Ruckler bei der Shader-Kompilierung vermieden. Falls der Ubershader nicht bereits im Shader-Cache vorhanden ist, muss dieser zuerst  kompiliert werden. Da der Dolphin-Emulator wiederum mit dem JIT-Interpreter arbeitet, und der JIT-Cache beim start eines Spiels anfänglich leer ist, braucht dieser Zeit um die ersten Befehle zu übersetzen.
-Eden auf der anderen Seite muss wegen der komplexeren NVIDIA-Maxwell-GPU viele Shader laden. Ist der Shader-Cache anfänglich leer, entstehen bei neuen Effekten Ruckler. Ausserdem müssen etliche Systemdienste geladen werden, da das Switch-OS deutlich komplexer ist.
+
+Auffällig ist, dass der Emulator Azahar im Vergleich zu Eden und Dolphin praktisch keine Anlaufphase zeigt.
+Mit OpenGL liegt die Bildrate bei allen vier Auflösungen von der ersten Sekunde an bei rund 60~FPS,
+die Frametime bleibt konstant bei 16~ms und in den ersten 60 Sekunden tritt kein einziger Ruckler (Jank) auf.
+Bei Dolphin dauert es dagegen 9 bis 14 Sekunden, bis die Bildrate dauerhaft über 55~FPS liegt.
+In den ersten 10 Sekunden liegt sie bei nativer Auflösung im Mittel nur bei 41~FPS, der Minimalwert beträgt 7~FPS
+und die Frametime erreicht in Sekunde 2 eine Spitze von 650~ms.
+Auch die Ruckler konzentrieren sich auf den Anfang: In den ersten 60 Sekunden zählt Dolphin (nativ) 57 Jank-Ereignisse, in den restlichen 240 Sekunden nur noch 16.
+Die mittlere maximale Frametime sinkt entsprechend von 49~ms auf 20~ms.
+Bei Eden mit zweifacher Auflösung liegt die Bildrate in den ersten 10 Sekunden im Mittel bei 51~FPS (Minimum 36~FPS) mit einer Frametime-Spitze von 300~ms.
+Hier fallen 68 Jank-Ereignisse in die ersten 60 Sekunden, danach sind es 27 in den restlichen 240 Sekunden.
+Bei nativer Auflösung ist der Effekt schwächer (6 gegenüber 15 Ereignissen, Spitze 133~ms in Sekunde 6).
+Dies kann unter anderem durch das Laden der benötigten Shader erklärt werden.
+
+Die GPU der 3DS (PICA200) ist vergleichsweise einfach gebaut und benötigt nur wenige Shader.
+Dolphin nutzt sogenannte Ubershader, universelle Shader-Programme, die sofort einsatzbereit sind, während spezialisierte Shader im Hintergrund kompiliert werden.
+Dadurch wird zwar das Rendern jedes einzelnen Bildes langsamer (laut Literatur etwa 6~ms gegenüber 9~ms \cite{QUELLE}), jedoch werden Ruckler bei der Shader-Kompilierung vermieden.
+Falls der Ubershader nicht bereits im Shader-Cache vorhanden ist, muss dieser zuerst kompiliert werden.
+Da Dolphin zudem mit einem JIT-Compiler (dynamische Rekompilierung) arbeitet und der JIT-Cache beim Start eines Spiels leer ist, braucht dieser Zeit, um die ersten Befehle zu übersetzen.
+Eden muss wegen der komplexeren NVIDIA-Maxwell-GPU viele Shader laden.
+Ist der Shader-Cache anfänglich leer, entstehen bei neuen Effekten Ruckler.
+Zusätzlich müssen etliche Systemdienste geladen werden, da das Switch-Betriebssystem deutlich komplexer ist.
+Dass dieser Effekt vom Zustand des Shader-Caches abhängt, zeigt sich auch bei Dolphin mit dreifacher Auflösung: Hier blieb die Anlaufphase aus (Minimum 50~FPS, Spitze 100~ms),
+was darauf hindeutet, dass der Cache in dieser Messung bereits gefüllt war.
+Azahar mit Vulkan zeigt im Gegensatz zu OpenGL ebenfalls Ruckler (29 Jank-Ereignisse in den ersten 60 Sekunden, Spitze 200~ms),
+was für einen höheren Kompilierungsaufwand der Vulkan-Pipelines spricht.
+
 
 \subsection{Ressourcenbedarf, Energieeffizienz und Thermik}
 \begin{table}[htbp]
@@ -746,17 +789,27 @@ Eden auf der anderen Seite muss wegen der komplexeren NVIDIA-Maxwell-GPU viele S
     \begin{tabularx}{\linewidth}{|l|c|c|c|c|X|}
         \hline
         \rowcolor{primaryTeal}
-        \textcolor{white}{\textbf{System}} & 
-        \textcolor{white}{\textbf{$\varnothing$ Leistung $P$}} & 
-        \textcolor{white}{\textbf{Peak $P$}} & 
-        \textcolor{white}{\textbf{$\varnothing$ Strom $I$}} & 
-        \textcolor{white}{\textbf{Verbrauch/h}} & 
+        \textcolor{white}{\textbf{System}} &
+        \textcolor{white}{\textbf{$\varnothing$ Leistung $P$}} &
+        \textcolor{white}{\textbf{Peak $P$}} &
+        \textcolor{white}{\textbf{$\varnothing$ Strom $I$}} &
+        \textcolor{white}{\textbf{Verbrauch/h}} &
         \textcolor{white}{\textbf{Projizierte Akkulaufzeit}} \\ \hline
         Nintendo 3DS & 2.78\,W & 4.83\,W & 693\,mA & ca. 13.9\,\%/h & ca. 7.2 Stunden \\ \hline
         Nintendo Wii & 3.40\,W & 5.49\,W & 901\,mA & ca. 18.0\,\%/h & ca. 5.6 Stunden \\ \hline
         Nintendo Switch & 7.41\,W & 9.20\,W & 1'858\,mA & ca. 37.2\,\%/h & ca. 2.7 Stunden \\ \hline
     \end{tabularx}
 \end{table}
+
+In der folgenden Abbildung~\ref{fig:cpu_gpu_last} ist die CPU-Last und GPU-Last aller Emulatoren beschrieben.
+Die Graphen a, c und e beschreiben jeweils die Durchschnittliche CPU-Last aller CPU-Kerne, die des Stärksten Kerns und die Last auf der Grafikkarte.
+Eine tiefe durchschnittliche CPU-Auslastung bedeutet nicht automatisch eine bessere Performance des Spiels, da die Emulation häufig von einem einzelnen Hauptthread abhängt und die übrigen Kerne kaum ausgelastet werden.
+Die GPU-Last zeigt, wie stark die Grafikkarte durch die gewählte Auflösung beansprucht wird.
+
+Ebenso ist ausschliesslich der GPU-Lastverlauf aller Durchläufe ersichtlich auf den Graphen b, c und f über eine Zeitspanne von 5 Minuten.
+Hiermit kann vor allem der Unterschied zwischen einer Ausführung mit dem OpenGL Treiber und dem Vulkan Treiber verfolgt werden.
+Ausschläge nach unten sind als Ladebildschirme zu beachten, worin hauptsächlich die Ressourcen für das nächste Rennen im Spiel geladen werden.
+
 
 \begin{figure}[htbp]
     \centering
@@ -795,6 +848,26 @@ Eden auf der anderen Seite muss wegen der komplexeren NVIDIA-Maxwell-GPU viele S
     \caption{Verteilung der Rechenlast auf CPU-Cluster und Adreno-740-GPU im Plattformvergleich.}
     \label{fig:cpu_gpu_last}
 \end{figure}
+
+
+Bei Azahar liegt die gesamte CPU-Last bei nur rund 25~\%,
+der am stärksten belastete Kern erreicht aber etwa 50 bis 62~\%.
+Der fünfte Durchlauf mit dem Vulkan Treiber zeigt eine tiefere Auslastung des CPUs, wie auch eine tiefere Auslastung des stärksten Kerns.
+Dolphin zeigt ein ähnliches Muster mit 32 bis 36~\% Gesamtlast und 54 bis 62~\% auf dem stärksten Kern.
+Bei Eden ist die Gesamtlast mit 42 bis 54~\% am höchsten, und auch der stärkste Kern liegt mit 63 bis 65~\% klar über den anderen Emulatoren.
+Das passt zur höheren Komplexität der Switch-Emulation.
+
+Die durchschnittliche GPU-Last bei Azahar und Dolphin steigt mit der internen Auflösung deutlich an (Azahar von 11 auf 31~\%, Dolphin von 11 auf 67~\% bei OpenGL),
+während die CPU-Last nahezu konstant bleibt.
+Die Auflösung belastet also vor allem die GPU und kaum die CPU.
+Bei Eden mit zweifacher Auflösung erreicht die GPU im Mittel 96~\% und ist damit der limitierende Faktor.
+Dies erklärt, weshalb die Bildrate dort mit durchschnittlich 52 FPS unter der Zielgeschwindigkeit von 60 FPS bleibt.
+Auch bei Azahar mit Vulkan (66~\% GPU-Last, 57 FPS) liegt die Bildrate unter derjenigen mit OpenGL (31~\% GPU-Last, 60 FPS),
+obwohl die CPU-Last dort tiefer ist.
+Eine tiefe CPU-Last allein sagt demnach nichts über die Leistung aus,
+entscheidend ist, ob der Hauptthread oder die GPU zuerst an ihre Grenze kommt.
+
+
 
 \begin{figure}[htbp]
     \centering
@@ -879,10 +952,10 @@ Eden auf der anderen Seite muss wegen der komplexeren NVIDIA-Maxwell-GPU viele S
     \begin{tabularx}{\linewidth}{|l|c|c|c|X|}
         \hline
         \rowcolor{primaryTeal}
-        \textcolor{white}{\textbf{System}} & 
-        \textcolor{white}{\textbf{Gesamtnote}} & 
-        \textcolor{white}{\textbf{Audio-Lag}} & 
-        \textcolor{white}{\textbf{Shader-Stutter}} & 
+        \textcolor{white}{\textbf{System}} &
+        \textcolor{white}{\textbf{Gesamtnote}} &
+        \textcolor{white}{\textbf{Audio-Lag}} &
+        \textcolor{white}{\textbf{Shader-Stutter}} &
         \textcolor{white}{\textbf{Qualitative Beobachtungen}} \\ \hline
         CHIP-8 & 6.0 & Keiner & Keiner & Perfekte Logikausführung \\ \hline
         Nintendo 3DS & 5.9 & Keiner & Keiner & Perfektes Dual-Screen-Erlebnis auf oberem/unterem Panel \\ \hline
@@ -1061,8 +1134,8 @@ Zürich, den 27. November 2026
 \begin{tabularx}{\linewidth}{|p{3.8cm}|p{3.2cm}|X|}
     \hline
     \rowcolor{primaryTeal}
-    \textcolor{white}{\textbf{Einsatzbereich}} & 
-    \textcolor{white}{\textbf{Verwendetes Tool}} & 
+    \textcolor{white}{\textbf{Einsatzbereich}} &
+    \textcolor{white}{\textbf{Verwendetes Tool}} &
     \textcolor{white}{\textbf{Beschreibung des Einsatzes \& Reflexion}} \\ \hline
     Ideenfindung \& Strukturierung & Claude / ChatGPT & Unterstützung bei der Strukturierung des Inhaltsverzeichnisses und der sprachlichen Schärfung der Hypothesen. \\ \hline
     Sprachliche Korrektur & DeepL / Overleaf & Grammatikalische Überprüfung, Optimierung der Satzübergänge und Rechtschreibprüfung. \\ \hline
